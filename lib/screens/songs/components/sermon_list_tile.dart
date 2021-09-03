@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:louvor_app/models/Sermon.dart';
-import 'package:louvor_app/models/sermon_manager.dart';
+import 'package:louvor_app/models/Song.dart';
+import 'package:louvor_app/models/song_manager.dart';
 import 'package:provider/provider.dart';
 
-class SermonListTile extends StatelessWidget {
+class SongListTile extends StatelessWidget {
 
-  const SermonListTile(this.sermon);
+  const SongListTile(this.song);
 
-  final Culto sermon;
+  final Song song;
 
-  _showAlertDialog(BuildContext context, String conteudo, Culto s) {
+  _showAlertDialog(BuildContext context, String conteudo, Song s) {
     showDialog(
       context: context,
       builder: (context) {
@@ -26,7 +26,7 @@ class SermonListTile extends StatelessWidget {
               onPressed: () {
                 //TODO fix this POG
                 s.delete(s);
-                context.read<CultoManager>().update(s);
+                context.read<SongManager>().update(s);
                 Navigator.pop(context);
               },
             )
@@ -40,10 +40,10 @@ class SermonListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).pushNamed('/sermon', arguments: sermon);
+        Navigator.of(context).pushNamed('/song', arguments: song);
       },
       child: Visibility(
-        visible: sermon.ativo.toLowerCase() == 'true',
+        visible: song.ativo.toLowerCase() == 'true',
         child: Card(
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(4)
@@ -63,7 +63,7 @@ class SermonListTile extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            sermon.titulo,
+                            song.nome,
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w800,
@@ -71,7 +71,7 @@ class SermonListTile extends StatelessWidget {
                           ),
                           GestureDetector(
                             onTap: () {
-                              _showAlertDialog(context, 'Confirma a exclusão deste culto?', sermon);
+                              _showAlertDialog(context, 'Confirma a exclusão dessa música do repertório?', song);
                             },
                             child: Icon(Icons.delete, color: Colors.blueGrey,),
                           ),
@@ -80,7 +80,7 @@ class SermonListTile extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(top: 4),
                         child: Text(
-                          '${sermon.tags}',
+                          '${song.letra}',
                           style: TextStyle(
                             color: Colors.grey[400],
                             fontSize: 12,
@@ -88,7 +88,7 @@ class SermonListTile extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '${sermon.texto_base}',
+                        '${song.artista}',
                         style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w800,

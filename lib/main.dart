@@ -3,13 +3,13 @@ import 'package:provider/provider.dart';
 import 'package:louvor_app/models/user_manager.dart';
 import 'package:louvor_app/screens/base/base_screen.dart';
 import 'package:louvor_app/screens/login/login_screen.dart';
-import 'package:louvor_app/screens/sermon_list.dart';
-import 'package:louvor_app/screens/sermons/sermon_screen.dart';
-import 'package:louvor_app/screens/sermons/sermons_screen.dart';
+import 'package:louvor_app/screens/song_list.dart';
+import 'package:louvor_app/screens/songs/song_screen.dart';
+import 'package:louvor_app/screens/songs/songs_screen.dart';
 import 'package:louvor_app/screens/signup/signup_screen.dart';
 
-import 'models/Sermon.dart';
-import 'models/sermon_manager.dart';
+import 'models/Song.dart';
+import 'models/song_manager.dart';
 
 Future<void> main() async {
   runApp(MyApp());
@@ -40,8 +40,8 @@ class MyApp extends StatelessWidget {
           create: (_) => UserManager(),
           lazy: false,
         ),
-        ChangeNotifierProxyProvider<UserManager, CultoManager>(
-          create: (_) => CultoManager(),
+        ChangeNotifierProxyProvider<UserManager, SongManager>(
+          create: (_) => SongManager(),
           lazy: false,
           update: (_, userManager, sermonManager) =>
               sermonManager..updateUser(userManager),
@@ -62,15 +62,15 @@ class MyApp extends StatelessWidget {
               return MaterialPageRoute(
                   builder: (_) => SignUpScreen()
               );
-            case '/sermon':
+            case '/song':
               return MaterialPageRoute(
-                  builder: (_) => CultoScreen(
-                      settings.arguments as Culto
+                  builder: (_) => SongScreen(
+                      settings.arguments as Song
                   )
               );
-            case '/sermons':
+            case '/songs':
               return MaterialPageRoute(
-                  builder: (_) => CultosScreen()
+                  builder: (_) => SongsScreen()
               );
             case '/base':
             default:

@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:louvor_app/models/Sermon.dart';
-import 'package:louvor_app/screens/sermon_item.dart';
+import 'package:louvor_app/models/Song.dart';
+import 'package:louvor_app/screens/song_item.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 
 class CultoList extends StatefulWidget {
@@ -105,7 +105,7 @@ class _CultoListState extends State<CultoList> {
     }
   }
 
-  List<Culto> list = [];
+  List<Song> list = [];
   final _doneStyle =
   TextStyle(color: Colors.green, decoration: TextDecoration.lineThrough);
 
@@ -115,7 +115,7 @@ class _CultoListState extends State<CultoList> {
     if (data != null) {
       setState(() {
         var objs = jsonDecode(data) as List;
-        list = objs.map((obj) => Culto.fromJson(obj)).toList();
+        list = objs.map((obj) => Song.fromJson(obj)).toList();
       });
     }
   }
@@ -166,13 +166,13 @@ class _CultoListState extends State<CultoList> {
         itemCount: list.length,
         itemBuilder: (context, index) {
           return ListTile(
-            title: Text('${list[index].titulo}'),
-            subtitle: Text('${list[index].tema}'),
+            title: Text('${list[index].nome}'),
+            subtitle: Text('${list[index].tom}'),
             onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) =>
-                      CultoItem(todo: list[index], index: index),
+                      SongItem(todo: list[index], index: index),
                 )).then((value) => _reloadList()),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
@@ -180,7 +180,7 @@ class _CultoListState extends State<CultoList> {
                 IconButton(
                   icon: Icon(Icons.clear),
                   onPressed: () => _showAlertDialog(context,
-                      'Confirma a exclusão deste culto?', _removeItem, index),
+                      'Confirma a exclusão dessa música do repertório?', _removeItem, index),
                 ),
 //                Visibility(
 //                  visible: list[index].tema == 'A',
@@ -201,7 +201,7 @@ class _CultoListState extends State<CultoList> {
         onPressed: () => Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => CultoItem(todo: null, index: -1),
+              builder: (context) => SongItem(todo: null, index: -1),
             )).then((value) => _reloadList()),
       ),
     );

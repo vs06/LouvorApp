@@ -4,21 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:searchable_dropdown/searchable_dropdown.dart';
-import 'package:louvor_app/models/Sermon.dart';
+import 'package:louvor_app/models/Song.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class CultoItem extends StatefulWidget {
-  final Culto todo;
+class SongItem extends StatefulWidget {
+  final Song todo;
   final int index;
 
-  CultoItem({Key key, @required this.todo, @required this.index})
+  SongItem({Key key, @required this.todo, @required this.index})
       : super(key: key);
 
   @override
-  _CultoItemState createState() => _CultoItemState(todo, index);
+  _SongItemState createState() => _SongItemState(todo, index);
 }
 
-class _CultoItemState extends State<CultoItem> {
+class _SongItemState extends State<SongItem> {
   final List<String> _livros = <String>[ 'Gênesis', 'Êxodo', 'Levítico', 'Números', 'Deuteronômio', 'Josué', 'Juízes', 'Rute', 'I Samuel', 'II Samuel', 'I Reis', 'II Reis', 'I Crônicas', 'II Crônicas', 'Esdras', 'Neemias',
     'Ester', 'Jó', 'Salmos', 'Provérbios', 'Eclesiastes', 'Cânticos dos Cânticos', 'Isaías', 'Jeremias', 'Lamentações', 'Ezequiel', 'Daniel', 'Oseias', 'Joel', 'Amós', 'Obadias', 'Jonas', 'Miqueias', 'Naum', 'Habacuque',
     'Sofonias', 'Ageu', 'Zacarias', 'Malaquias', 'Mateus', 'Marcos', 'Lucas', 'João', 'Atos', 'Romanos', '1 Coríntios', '2 Coríntios', 'Gálatas', 'Efésios', 'Filipenses', 'Colossenses', '1 Tessalonicenses', '2 Tessalonicenses',
@@ -28,7 +28,7 @@ class _CultoItemState extends State<CultoItem> {
 
   List<Book> book = List<Book>(66);
   String livro = 'Mateus';
-  Culto _todo;
+  Song _todo;
   int _index;
   DateTime date = DateTime.now();
   String dateStr = '';
@@ -56,13 +56,13 @@ class _CultoItemState extends State<CultoItem> {
 
   final key = GlobalKey<ScaffoldState>();
 
-  _CultoItemState(Culto todo, int index) {
+  _SongItemState(Song todo, int index) {
     this._todo = todo;
     this._index = index;
     if (_todo != null) {
-      _tituloController.text = _todo.titulo;
-      _texto_baseController.text = _todo.texto_base;
-      _temaController.text = _todo.tema;
+      _tituloController.text = _todo.nome;
+      _texto_baseController.text = _todo.artista;
+      _temaController.text = _todo.tom;
       livro = _todo.livro;
       dateStr = _todo.data;
       date = DateTime.parse(dateStr);
@@ -76,15 +76,15 @@ class _CultoItemState extends State<CultoItem> {
       ));
     } else {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      List<Culto> list = [];
+      List<Song> list = [];
 
       var data = prefs.getString('list');
       if (data != null) {
         var objs = jsonDecode(data) as List;
-        list = objs.map((obj) => Culto.fromJson(obj)).toList();
+        list = objs.map((obj) => Song.fromJson(obj)).toList();
       }
 
-      _todo = Culto.fromTituloDescricao(
+      _todo = Song.fromTituloDescricao(
           _tituloController.text, _texto_baseController.text, livro, _temaController.text, dateStr);
       if (_index != -1) {
         list[_index] = _todo;
@@ -102,7 +102,7 @@ class _CultoItemState extends State<CultoItem> {
         key: key,
         appBar: AppBar(
             backgroundColor: Colors.blue,
-            title: Text('Cadastrar Culto')),
+            title: Text('Cadastrar Música')),
         body: Column(
           children: [
             Padding(

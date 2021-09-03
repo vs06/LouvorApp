@@ -4,8 +4,8 @@ import 'package:louvor_app/models/page_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:louvor_app/models/user_manager.dart';
 import 'package:louvor_app/screens/login/login_screen.dart';
-import 'package:louvor_app/screens/sermon_list.dart';
-import 'package:louvor_app/screens/sermons/sermons_screen.dart';
+import 'package:louvor_app/screens/song_list.dart';
+import 'package:louvor_app/screens/songs/songs_screen.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 
 class BaseScreen extends StatelessWidget {
@@ -37,7 +37,7 @@ class BaseScreen extends StatelessWidget {
 //        }
 //        ),
       ),
-    CultosScreen(),
+    SongsScreen(),
     ],
     );
       },

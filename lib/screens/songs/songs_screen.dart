@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:louvor_app/common/custom_drawer/custom_drawer.dart';
-import 'package:louvor_app/models/sermon_manager.dart';
-import 'package:louvor_app/screens/sermons/components/sermon_list_tile.dart';
+import 'package:louvor_app/models/song_manager.dart';
+import 'package:louvor_app/screens/songs/components/sermon_list_tile.dart';
 import 'package:provider/provider.dart';
 
 import 'components/search_dialog.dart';
 import 'components/sermon_list_tile.dart';
 
-class CultosScreen extends StatelessWidget {
+class SongsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: CustomDrawer(),
       appBar: AppBar(
-        title: Consumer<CultoManager>(
-          builder: (_, sermonManager, __){
-            if(sermonManager.search.isEmpty){
+        title: Consumer<SongManager>(
+          builder: (_, songManager, __){
+            if(songManager.search.isEmpty){
               return const Text('Músicas');
             } else {
               return LayoutBuilder(
@@ -23,15 +23,15 @@ class CultosScreen extends StatelessWidget {
                   return GestureDetector(
                     onTap: () async {
                       final search = await showDialog<String>(context: context,
-                          builder: (_) => SearchDialog(sermonManager.search));
+                          builder: (_) => SearchDialog(songManager.search));
                       if(search != null){
-                        sermonManager.search = search;
+                        songManager.search = search;
                       }
                     },
                     child: Container(
                         width: constraints.biggest.width,
                         child: Text(
-                          'Músicas: ${sermonManager.search}',
+                          'Músicas: ${songManager.search}',
                           textAlign: TextAlign.center,
                         )
                     ),
@@ -43,16 +43,16 @@ class CultosScreen extends StatelessWidget {
         ),
         centerTitle: true,
         actions: <Widget>[
-          Consumer<CultoManager>(
-            builder: (_, sermonManager, __){
-              if(sermonManager.search.isEmpty){
+          Consumer<SongManager>(
+            builder: (_, songManager, __){
+              if(songManager.search.isEmpty){
                 return IconButton(
                   icon: Icon(Icons.search),
                   onPressed: () async {
                     final search = await showDialog<String>(context: context,
-                        builder: (_) => SearchDialog(sermonManager.search));
+                        builder: (_) => SearchDialog(songManager.search));
                     if(search != null){
-                      sermonManager.search = search;
+                      songManager.search = search;
                     }
                   },
                 );
@@ -60,7 +60,7 @@ class CultosScreen extends StatelessWidget {
                 return IconButton(
                   icon: Icon(Icons.close),
                   onPressed: () async {
-                    sermonManager.search = '';
+                    songManager.search = '';
                   },
                 );
               }
@@ -69,19 +69,19 @@ class CultosScreen extends StatelessWidget {
           IconButton(icon: Icon(Icons.add),
     onPressed: (){
     Navigator.of(context).pushNamed(
-    '/sermon',
+    '/song',
     ); },
     )
     ],
       ),
-      body: Consumer<CultoManager>(
-        builder: (_, sermonManager, __){
-          final filteredSermons = sermonManager.filteredSermons;
+      body: Consumer<SongManager>(
+        builder: (_, songManager, __){
+          final filteredSongs = songManager.filteredSongs;
           return ListView.builder(
               padding: const EdgeInsets.all(4),
-              itemCount: filteredSermons.length,
+              itemCount: filteredSongs.length,
               itemBuilder: (_, index){
-                return SermonListTile(filteredSermons[index]);
+                return SongListTile(filteredSongs[index]);
               }
           );
         },

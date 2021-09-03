@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:louvor_app/models/Sermon.dart';
+import 'package:louvor_app/models/Song.dart';
 import 'package:provider/provider.dart';
-import 'package:louvor_app/models/sermon_manager.dart';
+import 'package:louvor_app/models/song_manager.dart';
 
-class CultoScreen extends StatelessWidget {
+class SongScreen extends StatelessWidget {
 
-  CultoScreen(Culto s) : sermon = s != null ? s.clone() : Culto();
+  SongScreen(Song s) : song = s != null ? s.clone() : Song();
 
-  final Culto sermon;
+  final Song song;
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -16,10 +16,10 @@ class CultoScreen extends StatelessWidget {
     final primaryColor = Theme.of(context).primaryColor;
 
     return ChangeNotifierProvider.value(
-        value: sermon,
+        value: song,
     child: Scaffold(
       appBar: AppBar(
-        title: sermon != null ? Text("Música") : Text(sermon.titulo),
+        title: song != null ? Text("Música") : Text(song.nome),
         centerTitle: true,
       ),
       backgroundColor: Colors.white,
@@ -33,8 +33,8 @@ class CultoScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                 TextFormField(
-                      initialValue: sermon.titulo,
-                      onSaved: (titulo) => sermon.titulo = titulo,
+                      initialValue: song.nome,
+                      onSaved: (titulo) => song.nome = titulo,
                       decoration: const InputDecoration(
                         hintText: 'Nome',
                         border: InputBorder.none,
@@ -47,8 +47,8 @@ class CultoScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(top: 8),
                     child: TextFormField(
-                      initialValue: sermon.texto_base,
-                      onSaved: (tb) => sermon.texto_base = tb,
+                      initialValue: song.artista,
+                      onSaved: (tb) => song.artista = tb,
                       decoration: const InputDecoration(
                         hintText: 'Artista',
                         border: InputBorder.none,
@@ -64,8 +64,8 @@ class CultoScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(top: 8),
                     child: TextFormField(
-                      initialValue: sermon.tags,
-                      onSaved: (tags) => sermon.tags = tags,
+                      initialValue: song.letra,
+                      onSaved: (tags) => song.letra = tags,
                       decoration: const InputDecoration(
                         hintText: 'Letra',
                         border: InputBorder.none,
@@ -80,8 +80,8 @@ class CultoScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(top: 16, bottom: 8),
                     child: TextFormField(
-                      initialValue: sermon.tema,
-                      onSaved: (tema) => sermon.tema = tema,
+                      initialValue: song.tom,
+                      onSaved: (tema) => song.tom = tema,
                       decoration: const InputDecoration(
                         hintText: 'Tom',
                         border: InputBorder.none,
@@ -95,8 +95,8 @@ class CultoScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 16, bottom: 8),
                 child: TextFormField(
-                    initialValue: sermon.texto,
-                    onSaved: (texto) => sermon.texto = texto,
+                    initialValue: song.cifra,
+                    onSaved: (texto) => song.cifra = texto,
                     decoration: InputDecoration(
                       border: const OutlineInputBorder(),
                       filled: true,
@@ -104,19 +104,19 @@ class CultoScreen extends StatelessWidget {
                       labelText: 'Cifra',
                     ),
                     onChanged: (value) {
-                      sermon.texto = value;
+                      song.cifra = value;
                     },
                     maxLines: 5,
                   ),
               ),
-            Consumer<Culto>(
+            Consumer<Song>(
                builder: (_, sermon, __) {
                  return RaisedButton(
                    onPressed: () async {
                      if (formKey.currentState.validate()) {
                        formKey.currentState.save();
                        await sermon.save();
-                       context.read<CultoManager>().update(sermon);
+                       context.read<SongManager>().update(sermon);
                        Navigator.of(context).pop();
                      }
                    },
