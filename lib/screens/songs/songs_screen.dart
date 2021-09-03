@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:louvor_app/common/custom_drawer/custom_drawer.dart';
 import 'package:louvor_app/models/song_manager.dart';
-import 'package:louvor_app/screens/songs/components/sermon_list_tile.dart';
+import 'package:louvor_app/screens/songs/components/song_list_tile.dart';
 import 'package:provider/provider.dart';
 
 import 'components/search_dialog.dart';
-import 'components/sermon_list_tile.dart';
+import 'components/song_list_tile.dart';
 
 class SongsScreen extends StatelessWidget {
   @override
