@@ -53,7 +53,7 @@ class CultoManager extends ChangeNotifier{
 
   Future<void> _loadAllSermon(UserManager userManager) async {
     final QuerySnapshot snapSermons =
-    await firestore.collection('sermons').where('uid', isEqualTo: userManager.user.id).where('ativo', isEqualTo: 'True').getDocuments();
+    await firestore.collection('sermons').where('ativo', isEqualTo: 'True').getDocuments();
 
     allSermons = snapSermons.documents.map(
             (d) => Culto.fromDocument(d)).toList();
