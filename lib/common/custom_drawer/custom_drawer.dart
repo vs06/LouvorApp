@@ -40,6 +40,11 @@ class CustomDrawer extends StatelessWidget {
                 title: 'Repertório',
                 page: 1,
               ),
+              DrawerTile(
+                iconData: Icons.home_work,
+                title: 'Cultos',
+                page: 2,
+              ),
             ],
           ),
         ],

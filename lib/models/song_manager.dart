@@ -64,7 +64,6 @@ class SongManager extends ChangeNotifier{
   void update(Song song){
     allSongs.removeWhere((s) => s.id == song.id);
     song.uid = user.id;
-    print(song.ativo);
     allSongs.add(song);
     song.save();
   notifyListeners();

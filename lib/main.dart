@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:louvor_app/screens/services/service_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:louvor_app/models/user_manager.dart';
 import 'package:louvor_app/screens/base/base_screen.dart';
@@ -6,10 +7,13 @@ import 'package:louvor_app/screens/login/login_screen.dart';
 import 'package:louvor_app/screens/song_list.dart';
 import 'package:louvor_app/screens/songs/song_screen.dart';
 import 'package:louvor_app/screens/songs/songs_screen.dart';
+import 'package:louvor_app/screens/services/services_screen.dart';
 import 'package:louvor_app/screens/signup/signup_screen.dart';
 
 import 'models/Song.dart';
 import 'models/song_manager.dart';
+import 'models/Service.dart';
+import 'models/service_manager.dart';
 
 Future<void> main() async {
   runApp(MyApp());
@@ -45,7 +49,13 @@ class MyApp extends StatelessWidget {
           lazy: false,
           update: (_, userManager, sermonManager) =>
               sermonManager..updateUser(userManager),
-        )
+        ),
+        ChangeNotifierProxyProvider<UserManager, ServiceManager>(
+           create: (_) => ServiceManager(),
+           lazy: false,
+           update: (_, userManager, serviceManager) =>
+           serviceManager..updateUser(userManager),
+         )
       ],
       child: MaterialApp(
         title: 'Louvor',
@@ -71,6 +81,16 @@ class MyApp extends StatelessWidget {
             case '/songs':
               return MaterialPageRoute(
                   builder: (_) => SongsScreen()
+              );
+            case '/service':
+              return MaterialPageRoute(
+                  builder: (_) => ServiceScreen(
+                      settings.arguments as Service
+                  )
+              );
+            case '/services':
+              return MaterialPageRoute(
+                  builder: (_) => ServicesScreen()
               );
             case '/base':
             default:
