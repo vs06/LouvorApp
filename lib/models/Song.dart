@@ -24,8 +24,8 @@ class Song extends ChangeNotifier {
   Song.fromDocument(DocumentSnapshot document){
     id = document.documentID;
     nome = document['titulo'] as String;
-    artista = document['texto_base'] as String;
-    tom = document['tema'] as String;
+    artista = document['artista'] as String;
+    tom = document['tom'] as String;
     livro = document['livro'] as String;
     data = document['data'] as String;
     cifra = document['cifra'] as String;
@@ -39,10 +39,10 @@ class Song extends ChangeNotifier {
   Future<void> save() async {
     final Map<String, dynamic> blob = {
       'titulo': nome,
-      'texto_base': artista,
-      'tema': tom,
+      'artista': artista,
+      'tom': tom,
       'data': data,
-      'texto': cifra,
+      'cifra': cifra,
       'tags': letra,
       'uid': uid,
       'ativo': ativo,
@@ -63,10 +63,10 @@ class Song extends ChangeNotifier {
 
   //Sermon();
 
-  Song.fromTituloDescricao(String titulo, String descricao, String livro, String tema, String data) {
+  Song.fromTituloDescricao(String titulo, String descricao, String livro, String tom, String data) {
     this.nome = titulo;
     this.artista = descricao;
-    this.tom = tema;
+    this.tom = tom;
     this.livro = livro;
     this.cifra = cifra;
     this.data = data;
@@ -86,7 +86,7 @@ class Song extends ChangeNotifier {
 
   Map toJson() => {
     'titulo': nome,
-    'descricao': artista,
+    'artista': artista,
     'status': tom,
     'livro': livro,
     'tags': letra,
