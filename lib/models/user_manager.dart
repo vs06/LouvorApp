@@ -15,6 +15,7 @@ class UserManager extends ChangeNotifier {
   final Firestore firestore = Firestore.instance;
 
   User user;
+  static bool isUserAdmin;
 
   bool _loading = false;
   bool get loading => _loading;
@@ -71,6 +72,7 @@ class UserManager extends ChangeNotifier {
       final DocumentSnapshot docUser = await firestore.collection('users')
           .document(currentUser.uid).get();
       user = User.fromDocument(docUser);
+      isUserAdmin = user.isAdmin == 'TRUE'? true : false;
 
       notifyListeners();
     }

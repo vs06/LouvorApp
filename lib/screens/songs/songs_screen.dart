@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:louvor_app/common/custom_drawer/custom_drawer.dart';
 import 'package:louvor_app/models/song_manager.dart';
+import 'package:louvor_app/models/user_manager.dart';
 import 'package:louvor_app/screens/songs/components/song_list_tile.dart';
 import 'package:provider/provider.dart';
 
@@ -14,17 +15,18 @@ class SongsScreen extends StatelessWidget {
       drawer: CustomDrawer(),
       appBar: AppBar(
         title: Consumer<SongManager>(
-          builder: (_, songManager, __){
-            if(songManager.search.isEmpty){
+          builder: (_, songManager, __) {
+            if (songManager.search.isEmpty) {
               return const Text('Músicas');
             } else {
               return LayoutBuilder(
-                builder: (_, constraints){
+                builder: (_, constraints) {
                   return GestureDetector(
                     onTap: () async {
-                      final search = await showDialog<String>(context: context,
+                      final search = await showDialog<String>(
+                          context: context,
                           builder: (_) => SearchDialog(songManager.search));
-                      if(search != null){
+                      if (search != null) {
                         songManager.search = search;
                       }
                     },
@@ -33,8 +35,7 @@ class SongsScreen extends StatelessWidget {
                         child: Text(
                           'Músicas: ${songManager.search}',
                           textAlign: TextAlign.center,
-                        )
-                    ),
+                        )),
                   );
                 },
               );
@@ -44,14 +45,15 @@ class SongsScreen extends StatelessWidget {
         centerTitle: true,
         actions: <Widget>[
           Consumer<SongManager>(
-            builder: (_, songManager, __){
-              if(songManager.search.isEmpty){
+            builder: (_, songManager, __) {
+              if (songManager.search.isEmpty) {
                 return IconButton(
                   icon: Icon(Icons.search),
                   onPressed: () async {
-                    final search = await showDialog<String>(context: context,
+                    final search = await showDialog<String>(
+                        context: context,
                         builder: (_) => SearchDialog(songManager.search));
-                    if(search != null){
+                    if (search != null) {
                       songManager.search = search;
                     }
                   },
@@ -66,24 +68,29 @@ class SongsScreen extends StatelessWidget {
               }
             },
           ),
-          IconButton(icon: Icon(Icons.add),
-    onPressed: (){
-    Navigator.of(context).pushNamed(
-    '/song',
-    ); },
-    )
-    ],
+          Visibility(
+            visible: UserManager.isUserAdmin,
+            child:
+              IconButton(
+                icon: Icon(Icons.add),
+                onPressed: () {
+                  Navigator.of(context).pushNamed(
+                    '/song',
+                  );
+                },
+              )
+          ),
+        ],
       ),
       body: Consumer<SongManager>(
-        builder: (_, songManager, __){
+        builder: (_, songManager, __) {
           final filteredSongs = songManager.filteredSongs;
           return ListView.builder(
               padding: const EdgeInsets.all(4),
               itemCount: filteredSongs.length,
-              itemBuilder: (_, index){
+              itemBuilder: (_, index) {
                 return SongListTile(filteredSongs[index]);
-              }
-          );
+              });
         },
       ),
     );

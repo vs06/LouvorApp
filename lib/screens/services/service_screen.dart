@@ -4,6 +4,7 @@ import 'package:louvor_app/models/Service.dart';
 import 'package:provider/provider.dart';
 import 'package:louvor_app/models/song_manager.dart';
 import 'package:louvor_app/models/service_manager.dart';
+//import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class ServiceScreen extends StatelessWidget {
 
@@ -12,6 +13,13 @@ class ServiceScreen extends StatelessWidget {
   final Service service;
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  //CalendarController _controller = CalendarController();
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _controller = CalendarController();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -38,14 +46,62 @@ class ServiceScreen extends StatelessWidget {
                       initialValue: service.data,
                       onSaved: (data) => service.data = data,
                       decoration: const InputDecoration(
-                        hintText: 'Data',
+                        hintText: 'Dataa',
                         border: InputBorder.none,
-                        labelText: 'Data',
+                        labelText: 'Dataa',
                       ),
                       style: TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.w800),
                     ),
+                  //SfCalendar(view: CalendarView.month,),
+                  // TableCalendar(
+                  //   initialCalendarFormat: CalendarFormat.month,
+                  //   calendarStyle: CalendarStyle(
+                  //       todayColor: Colors.blue,
+                  //       selectedColor: Theme.of(context).primaryColor,
+                  //       todayStyle: TextStyle(
+                  //           fontWeight: FontWeight.bold,
+                  //           fontSize: 22.0,
+                  //           color: Colors.white)
+                  //   ),
+                  //   headerStyle: HeaderStyle(
+                  //     centerHeaderTitle: true,
+                  //     formatButtonDecoration: BoxDecoration(
+                  //       color: Colors.brown,
+                  //       borderRadius: BorderRadius.circular(22.0),
+                  //     ),
+                  //     formatButtonTextStyle: TextStyle(color: Colors.white),
+                  //     formatButtonShowsNext: false,
+                  //   ),
+                  //   // startingDayOfWeek: StartingDayOfWeek.monday,
+                  //   // onDaySelected: (date, events) {
+                  //   //   print(date.toUtc());
+                  //   // },
+                  //   builders: CalendarBuilders(
+                  //     selectedDayBuilder: (context, date, events) => Container(
+                  //         margin: const EdgeInsets.all(5.0),
+                  //         alignment: Alignment.center,
+                  //         decoration: BoxDecoration(
+                  //             color: Theme.of(context).primaryColor,
+                  //             borderRadius: BorderRadius.circular(8.0)),
+                  //         child: Text(
+                  //           date.day.toString(),
+                  //           style: TextStyle(color: Colors.white),
+                  //         )),
+                  //     todayDayBuilder: (context, date, events) => Container(
+                  //         margin: const EdgeInsets.all(5.0),
+                  //         alignment: Alignment.center,
+                  //         decoration: BoxDecoration(
+                  //             color: Colors.blue,
+                  //             borderRadius: BorderRadius.circular(8.0)),
+                  //         child: Text(
+                  //           date.day.toString(),
+                  //           style: TextStyle(color: Colors.white),
+                  //         )),
+                  //   ),
+                  //   calendarController: _controller,
+                  // ),
                   Padding(
                     padding: const EdgeInsets.only(top: 8),
                     child: TextFormField(

@@ -17,8 +17,9 @@ class Song extends ChangeNotifier {
   String letra;
   String uid;
   String ativo;
+  String videoUrl;
 
-  Song({this.id, this.nome, this.artista, this.tom, this.cifra, this.data, this.letra, this.uid, this.ativo}){}
+  Song({this.id, this.nome, this.artista, this.tom, this.cifra, this.data, this.letra, this.uid, this.ativo, this.videoUrl}){}
 
   Song.fromDocument(DocumentSnapshot document){
     id = document.documentID;
@@ -27,10 +28,12 @@ class Song extends ChangeNotifier {
     tom = document['tema'] as String;
     livro = document['livro'] as String;
     data = document['data'] as String;
-    cifra = document['texto'] as String;
+    cifra = document['cifra'] as String;
     letra = document['tags'] as String;
     uid = document['uid'] as String;
     ativo = document['ativo'] as String;
+    videoUrl = document['videoUrl'] as String;
+
   }
 
   Future<void> save() async {
@@ -43,6 +46,7 @@ class Song extends ChangeNotifier {
       'tags': letra,
       'uid': uid,
       'ativo': ativo,
+      'videoUrl': videoUrl,
     };
     if (ativo == null)
       ativo = 'True';
@@ -74,10 +78,11 @@ class Song extends ChangeNotifier {
         tom = json['status'],
         livro = json['livro'],
         letra = json['tags'],
-        cifra = json['texto'],
+        cifra = json['cifra'],
         data = json['data'],
         uid = json['uid'],
-        ativo = json['ativo'];
+        ativo = json['ativo'],
+        videoUrl = json['videoUrl'];
 
   Map toJson() => {
     'titulo': nome,
@@ -85,10 +90,11 @@ class Song extends ChangeNotifier {
     'status': tom,
     'livro': livro,
     'tags': letra,
-    'texto': cifra,
+    'cifra': cifra,
     'data': data,
     'uid': uid,
-    'ativo': ativo
+    'ativo': ativo,
+    'videoUrl' : videoUrl
   };
 
   Song clone(){
@@ -101,7 +107,8 @@ class Song extends ChangeNotifier {
         data: data,
         letra: letra,
         uid: uid,
-        ativo: ativo
+        ativo: ativo,
+        videoUrl: videoUrl
     );
   }
 

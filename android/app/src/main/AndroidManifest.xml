@@ -50,4 +50,23 @@
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-3241906809446166~7375934745"/>
     </application>
+
+<!--    <queries>-->
+<!--        &lt;!&ndash; If your app opens https URLs &ndash;&gt;-->
+<!--        <intent>-->
+<!--            <action android:name="android.intent.action.VIEW" />-->
+<!--            <data android:scheme="https" />-->
+<!--        </intent>-->
+<!--        &lt;!&ndash; If your app makes calls &ndash;&gt;-->
+<!--        <intent>-->
+<!--            <action android:name="android.intent.action.DIAL" />-->
+<!--            <data android:scheme="tel" />-->
+<!--        </intent>-->
+<!--        &lt;!&ndash; If your app emails &ndash;&gt;-->
+<!--        <intent>-->
+<!--            <action android:name="android.intent.action.SEND" />-->
+<!--            <data android:mimeType="*/*" />-->
+<!--        </intent>-->
+<!--    </queries>-->
+
 </manifest>
