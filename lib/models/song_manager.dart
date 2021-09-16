@@ -53,7 +53,7 @@ class SongManager extends ChangeNotifier{
 
   Future<void> _loadAllSong(UserManager userManager) async {
     final QuerySnapshot snapSongs =
-    await firestore.collection('songs').where('ativo', isEqualTo: 'True').getDocuments();
+    await firestore.collection('songs').where('ativo', isEqualTo: 'TRUE').getDocuments();
 
     allSongs = snapSongs.documents.map(
             (d) => Song.fromDocument(d)).toList();
