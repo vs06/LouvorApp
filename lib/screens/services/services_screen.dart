@@ -14,17 +14,18 @@ class ServicesScreen extends StatelessWidget {
       drawer: CustomDrawer(),
       appBar: AppBar(
         title: Consumer<ServiceManager>(
-          builder: (_, serviceManager, __){
-            if(serviceManager.search.isEmpty){
+          builder: (_, serviceManager, __) {
+            if (serviceManager.search.isEmpty) {
               return const Text('Cultos');
             } else {
               return LayoutBuilder(
-                builder: (_, constraints){
+                builder: (_, constraints) {
                   return GestureDetector(
                     onTap: () async {
-                      final search = await showDialog<String>(context: context,
+                      final search = await showDialog<String>(
+                          context: context,
                           builder: (_) => SearchDialog(serviceManager.search));
-                      if(search != null){
+                      if (search != null) {
                         serviceManager.search = search;
                       }
                     },
@@ -33,8 +34,7 @@ class ServicesScreen extends StatelessWidget {
                         child: Text(
                           'Cultos: ${serviceManager.search}',
                           textAlign: TextAlign.center,
-                        )
-                    ),
+                        )),
                   );
                 },
               );
@@ -44,14 +44,15 @@ class ServicesScreen extends StatelessWidget {
         centerTitle: true,
         actions: <Widget>[
           Consumer<ServiceManager>(
-            builder: (_, serviceManager, __){
-              if(serviceManager.search.isEmpty){
+            builder: (_, serviceManager, __) {
+              if (serviceManager.search.isEmpty) {
                 return IconButton(
                   icon: Icon(Icons.search),
                   onPressed: () async {
-                    final search = await showDialog<String>(context: context,
+                    final search = await showDialog<String>(
+                        context: context,
                         builder: (_) => SearchDialog(serviceManager.search));
-                    if(search != null){
+                    if (search != null) {
                       serviceManager.search = search;
                     }
                   },
@@ -66,24 +67,25 @@ class ServicesScreen extends StatelessWidget {
               }
             },
           ),
-          IconButton(icon: Icon(Icons.add),
-    onPressed: (){
-    Navigator.of(context).pushNamed(
-    '/service',
-    ); },
-    )
-    ],
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () {
+              Navigator.of(context).pushNamed(
+                '/service',
+              );
+            },
+          )
+        ],
       ),
       body: Consumer<ServiceManager>(
-        builder: (_, serviceManager, __){
+        builder: (_, serviceManager, __) {
           final filteredServices = serviceManager.filteredServices;
           return ListView.builder(
               padding: const EdgeInsets.all(4),
               itemCount: filteredServices.length,
-              itemBuilder: (_, index){
+              itemBuilder: (_, index) {
                 return ServiceListTile(filteredServices[index]);
-              }
-          );
+              });
         },
       ),
     );
