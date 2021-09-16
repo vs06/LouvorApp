@@ -65,12 +65,15 @@ class SongListTile extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
+                          Flexible(
+                            child: Text(
                             song.nome,
+                            overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w800,
                             ),
+                          ),
                           ),
                         ],
                       ),
@@ -78,6 +81,7 @@ class SongListTile extends StatelessWidget {
                         padding: const EdgeInsets.only(top: 4),
                         child: Text(
                           '${song.letra}',
+                          overflow: TextOverflow.ellipsis ,
                           style: TextStyle(
                             color: Colors.grey[400],
                             fontSize: 12,
@@ -124,16 +128,19 @@ class SongListTile extends StatelessWidget {
                         Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Align(
+                              Flexible(
+                                  child: Align(
                                 alignment: Alignment.topRight,
                                 child: Text(
                                   "Tom: " + '${song.tom}',
+                                  overflow: TextOverflow.ellipsis ,
                                   style: TextStyle(
                                     color: Colors.blueGrey,
                                     fontSize: 15,
                                     fontWeight: FontWeight.w800,
                                   ),
                                 ),
+                              ),
                               ),
                               Visibility(
                                 child: GestureDetector(
