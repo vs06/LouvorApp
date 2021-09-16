@@ -74,9 +74,8 @@ class Song extends ChangeNotifier {
 
   Song.fromJson(Map<String, dynamic> json)
       : nome = json['titulo'],
-        artista = json['descricao'],
-        tom = json['status'],
-        livro = json['livro'],
+        artista = json['artista'],
+        tom = json['tom'],
         letra = json['tags'],
         cifra = json['cifra'],
         data = json['data'],
@@ -87,7 +86,7 @@ class Song extends ChangeNotifier {
   Map toJson() => {
     'titulo': nome,
     'artista': artista,
-    'status': tom,
+    'tom': tom,
     'livro': livro,
     'tags': letra,
     'cifra': cifra,
