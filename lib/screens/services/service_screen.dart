@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:louvor_app/models/Song.dart';
 import 'package:louvor_app/models/Service.dart';
+import 'package:louvor_app/screens/songs/songs_service_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:louvor_app/models/song_manager.dart';
 import 'package:louvor_app/models/service_manager.dart';
@@ -128,7 +129,16 @@ class ServiceScreen extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 16,
                             ),
-                          )
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              //Navigator.of(context).pushNamed('/songs', arguments: songs);
+                              Navigator.of(context).push(
+                                MaterialPageRoute(builder: (context) => SongsServiceScreen())
+                              );
+                            },
+                            child: Icon(Icons.add, color: Colors.blueGrey,),
+                          ),
                         ],
                       ),
                     ),
