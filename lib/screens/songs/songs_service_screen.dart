@@ -181,10 +181,6 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
                                                           icon: Icon(Icons.add, size: 10),
                                                           label: Text("Add"),
                                                         )
-                                                      // GestureDetector(
-                                                      //   onTap: setSt,
-                                                      //   child: Icon(Icons.add_circle_sharp, color: Colors.lightGreen, size: 35,),
-                                                      // ),
                                                     ),
                                                   ]
                                               ),
@@ -220,7 +216,13 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
                     );
                   }),
             ),
-            Text('Musicas Selecionadas' ),
+            Text('Musicas Selecionadas',
+              style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w800,
+                  color: Theme.of(context).primaryColor
+              ),
+            ),
             Expanded(
               flex: 4, // 40%
               child: ListView.builder(
@@ -228,11 +230,7 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
                         itemCount: widget._lstSongSelecionadas.length,
                         shrinkWrap: true,
                         itemBuilder: (BuildContext context, int index) {
-                          //final SongSelecionada = widget._lstSongSelecionadas[index];
-                          return GestureDetector(
-                            onTap: () {
-                              //Navigator.of(context).pushNamed('/song', arguments: filteredSongs[index]);
-                            },
+                          return Expanded(
                             child: Card(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(4)
@@ -262,6 +260,17 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
                                                   ),
                                                 ),
                                               ),
+                                              Align(
+                                                  alignment: Alignment.center,
+                                                  child:
+                                                    GestureDetector(
+                                                      onTap: () {setState(() {
+                                                                    widget._lstSongSelecionadas.removeWhere((element) => element.nome == widget._lstSongSelecionadas[index].nome);
+                                                                  });
+                                                                },
+                                                      child:Icon(Icons.delete , color: Colors.blueGrey,),
+                                                    ),
+                                              ),
                                             ],
                                           ),
                                         ],
@@ -282,10 +291,17 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
                 );
               },
               icon: Icon(Icons.add, size: 10),
-              label: Text("Add"),
-            )
+              label: Text("Adicionar selecionadas"),
+            ),
           ],
-        )
+        ),
+        // floatingActionButton: FloatingActionButton(
+        //     onPressed: () {
+        //   // Add your onPressed code here!
+        //   },
+        //   child: const Icon(Icons.check),
+        //   backgroundColor: Colors.blueGrey,
+        // ),
     );
   }
 
