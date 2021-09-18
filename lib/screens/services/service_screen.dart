@@ -134,7 +134,7 @@ class ServiceScreen extends StatelessWidget {
                             onTap: () {
                               //Navigator.of(context).pushNamed('/songs', arguments: songs);
                               Navigator.of(context).push(
-                                MaterialPageRoute(builder: (context) => SongsServiceScreen())
+                                MaterialPageRoute(builder: (context) => SongsServiceScreen.buildSongsServiceScreen(service))
                               );
                             },
                             child: Icon(Icons.add, color: Colors.blueGrey,),
