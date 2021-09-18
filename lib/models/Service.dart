@@ -11,14 +11,16 @@ class Service extends ChangeNotifier {
   String ativo;
   String data;
   String dirigente;
+  List<String> songs;
 
-  Service({this.id, this.dirigente, this.data, this.ativo}){}
+  Service({this.id, this.dirigente, this.data, this.ativo, this.songs}){}
 
   Service.fromDocument(DocumentSnapshot document){
     id = document.documentID;
     data = document['data'] as String;
     dirigente = document['dirigente'] as String;
     ativo = document['ativo'] as String;
+    songs = List.from(document.data['songs']);
   }
 
   Future<void> save() async {
@@ -26,6 +28,7 @@ class Service extends ChangeNotifier {
       'data': data,
       'dirigente': dirigente,
       'ativo' : ativo,
+      'songs': songs,
     };
     if (ativo == null)
       ativo = 'True';
@@ -33,7 +36,9 @@ class Service extends ChangeNotifier {
     if(id == null){
       final doc = await firestore.collection('services').add(blob);
       id = doc.documentID;
+      print('SALVANDO $blob $data $dirigente $songs');
     } else {
+      print('ATUALIZANDO $blob $data $dirigente $songs');
       await firestoreRef.updateData(blob);
     }
 
@@ -46,23 +51,30 @@ class Service extends ChangeNotifier {
     this.data = data;
   }
 
-  Service.fromJson(Map<String, dynamic> json)
-      : dirigente = json['dirigente'],
-        data = json['data'],
-        ativo = json['ativo'];
+  Service.fromJson(Map<String, dynamic> json) {
+  dirigente = json['dirigente'];
+  ativo = json['ativo'];
+  data = json['data'];
+  songs = json['songs'].cast<String>();
+}
 
-  Map toJson() => {
-    'dirigente': dirigente,
-    'data': data,
-    'ativo': ativo
-  };
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['dirigente'] = this.dirigente;
+    data['ativo'] = this.ativo;
+    data['data'] = this.data;
+    data['songs'] = this.songs;
+    return data;
+  }
 
   Service clone(){
+    print('CLONEI');
     return Service(
         id: id,
         dirigente: dirigente,
         data: data,
-        ativo: ativo
+        ativo: ativo,
+        songs: songs
     );
   }
 

@@ -13,7 +13,9 @@ class SongsServiceScreen extends StatefulWidget {
   final List<Song> _lstSongSelecionadas = new List();
   Service service;
 
-  SongsServiceScreen.buildSongsServiceScreen(this.service);
+  SongsServiceScreen.buildSongsServiceScreen(this.service) ;
+
+  SongsServiceScreen(Service s) : service = s != null ? s.clone() : Service();
 
   @override
   State<StatefulWidget> createState() {
@@ -175,6 +177,7 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
                                                             //widget._lstSongSelecionadas.add(filteredSongs[index]);
                                                             setState(() {
                                                               widget._lstSongSelecionadas.add(filteredSongs[index]);
+                                                              //widget.service.songs.add(filteredSongs[index].id);
                                                             });
                                                             // Respond to button press
                                                           },
@@ -286,6 +289,7 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
             ),
             ElevatedButton.icon(
               onPressed: () {
+                print('${widget._lstSongSelecionadas} ${widget.service.data} ${widget.service.dirigente} ${widget.service.songs}');
                 Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => ServiceScreen(widget.service))
                 );
