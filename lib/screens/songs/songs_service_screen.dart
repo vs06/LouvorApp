@@ -180,7 +180,7 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
                                                             //widget._lstSongSelecionadas.add(filteredSongs[index]);
                                                             setState(() {
                                                               widget._lstSongSelecionadas.add(filteredSongs[index]);
-                                                              //widget.service.songs.add(filteredSongs[index].id);
+                                                              widget.service.songs.add(filteredSongs[index].id);
                                                             });
                                                             // Respond to button press
                                                           },
