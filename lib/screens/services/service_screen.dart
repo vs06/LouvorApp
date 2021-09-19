@@ -12,6 +12,7 @@ class ServiceScreen extends StatelessWidget {
   final Service service;
 
   ServiceScreen(Service s) : service = s != null ? s.clone() : Service();
+
   ServiceScreen.buidSongs(this.service);
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -134,6 +135,10 @@ class ServiceScreen extends StatelessWidget {
                           ),
                           GestureDetector(
                             onTap: () {
+                              if (formKey.currentState.validate()) {
+                                  formKey.currentState.save();
+                              }
+                              Service s2 = service;
                               Navigator.of(context).push(
                                   MaterialPageRoute(builder: (context) => SongsServiceScreen.buildSongsServiceScreen(service))
                               );

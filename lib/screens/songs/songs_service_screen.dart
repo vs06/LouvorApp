@@ -13,7 +13,8 @@ class SongsServiceScreen extends StatefulWidget {
   List<Song> _lstSongSelecionadas = new List<Song>();
   Service service;
 
-  SongsServiceScreen.buildSongsServiceScreen(this.service) {
+  SongsServiceScreen.buildSongsServiceScreen(Service s) {
+     service = s;
     _lstSongSelecionadas.addAll(service.lstSongs);
   }
 
@@ -269,7 +270,8 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
                                                   alignment: Alignment.center,
                                                   child:
                                                     GestureDetector(
-                                                      onTap: () {setState(() {
+                                                      onTap: () {
+                                                                  setState(() {
                                                                     widget._lstSongSelecionadas.removeWhere((element) => element.nome == widget._lstSongSelecionadas[index].nome);
                                                                   });
                                                                 },
@@ -294,6 +296,7 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
                 print('${widget._lstSongSelecionadas} ${widget.service.data} ${widget.service.dirigente} ${widget.service.songs}');
                 widget.service.lstSongs.clear();
                 widget.service.lstSongs.addAll(widget._lstSongSelecionadas);
+                fillSongsNameIntoService(widget.service);
                 Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => ServiceScreen.buidSongs(widget.service))
                 );
@@ -313,17 +316,16 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
     );
   }
 
-  Future<Service> servicesAddSongs(Service serv, List<Song> lst) async {
-    //final List<Service> filteredServices = [];
-
-     serv.lstSongs.addAll(lst);
-     return serv;
-    // serv.lstSongs.addAll(
-    //       allServices.where(
-    //               (p) => p.data.toLowerCase().contains(search.toLowerCase())
-    //       )
-    //   );
-
+  /*Criado para na volta para a tela de services,
+   * o objeto services conter alem da List<Song>
+   *ter também a List<String> com as chaves das songs a serem persistidas
+   */
+  void fillSongsNameIntoService(Service serv){
+    if(serv.lstSongs.isNotEmpty && serv.lstSongs.length > 0){
+      List<String> lstSongsName = [];
+      serv.lstSongs.forEach((element) => lstSongsName.add(element.nome));
+      serv.songs = lstSongsName;
+    }
   }
 
 }
