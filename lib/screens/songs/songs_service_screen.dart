@@ -10,10 +10,12 @@ import 'components/search_dialog.dart';
 
 class SongsServiceScreen extends StatefulWidget {
 
-  final List<Song> _lstSongSelecionadas = new List();
+  List<Song> _lstSongSelecionadas = new List<Song>();
   Service service;
 
-  SongsServiceScreen.buildSongsServiceScreen(this.service) ;
+  SongsServiceScreen.buildSongsServiceScreen(this.service) {
+    _lstSongSelecionadas.addAll(service.lstSongs);
+  }
 
   SongsServiceScreen(Service s) : service = s != null ? s.clone() : Service();
 
@@ -290,8 +292,10 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
             ElevatedButton.icon(
               onPressed: () {
                 print('${widget._lstSongSelecionadas} ${widget.service.data} ${widget.service.dirigente} ${widget.service.songs}');
+                widget.service.lstSongs.clear();
+                widget.service.lstSongs.addAll(widget._lstSongSelecionadas);
                 Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => ServiceScreen(widget.service))
+                    MaterialPageRoute(builder: (context) => ServiceScreen.buidSongs(widget.service))
                 );
               },
               icon: Icon(Icons.add, size: 10),
@@ -309,5 +313,17 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
     );
   }
 
+  Future<Service> servicesAddSongs(Service serv, List<Song> lst) async {
+    //final List<Service> filteredServices = [];
+
+     serv.lstSongs.addAll(lst);
+     return serv;
+    // serv.lstSongs.addAll(
+    //       allServices.where(
+    //               (p) => p.data.toLowerCase().contains(search.toLowerCase())
+    //       )
+    //   );
+
+  }
 
 }

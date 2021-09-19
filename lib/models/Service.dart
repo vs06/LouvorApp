@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:louvor_app/models/Song.dart';
 
 class Service extends ChangeNotifier {
 
@@ -12,6 +13,7 @@ class Service extends ChangeNotifier {
   String data;
   String dirigente;
   List<String> songs;
+  List<Song> lstSongs = new List<Song>();
 
   Service({this.id, this.dirigente, this.data, this.ativo, this.songs}){}
 
