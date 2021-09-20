@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:louvor_app/models/Song.dart';
@@ -13,9 +15,11 @@ class Service extends ChangeNotifier {
   String data;
   String dirigente;
   List<String> songs;
-  List<Song> lstSongs = new List<Song>();
+  List<Song> lstSongs = [];
+  Map<String, dynamic> dynamicSongs = new Map();
 
-  Service({this.id, this.dirigente, this.data, this.ativo, this.songs}){}
+  //Service({this.id, this.dirigente, this.data, this.ativo, this.songs, this.lstSongs}){ this.lstSongs = new List<Song>();}
+  Service({this.id, this.dirigente, this.data, this.ativo, this.songs, this.lstSongs});
 
   Service.fromDocument(DocumentSnapshot document){
     id = document.documentID;
@@ -23,6 +27,17 @@ class Service extends ChangeNotifier {
     dirigente = document['dirigente'] as String;
     ativo = document['ativo'] as String;
     songs = List.from(document.data['songs']);
+
+    Map.from(document.data['lstSongs']).forEach((key, value) {
+      if(lstSongs == null)
+          lstSongs = [];
+      Song s = Song.byMap(key, value);
+      s.id = key;
+      lstSongs.add(s);
+    });
+
+    lstSongs.forEach((element) {print(element.id);});
+
   }
 
   Future<void> save() async {
@@ -31,43 +46,53 @@ class Service extends ChangeNotifier {
       'dirigente': dirigente,
       'ativo' : ativo,
       'songs': songs,
+      'lstSongs': lstSongs,
     };
     if (ativo == null)
       ativo = 'True';
 
     if(id == null){
-      final doc = await firestore.collection('services').add(blob);
-      id = doc.documentID;
+      if(this.dynamicSongs == null)
+        this.dynamicSongs = new Map();
+
+      this.lstSongs.forEach((element) => this.dynamicSongs.addAll(element.toMap()));
+
+      final doc = await firestore.collection('services').document().setData(this.toMap());
+      id = firestore.collection('services').document().documentID;
       print('SALVANDO $blob $data $dirigente $songs');
+
     } else {
+
       print('ATUALIZANDO $blob $data $dirigente $songs');
-      await firestoreRef.updateData(blob);
+
+      this.lstSongs.forEach((element) => this.dynamicSongs.addAll(element.toMap()));
+      await firestoreRef.updateData(this.toMap());
+
     }
 
     notifyListeners();
   }
 
-  //Sermon();
-
   Service.fromData(String data) {
     this.data = data;
   }
 
-  Service.fromJson(Map<String, dynamic> json) {
-  dirigente = json['dirigente'];
-  ativo = json['ativo'];
-  data = json['data'];
-  songs = json['songs'].cast<String>();
-}
+  Service.fromMap(Map<dynamic, dynamic> map)
+      : dirigente = map['dirigente'],
+        ativo = map['ativo'],
+        data = map['data'],
+        songs = map['songs'].cast<String>(),
+        lstSongs = map['lstSongs'].map(
+                                        (set) {return Set.from(set);}
+                                      ).toList();
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['dirigente'] = this.dirigente;
-    data['ativo'] = this.ativo;
-    data['data'] = this.data;
-    data['songs'] = this.songs;
-    return data;
-  }
+  Map<String, dynamic> toMap() => {
+    "dirigente" : this.dirigente,
+    "ativo" : this.ativo,
+    "data" : this.data,
+    "songs" : this.songs,
+    "lstSongs" : this.dynamicSongs,
+  };
 
   Service clone(){
     print('CLONEI');
@@ -76,7 +101,8 @@ class Service extends ChangeNotifier {
         dirigente: dirigente,
         data: data,
         ativo: ativo,
-        songs: songs
+        songs: songs,
+        lstSongs: lstSongs,
     );
   }
 

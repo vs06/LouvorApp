@@ -153,7 +153,7 @@ class ServiceScreen extends StatelessWidget {
                       padding: const EdgeInsets.only(top: 150),
                       child: ListView.builder(
                           padding: const EdgeInsets.all(8),
-                          itemCount: service.lstSongs.length,
+                          itemCount: service.lstSongs == null ? 0 : service.lstSongs.length,
                           shrinkWrap: true,
                           itemBuilder: (BuildContext context, int index) {
                             return Expanded(

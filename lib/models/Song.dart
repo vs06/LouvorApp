@@ -19,7 +19,21 @@ class Song extends ChangeNotifier {
   String ativo;
   String videoUrl;
 
-  Song({this.id, this.nome, this.artista, this.tom, this.cifra, this.data, this.letra, this.uid, this.ativo, this.videoUrl}){}
+  Song({this.id, this.nome, this.artista, this.tom, this.cifra, this.data, this.letra, this.uid, this.ativo, this.videoUrl});
+
+  Song.byMap(String id, Map<String, dynamic> json){
+    this.id = id;
+    this.artista = json['artista'];
+    this.ativo = json['ativo'];
+    this.cifra = json['cifra'];
+    this.data = json['data'];
+    this.id = json['id'];
+    this.letra = json['letra'];
+    this.nome = json['titulo'];
+    this.tom = json['tom'];
+    this.uid = json['uid'];
+    this.videoUrl = json['videoUrl'];
+  }
 
   Song.fromDocument(DocumentSnapshot document){
     id = document.documentID;
@@ -61,8 +75,6 @@ class Song extends ChangeNotifier {
     notifyListeners();
   }
 
-  //Sermon();
-
   Song.fromTituloDescricao(String titulo, String descricao, String livro, String tom, String data) {
     this.nome = titulo;
     this.artista = descricao;
@@ -87,13 +99,26 @@ class Song extends ChangeNotifier {
     'titulo': nome,
     'artista': artista,
     'tom': tom,
-    'livro': livro,
     'tags': letra,
     'cifra': cifra,
     'data': data,
     'uid': uid,
     'ativo': ativo,
     'videoUrl' : videoUrl
+  };
+
+  Map<String,dynamic> toMap() => {
+    id: {
+      'titulo': nome,
+      'artista': artista,
+      'tom': tom,
+      'tags': letra,
+      'cifra': cifra,
+      'data': data,
+      'uid': uid,
+      'ativo': ativo,
+      'videoUrl' : videoUrl
+    }
   };
 
   Song clone(){

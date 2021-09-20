@@ -15,7 +15,12 @@ class SongsServiceScreen extends StatefulWidget {
 
   SongsServiceScreen.buildSongsServiceScreen(Service s) {
      service = s;
-    _lstSongSelecionadas.addAll(service.lstSongs);
+
+     if(service.lstSongs != null){
+      _lstSongSelecionadas.addAll(service.lstSongs);
+     } else {
+       service.lstSongs = new List();
+     }
   }
 
   SongsServiceScreen(Service s) : service = s != null ? s.clone() : Service();
@@ -180,7 +185,7 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
                                                             //widget._lstSongSelecionadas.add(filteredSongs[index]);
                                                             setState(() {
                                                               widget._lstSongSelecionadas.add(filteredSongs[index]);
-                                                              widget.service.songs.add(filteredSongs[index].id);
+                                                              //widget.service.songs.add(filteredSongs[index].id);
                                                             });
                                                             // Respond to button press
                                                           },
@@ -323,7 +328,7 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
   void fillSongsNameIntoService(Service serv){
     if(serv.lstSongs.isNotEmpty && serv.lstSongs.length > 0){
       List<String> lstSongsName = [];
-      serv.lstSongs.forEach((element) => lstSongsName.add(element.nome));
+      serv.lstSongs.forEach((element) => lstSongsName.add(element.id));
       serv.songs = lstSongsName;
     }
   }
