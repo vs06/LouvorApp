@@ -10,7 +10,6 @@ import 'dart:async';
 //import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class ServiceScreen extends StatefulWidget {
-
   final Service service;
 
   ServiceScreen(Service s) : service = s != null ? s.clone() : Service();
@@ -33,7 +32,6 @@ class ServiceScreen extends StatefulWidget {
 }
 
 class ServiceScreenState extends State<ServiceScreen> {
-
   String _value = '';
 
   Future _selectDate() async {
@@ -42,9 +40,12 @@ class ServiceScreenState extends State<ServiceScreen> {
         initialDate: DateTime.now(),
         firstDate: DateTime(2021),
         lastDate: DateTime(2022));
-    if (picked != null) setState(() => _value = picked.toString());
-  }
+    if (picked != null){
+      //TODO  JOGAR A DATA NO CAMPO DO FOMULARIO
+      setState(() => widget.service.data = picked.toString());
+    }
 
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +55,9 @@ class ServiceScreenState extends State<ServiceScreen> {
       value: widget.service,
       child: Scaffold(
         appBar: AppBar(
-          title: widget.service != null ? Text("Culto") : Text(widget.service.data),
+          title: widget.service != null
+              ? Text("Culto")
+              : Text(widget.service.data),
           centerTitle: true,
         ),
         backgroundColor: Colors.white,
@@ -64,10 +67,14 @@ class ServiceScreenState extends State<ServiceScreen> {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.all(16),
-                child:
-                Column(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
+                    ElevatedButton.icon(
+                      onPressed: _selectDate,
+                      icon: Icon(Icons.calendar_today_outlined, size: 20),
+                      label: Text("Data"),
+                    ),
                     TextFormField(
                       initialValue: widget.service.data,
                       onSaved: (data) => widget.service.data = data,
@@ -76,13 +83,11 @@ class ServiceScreenState extends State<ServiceScreen> {
                         border: InputBorder.none,
                         labelText: 'Data',
                       ),
-                      style:
-                      TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: primaryColor,),
-                    ),
-                    Text(_value),
-                    RaisedButton(
-                      onPressed: _selectDate,
-                      child: Text('CLIQUE'),
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w800,
+                        color: primaryColor,
+                      ),
                     ),
                     //SfCalendar(view: CalendarView.month,),
                     // TableCalendar(
@@ -166,11 +171,15 @@ class ServiceScreenState extends State<ServiceScreen> {
                                 widget.formKey.currentState.save();
                               }
                               Service s2 = widget.service;
-                              Navigator.of(context).push(
-                                  MaterialPageRoute(builder: (context) => SongsServiceScreen.buildSongsServiceScreen(widget.service))
-                              );
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => SongsServiceScreen
+                                      .buildSongsServiceScreen(
+                                          widget.service)));
                             },
-                            child: Icon(Icons.add, color: Colors.blueGrey,),
+                            child: Icon(
+                              Icons.add,
+                              color: Colors.blueGrey,
+                            ),
                           ),
                         ],
                       ),
@@ -180,48 +189,63 @@ class ServiceScreenState extends State<ServiceScreen> {
                       padding: const EdgeInsets.only(top: 150),
                       child: ListView.builder(
                           padding: const EdgeInsets.all(8),
-                          itemCount: widget.service.lstSongs == null ? 0 : widget.service.lstSongs.length,
+                          itemCount: widget.service.lstSongs == null
+                              ? 0
+                              : widget.service.lstSongs.length,
                           shrinkWrap: true,
                           itemBuilder: (BuildContext context, int index) {
                             return Expanded(
                               child: Card(
                                 shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(4)
-                                ),
+                                    borderRadius: BorderRadius.circular(4)),
                                 child: Container(
                                   height: 60,
                                   padding: const EdgeInsets.all(8),
                                   child: Row(
                                     children: <Widget>[
-                                      const SizedBox(width: 16,),
+                                      const SizedBox(
+                                        width: 16,
+                                      ),
                                       Expanded(
                                         flex: 5,
                                         child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: <Widget>[
                                             Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
                                                 Flexible(
                                                   child: Text(
-                                                    widget.service.lstSongs[index].nome,
-                                                    overflow: TextOverflow.ellipsis,
+                                                    widget.service
+                                                        .lstSongs[index].nome,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                                     style: TextStyle(
                                                       fontSize: 16,
-                                                      fontWeight: FontWeight.w800,
+                                                      fontWeight:
+                                                          FontWeight.w800,
                                                     ),
                                                   ),
                                                 ),
                                                 Align(
                                                   alignment: Alignment.topRight,
                                                   child: GestureDetector(
-                                                    onTap: () => _launchChordsURL(widget.service.lstSongs[index]),
-                                                    child: Icon(Icons.straighten_rounded, color: Colors.blueGrey,),
+                                                    onTap: () =>
+                                                        _launchChordsURL(widget
+                                                            .service
+                                                            .lstSongs[index]),
+                                                    child: Icon(
+                                                      Icons.straighten_rounded,
+                                                      color: Colors.blueGrey,
+                                                    ),
                                                     //child: IconData(0xe457, fontFamily: 'MaterialIcons'),
                                                   ),
                                                 ),
-
                                               ],
                                             ),
                                           ],
@@ -232,8 +256,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                                 ),
                               ),
                             );
-                          }
-                      ),
+                          }),
                     ),
 //*******************************************************************************************************************
                     Consumer<Service>(
@@ -267,7 +290,7 @@ class ServiceScreenState extends State<ServiceScreen> {
     );
   }
 
-  void _launchChordsURL(Song song) async =>
-      await canLaunch(song.cifra) ? await launch(song.cifra) : throw 'Could not launch $song.cifra';
-
+  void _launchChordsURL(Song song) async => await canLaunch(song.cifra)
+      ? await launch(song.cifra)
+      : throw 'Could not launch $song.cifra';
 }
