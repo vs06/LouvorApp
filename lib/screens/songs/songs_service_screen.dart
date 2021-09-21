@@ -298,12 +298,12 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
             ),
             ElevatedButton.icon(
               onPressed: () {
-                print('${widget._lstSongSelecionadas} ${widget.service.data} ${widget.service.dirigente} ${widget.service.songs}');
+                print('${widget._lstSongSelecionadas} ${widget.service.data} ${widget.service.dirigente}');
                 widget.service.lstSongs.clear();
                 widget.service.lstSongs.addAll(widget._lstSongSelecionadas);
-                fillSongsNameIntoService(widget.service);
+                //fillSongsNameIntoService(widget.service);
                 Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => ServiceScreen.buidSongs(widget.service))
+                    MaterialPageRoute(builder: (context) => ServiceScreen.buildSongs(widget.service))
                 );
               },
               icon: Icon(Icons.add, size: 10),
@@ -325,12 +325,12 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
    * o objeto services conter alem da List<Song>
    *ter também a List<String> com as chaves das songs a serem persistidas
    */
-  void fillSongsNameIntoService(Service serv){
-    if(serv.lstSongs.isNotEmpty && serv.lstSongs.length > 0){
-      List<String> lstSongsName = [];
-      serv.lstSongs.forEach((element) => lstSongsName.add(element.id));
-      serv.songs = lstSongsName;
-    }
-  }
+  // void fillSongsNameIntoService(Service serv){
+  //   if(serv.lstSongs.isNotEmpty && serv.lstSongs.length > 0){
+  //     List<String> lstSongsName = [];
+  //     serv.lstSongs.forEach((element) => lstSongsName.add(element.id));
+  //     serv.songs = lstSongsName;
+  //   }
+  // }
 
 }

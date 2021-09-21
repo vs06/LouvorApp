@@ -17,7 +17,7 @@ class ServiceScreen extends StatefulWidget {
 
   ServiceScreen(Service s) : service = s != null ? s.clone() : Service();
 
-  ServiceScreen.buidSongs(this.service);
+  ServiceScreen.buildSongs(this.service);
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -39,6 +39,7 @@ class ServiceScreen extends StatefulWidget {
 class ServiceScreenState extends State<ServiceScreen> {
 
   TextEditingController _dateController = TextEditingController();
+  TextEditingController _dirigenteController = TextEditingController();
   DateTime selectedDate = DateTime.now();
   String dropdownValue = 'Dirigente';
 
@@ -50,9 +51,8 @@ class ServiceScreenState extends State<ServiceScreen> {
                                            );
     if (picked != null){
               setState(() => selectedDate = picked);
-    }
-    if (picked != null){
-            setState(() => _dateController.text = "${picked.toLocal().day}/${picked.toLocal().month}/${picked.toLocal().year}");
+              setState(() => _dateController.text = "${picked.toLocal().day}/${picked.toLocal().month}/${picked.toLocal().year}");
+              setState(() => widget.service.data = selectedDate);
     }
 
   }
@@ -103,8 +103,10 @@ class ServiceScreenState extends State<ServiceScreen> {
                     Padding(
                       padding: const EdgeInsets.only(top: 2),
                       child: TextFormField(
+                        //controller: _dirigenteController,
                         initialValue: widget.service.dirigente,
                         onSaved: (dr) => widget.service.dirigente = dr,
+                        //onEditingComplete: () => widget.service.dirigente = _dirigenteController.text,
                         decoration: const InputDecoration(
                           hintText: 'Dirigente',
                           border: InputBorder.none,

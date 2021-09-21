@@ -14,20 +14,17 @@ class Service extends ChangeNotifier {
   String ativo;
   DateTime data;
   String dirigente;
-  List<String> songs;
   List<Song> lstSongs = [];
   Map<String, dynamic> dynamicSongs = new Map();
 
-  //Service({this.id, this.dirigente, this.data, this.ativo, this.songs, this.lstSongs}){ this.lstSongs = new List<Song>();}
   Service(
-      {this.id, this.dirigente, this.data, this.ativo, this.songs, this.lstSongs});
+      {this.id, this.dirigente, this.data, this.ativo, this.lstSongs});
 
   Service.fromDocument(DocumentSnapshot document){
     id = document.documentID;
     dirigente = document['dirigente'] as String;
     data = (document['data'] as Timestamp).toDate();
     ativo = document['ativo'] as String;
-    songs = List.from(document.data['songs']);
 
     Map.from(document.data['lstSongs']).forEach((key, value) {
       if (lstSongs == null)
@@ -47,7 +44,6 @@ class Service extends ChangeNotifier {
       'data': data,
       'dirigente': dirigente,
       'ativo': ativo,
-      'songs': songs,
       'lstSongs': lstSongs,
     };
     if (ativo == null)
@@ -66,9 +62,9 @@ class Service extends ChangeNotifier {
           .collection('services')
           .document()
           .documentID;
-      print('SALVANDO $blob $data $dirigente $songs');
+      print('SALVANDO $blob $data $dirigente');
     } else {
-      print('ATUALIZANDO $blob $data $dirigente $songs');
+      print('ATUALIZANDO $blob $data $dirigente');
 
       this.lstSongs.forEach((element) =>
           this.dynamicSongs.addAll(element.toMap()));
@@ -86,7 +82,6 @@ class Service extends ChangeNotifier {
       : dirigente = map['dirigente'],
         ativo = map['ativo'],
         data = map['data'],
-        songs = map['songs'].cast<String>(),
         lstSongs = map['lstSongs'].map(
                 (set) {
               return Set.from(set);
@@ -98,7 +93,6 @@ class Service extends ChangeNotifier {
         "dirigente": this.dirigente,
         "ativo": this.ativo,
         "data": this.data,
-        "songs": this.songs,
         "lstSongs": this.dynamicSongs,
       };
 
@@ -109,7 +103,6 @@ class Service extends ChangeNotifier {
       dirigente: dirigente,
       data: data,
       ativo: ativo,
-      songs: songs,
       lstSongs: lstSongs,
     );
   }
