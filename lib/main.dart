@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:louvor_app/screens/services/service_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:louvor_app/models/user_manager.dart';
@@ -62,6 +63,13 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         home: BaseScreen(),
         initialRoute: '/base',
+
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate
+        ],
+        supportedLocales: [const Locale('pt', 'BR')],
+
         onGenerateRoute: (settings){
           switch(settings.name){
             case '/login':

@@ -19,7 +19,8 @@ class Service extends ChangeNotifier {
   Map<String, dynamic> dynamicSongs = new Map();
 
   //Service({this.id, this.dirigente, this.data, this.ativo, this.songs, this.lstSongs}){ this.lstSongs = new List<Song>();}
-  Service({this.id, this.dirigente, this.data, this.ativo, this.songs, this.lstSongs});
+  Service(
+      {this.id, this.dirigente, this.data, this.ativo, this.songs, this.lstSongs});
 
   Service.fromDocument(DocumentSnapshot document){
     id = document.documentID;
@@ -29,45 +30,49 @@ class Service extends ChangeNotifier {
     songs = List.from(document.data['songs']);
 
     Map.from(document.data['lstSongs']).forEach((key, value) {
-      if(lstSongs == null)
-          lstSongs = [];
+      if (lstSongs == null)
+        lstSongs = [];
       Song s = Song.byMap(key, value);
       s.id = key;
       lstSongs.add(s);
     });
 
-    lstSongs.forEach((element) {print(element.id);});
-
+    lstSongs.forEach((element) {
+      print(element.id);
+    });
   }
 
   Future<void> save() async {
     final Map<String, dynamic> blob = {
       'data': data,
       'dirigente': dirigente,
-      'ativo' : ativo,
+      'ativo': ativo,
       'songs': songs,
       'lstSongs': lstSongs,
     };
     if (ativo == null)
       ativo = 'True';
 
-    if(id == null){
-      if(this.dynamicSongs == null)
+    if (id == null) {
+      if (this.dynamicSongs == null)
         this.dynamicSongs = new Map();
 
-      this.lstSongs.forEach((element) => this.dynamicSongs.addAll(element.toMap()));
+      this.lstSongs.forEach((element) =>
+          this.dynamicSongs.addAll(element.toMap()));
 
-      final doc = await firestore.collection('services').document().setData(this.toMap());
-      id = firestore.collection('services').document().documentID;
+      final doc = await firestore.collection('services').document().setData(
+          this.toMap());
+      id = firestore
+          .collection('services')
+          .document()
+          .documentID;
       print('SALVANDO $blob $data $dirigente $songs');
-
     } else {
-
       print('ATUALIZANDO $blob $data $dirigente $songs');
 
-      this.lstSongs.forEach((element) => this.dynamicSongs.addAll(element.toMap()));
+      this.lstSongs.forEach((element) =>
+          this.dynamicSongs.addAll(element.toMap()));
       await firestoreRef.updateData(this.toMap());
-
     }
 
     notifyListeners();
@@ -83,30 +88,33 @@ class Service extends ChangeNotifier {
         data = map['data'],
         songs = map['songs'].cast<String>(),
         lstSongs = map['lstSongs'].map(
-                                        (set) {return Set.from(set);}
-                                      ).toList();
+                (set) {
+              return Set.from(set);
+            }
+        ).toList();
 
-  Map<String, dynamic> toMap() => {
-    "dirigente" : this.dirigente,
-    "ativo" : this.ativo,
-    "data" : this.data,
-    "songs" : this.songs,
-    "lstSongs" : this.dynamicSongs,
-  };
+  Map<String, dynamic> toMap() =>
+      {
+        "dirigente": this.dirigente,
+        "ativo": this.ativo,
+        "data": this.data,
+        "songs": this.songs,
+        "lstSongs": this.dynamicSongs,
+      };
 
-  Service clone(){
+  Service clone() {
     print('CLONEI');
     return Service(
-        id: id,
-        dirigente: dirigente,
-        data: data,
-        ativo: ativo,
-        songs: songs,
-        lstSongs: lstSongs,
+      id: id,
+      dirigente: dirigente,
+      data: data,
+      ativo: ativo,
+      songs: songs,
+      lstSongs: lstSongs,
     );
   }
 
-  void delete(Service s){
+  void delete(Service s) {
     s.ativo = 'False';
     s.save();
     notifyListeners();
