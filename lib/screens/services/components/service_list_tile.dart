@@ -62,7 +62,7 @@ class ServiceListTile extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            service.data == null ? "" : DateFormat('yyyy-MM-dd').format(service.data),
+                            service.data == null ? "" : DateFormat('dd/MM/yyyy').format(service.data),
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w800,

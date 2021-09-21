@@ -67,7 +67,7 @@ class ServiceScreenState extends State<ServiceScreen> {
         appBar: AppBar(
           title: widget.service != null
               ? Text("Culto")
-              : Text(DateFormat('yyyy/MM/dd').format(widget.service.data)),
+              : Text(DateFormat('dd/MM/yyyy').format(widget.service.data)),
           centerTitle: true,
         ),
         backgroundColor: Colors.white,
@@ -89,7 +89,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                           },
                           controller: _dateController,
                           decoration: InputDecoration(
-                            labelText: widget.service.data == null ? "Data" : DateFormat('yyyy/MM/dd').format(widget.service.data).toString(),
+                            labelText: widget.service.data == null ? "Data" : DateFormat('dd/MM/yyyy').format(widget.service.data).toString(),
                             icon: Icon(Icons.calendar_today),
                           ),
                           validator: (value) {
