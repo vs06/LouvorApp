@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:louvor_app/models/Song.dart';
 import 'package:louvor_app/models/Service.dart';
@@ -8,6 +10,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'dart:async';
 //import 'package:syncfusion_flutter_calendar/calendar.dart';
+import 'package:intl/intl.dart';
 
 class ServiceScreen extends StatefulWidget {
   final Service service;
@@ -18,12 +21,14 @@ class ServiceScreen extends StatefulWidget {
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  //CalendarController _controller = CalendarController();
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _controller = CalendarController();
-  // }
+  var _users = [
+    "Vitor",
+    "Mariana",
+    "Valdir",
+    "Marcio",
+    "Daniele",
+    "Bianca"
+  ];
 
   @override
   State<StatefulWidget> createState() {
@@ -32,17 +37,22 @@ class ServiceScreen extends StatefulWidget {
 }
 
 class ServiceScreenState extends State<ServiceScreen> {
-  String _value = '';
+
+  TextEditingController _dateController = TextEditingController();
+  DateTime selectedDate = DateTime.now();
+  String dropdownValue = 'Dirigente';
 
   Future _selectDate() async {
-    DateTime picked = await showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(2021),
-        lastDate: DateTime(2022));
+    DateTime picked = await showDatePicker(context: context,
+                                           initialDate: DateTime.now(),
+                                           firstDate: DateTime(2021),
+                                           lastDate: DateTime(2050)
+                                           );
     if (picked != null){
-      //TODO  JOGAR A DATA NO CAMPO DO FOMULARIO
-      setState(() => widget.service.data = picked.toString());
+              setState(() => selectedDate = picked);
+    }
+    if (picked != null){
+            setState(() => _dateController.text = "${picked.toLocal().day}/${picked.toLocal().month}/${picked.toLocal().year}");
     }
 
   }
@@ -57,7 +67,7 @@ class ServiceScreenState extends State<ServiceScreen> {
         appBar: AppBar(
           title: widget.service != null
               ? Text("Culto")
-              : Text(widget.service.data),
+              : Text(DateFormat('yyyy/MM/dd').format(widget.service.data)),
           centerTitle: true,
         ),
         backgroundColor: Colors.white,
@@ -70,73 +80,26 @@ class ServiceScreenState extends State<ServiceScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
-                    ElevatedButton.icon(
-                      onPressed: _selectDate,
-                      icon: Icon(Icons.calendar_today_outlined, size: 20),
-                      label: Text("Data"),
-                    ),
-                    TextFormField(
-                      initialValue: widget.service.data,
-                      onSaved: (data) => widget.service.data = data,
-                      decoration: const InputDecoration(
-                        hintText: 'Data',
-                        border: InputBorder.none,
-                        labelText: 'Data',
+                    GestureDetector(
+                      onTap: () => _selectDate(),
+                      child: AbsorbPointer(
+                        child: TextFormField(
+                          onSaved: (val) {
+                            widget.service.data = selectedDate;
+                          },
+                          controller: _dateController,
+                          decoration: InputDecoration(
+                            labelText: widget.service.data == null ? "Data" : DateFormat('yyyy/MM/dd').format(widget.service.data).toString(),
+                            icon: Icon(Icons.calendar_today),
+                          ),
+                          validator: (value) {
+                            if (widget.service.data == null)
+                              return "Please enter a date for your serice";
+                            return null;
+                          },
+                        ),
                       ),
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w800,
-                        color: primaryColor,
-                      ),
                     ),
-                    //SfCalendar(view: CalendarView.month,),
-                    // TableCalendar(
-                    //   initialCalendarFormat: CalendarFormat.month,
-                    //   calendarStyle: CalendarStyle(
-                    //       todayColor: Colors.blue,
-                    //       selectedColor: Theme.of(context).primaryColor,
-                    //       todayStyle: TextStyle(
-                    //           fontWeight: FontWeight.bold,
-                    //           fontSize: 22.0,
-                    //           color: Colors.white)
-                    //   ),
-                    //   headerStyle: HeaderStyle(
-                    //     centerHeaderTitle: true,
-                    //     formatButtonDecoration: BoxDecoration(
-                    //       color: Colors.brown,
-                    //       borderRadius: BorderRadius.circular(22.0),
-                    //     ),
-                    //     formatButtonTextStyle: TextStyle(color: Colors.white),
-                    //     formatButtonShowsNext: false,
-                    //   ),
-                    //   // startingDayOfWeek: StartingDayOfWeek.monday,
-                    //   // onDaySelected: (date, events) {
-                    //   //   print(date.toUtc());
-                    //   // },
-                    //   builders: CalendarBuilders(
-                    //     selectedDayBuilder: (context, date, events) => Container(
-                    //         margin: const EdgeInsets.all(5.0),
-                    //         alignment: Alignment.center,
-                    //         decoration: BoxDecoration(
-                    //             color: Theme.of(context).primaryColor,
-                    //             borderRadius: BorderRadius.circular(8.0)),
-                    //         child: Text(
-                    //           date.day.toString(),
-                    //           style: TextStyle(color: Colors.white),
-                    //         )),
-                    //     todayDayBuilder: (context, date, events) => Container(
-                    //         margin: const EdgeInsets.all(5.0),
-                    //         alignment: Alignment.center,
-                    //         decoration: BoxDecoration(
-                    //             color: Colors.blue,
-                    //             borderRadius: BorderRadius.circular(8.0)),
-                    //         child: Text(
-                    //           date.day.toString(),
-                    //           style: TextStyle(color: Colors.white),
-                    //         )),
-                    //   ),
-                    //   calendarController: _controller,
-                    // ),
                     Padding(
                       padding: const EdgeInsets.only(top: 2),
                       child: TextFormField(
@@ -146,6 +109,8 @@ class ServiceScreenState extends State<ServiceScreen> {
                           hintText: 'Dirigente',
                           border: InputBorder.none,
                           labelText: 'Dirigente',
+                          labelStyle: TextStyle(fontSize: 15),
+                          icon: Icon(Icons.person_pin_sharp),
                         ),
                         style: TextStyle(
                           fontSize: 20,
@@ -160,11 +125,12 @@ class ServiceScreenState extends State<ServiceScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Insira as músicas aqui +',
+                            'Insira as músicas aqui',
                             style: TextStyle(
-                              fontSize: 16,
-                            ),
-                          ),
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: primaryColor,
+                            ),                          ),
                           GestureDetector(
                             onTap: () {
                               if (widget.formKey.currentState.validate()) {
@@ -186,7 +152,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                     ),
 //*******************************************************************************************************************
                     Padding(
-                      padding: const EdgeInsets.only(top: 150),
+                      padding: const EdgeInsets.only(top: 8),
                       child: ListView.builder(
                           padding: const EdgeInsets.all(8),
                           itemCount: widget.service.lstSongs == null

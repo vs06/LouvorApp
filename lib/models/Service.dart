@@ -12,7 +12,7 @@ class Service extends ChangeNotifier {
 
   String id;
   String ativo;
-  String data;
+  DateTime data;
   String dirigente;
   List<String> songs;
   List<Song> lstSongs = [];
@@ -24,8 +24,8 @@ class Service extends ChangeNotifier {
 
   Service.fromDocument(DocumentSnapshot document){
     id = document.documentID;
-    data = document['data'] as String;
     dirigente = document['dirigente'] as String;
+    data = (document['data'] as Timestamp).toDate();
     ativo = document['ativo'] as String;
     songs = List.from(document.data['songs']);
 
@@ -78,9 +78,9 @@ class Service extends ChangeNotifier {
     notifyListeners();
   }
 
-  Service.fromData(String data) {
-    this.data = data;
-  }
+  // Service.fromData(String data) {
+  //   this.data = data;
+  // }
 
   Service.fromMap(Map<dynamic, dynamic> map)
       : dirigente = map['dirigente'],

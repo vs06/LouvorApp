@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:louvor_app/models/Service.dart';
 import 'package:louvor_app/models/service_manager.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class ServiceListTile extends StatelessWidget {
 
@@ -61,7 +62,7 @@ class ServiceListTile extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            service.data,
+                            service.data == null ? "" : DateFormat('yyyy-MM-dd').format(service.data),
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w800,

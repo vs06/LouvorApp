@@ -33,9 +33,13 @@ class ServiceManager extends ChangeNotifier{
     if(search.isEmpty){
       filteredServices.addAll(allServices);
     } else {
+      // filteredServices.addAll(
+      //     allServices.where(
+      //             (p) => p.data.toLowerCase().contains(search.toLowerCase())
+      //     )
       filteredServices.addAll(
           allServices.where(
-                  (p) => p.data.toLowerCase().contains(search.toLowerCase())
+                  (p) => p.data.toString().toLowerCase().contains(search.toLowerCase())
           )
       );
     }
