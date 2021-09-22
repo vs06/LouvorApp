@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:louvor_app/common/custom_drawer/custom_drawer.dart';
 import 'package:louvor_app/models/page_manager.dart';
+import 'package:louvor_app/screens/services/ServicesPeriodSelect.dart';
 import 'package:louvor_app/screens/services/services_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:louvor_app/models/user_manager.dart';
@@ -18,32 +19,27 @@ class BaseScreen extends StatelessWidget {
     return Provider(
       create: (_) => PageManager(pageController),
       child: Consumer<UserManager>(
-      builder: (_, userManager, __){
-    return PageView(
-    controller: pageController,
-    physics: const NeverScrollableScrollPhysics(),
-    children: <Widget>[
-      Scaffold(
-        drawer: CustomDrawer(),
-        appBar: AppBar(
-          title: const Text('Louvor-'),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: Image.asset("assets/sermon_tile.png", width: 300),
-        ),
-//        body: GestureDetector(
-//    onTap: (){
-//        Navigator.of(context).pushNamed('/sermons');
-//        }
-//        ),
+        builder: (_, userManager, __){
+          return PageView(
+            controller: pageController,
+            physics: const NeverScrollableScrollPhysics(),
+            children: <Widget>[
+              Scaffold(
+                drawer: CustomDrawer(),
+                appBar: AppBar(
+                  title: const Text('Louvor-'),
+                ),
+                body: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Image.asset("assets/sermon_tile.png", width: 300),
+                ),
+              ),
+              SongsScreen(),
+              ServicesPeriodSelect(),
+            ],
+          );
+        },
       ),
-    SongsScreen(),
-      ServicesScreen(),
-    ],
-    );
-      },
-    ),
     );
   }
 }

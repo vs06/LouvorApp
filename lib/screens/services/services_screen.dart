@@ -8,6 +8,11 @@ import 'components/search_dialog.dart';
 import 'components/service_list_tile.dart';
 
 class ServicesScreen extends StatelessWidget {
+
+  ServicesScreen();
+
+  ServicesScreen.buildByMounth(DateTime dateTime);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

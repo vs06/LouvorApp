@@ -176,8 +176,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                             if (widget.formKey.currentState.validate()) {
                               widget.formKey.currentState.save();
                             }
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => SongsServiceScreen.buildSongsServiceScreen(widget.service)));
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => SongsServiceScreen.buildSongsServiceScreen(widget.service)));
                           },
                           child: Icon(
                             Icons.add,
