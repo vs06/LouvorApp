@@ -175,6 +175,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                           onTap: () {
                             if (widget.formKey.currentState.validate()) {
                               widget.formKey.currentState.save();
+                              Navigator.of(context).pop();
                             }
                             Navigator.of(context).push(MaterialPageRoute(builder: (context) => SongsServiceScreen.buildSongsServiceScreen(widget.service)));
                           },
