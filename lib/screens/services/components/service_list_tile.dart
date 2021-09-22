@@ -4,6 +4,7 @@ import 'package:louvor_app/models/service_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
+
 class ServiceListTile extends StatelessWidget {
 
   const ServiceListTile(this.service);
@@ -48,8 +49,8 @@ class ServiceListTile extends StatelessWidget {
               borderRadius: BorderRadius.circular(4)
           ),
           child: Container(
-            height: 100,
-            padding: const EdgeInsets.all(8),
+            height: 85,
+            padding: const EdgeInsets.all(6),
             child: Row(
               children: <Widget>[
                 const SizedBox(width: 16,),
@@ -62,10 +63,18 @@ class ServiceListTile extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            service.data == null ? "" : DateFormat('dd/MM/yyyy').format(service.data),
+                            _getDateService(service.data),
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                          Text(
+                            ' ${service.dirigente}',
+                            style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w800,
+                                color: Theme.of(context).primaryColor
                             ),
                           ),
                           GestureDetector(
@@ -76,24 +85,28 @@ class ServiceListTile extends StatelessWidget {
                           ),
                         ],
                       ),
+
                       Padding(
                         padding: const EdgeInsets.only(top: 4),
                         child: Text(
-                          '${service.data}',
+                          'Vocal: Daniele, Mariana, Valdir, Vitor',
                           style: TextStyle(
                             color: Colors.grey[400],
                             fontSize: 12,
                           ),
                         ),
                       ),
-                      Text(
-                        '${service.dirigente}',
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w800,
-                            color: Theme.of(context).primaryColor
+                      Padding(
+                        padding: const EdgeInsets.only(top: 4),
+                        child: Text(
+                          ' instrumental : Lucas, Marcio, Vitor, Leonardo',
+                          style: TextStyle(
+                            color: Colors.grey[400],
+                            fontSize: 12,
+                          ),
                         ),
                       )
+
                     ],
                   ),
                 )
@@ -102,5 +115,36 @@ class ServiceListTile extends StatelessWidget {
           ),
         ),
     );
+  }
+  String _getDateService(DateTime datetime){
+
+    var dayOfWeekPtbr = "";
+      switch (DateFormat('EEEE').format(service.data).toUpperCase()) {
+        case "SUNDAY":
+          dayOfWeekPtbr = "Domingo";
+          break;
+        case "MONDAY":
+          dayOfWeekPtbr = "Segunda";
+          break;
+        case "TUESDAY":
+          dayOfWeekPtbr = "Terça";
+          break;
+        case "WEDNESDAY":
+          dayOfWeekPtbr = "Quarta";
+          break;
+        case "THURSDAY":
+          dayOfWeekPtbr = "Quinta";
+          break;
+        case "FRIDAY":
+          dayOfWeekPtbr = "Sexta";
+          break;
+        case "SATURDAY":
+          dayOfWeekPtbr = "Sábado";
+          break;
+      }
+
+      var dayMounth =  DateFormat('dd/MM').format(service.data);
+      var hourMinute24 = DateFormat('HH:mm').format(datetime);
+      return datetime == null ? "" : dayOfWeekPtbr + " - " + dayMounth + " - "+ hourMinute24;
   }
 }
