@@ -45,6 +45,22 @@ class CustomDrawer extends StatelessWidget {
                 title: 'Cultos',
                 page: 2,
               ),
+              // Visibility(
+              //   visible: UserManager.isUserAdmin,
+              //   child: DrawerTile(
+              //     iconData: Icons.supervised_user_circle_sharp,
+              //     title: 'Usuários',
+              //     page: 3,
+              //   ),
+              // ),
+              // Visibility(
+              //   visible: UserManager.isUserAdmin,
+              //   child: DrawerTile(
+              //     iconData: Icons.build,
+              //     title: 'Usuários',
+              //     page: 4,
+              //   ),
+              // ),
             ],
           ),
         ],

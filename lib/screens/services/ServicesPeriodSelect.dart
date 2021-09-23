@@ -2,6 +2,7 @@ import 'dart:core';
 
 import 'package:flutter/material.dart';
 import 'package:louvor_app/common/custom_drawer/custom_drawer.dart';
+import 'package:louvor_app/helpers/app_list_pool.dart';
 import 'package:louvor_app/screens/services/services_screen.dart';
 import 'package:intl/intl.dart';
 
@@ -19,8 +20,6 @@ class ServicesPeriodSelect extends StatefulWidget {
 class ServicesPeriodSelectState extends State<ServicesPeriodSelect>{
 
   DateTime selectedDate;
-
-  final List<String> listMounths = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 
   @override
   void initState() {
@@ -66,12 +65,12 @@ class ServicesPeriodSelectState extends State<ServicesPeriodSelect>{
       width: 300.0, // Change as per your requirement
       child: ListView.builder(
         shrinkWrap: true,
-        itemCount: listMounths.length,
+        itemCount: AppListPool.mounths.length,
         itemBuilder: (BuildContext context, int index) {
           return ListTile(
             title: GestureDetector(
                       onTap: () => setMounth(index+1),
-                      child: Text(listMounths[index],
+                      child: Text(AppListPool.mounths[index],
                         textAlign: TextAlign.center,
                       ),
                   )
@@ -107,19 +106,18 @@ class ServicesPeriodSelectState extends State<ServicesPeriodSelect>{
                                                             ),
                                                           ),
                                                           GestureDetector(
-                                                            onTap: () {showDialog(
-                                                                                  context: context,
-                                                                                  builder: (BuildContext context) {
-                                                                                                            return AlertDialog(
-                                                                                                              title: Text('Mês',
-                                                                                                                           style: Theme.of(context).textTheme.headline4,
-                                                                                                                           textAlign: TextAlign.center,
-                                                                                                                          ),
-                                                                                                              content: setupAlertDialoadContainer(),
-                                                                                                            );
-                                                                                  });
-                                                                      ;
-                                                                      },
+                                                            onTap: () { showDialog(
+                                                                            context: context,
+                                                                            builder: (BuildContext context) {
+                                                                                    return AlertDialog(
+                                                                                      title: Text('Mês',
+                                                                                                   style: Theme.of(context).textTheme.headline4,
+                                                                                                   textAlign: TextAlign.center,
+                                                                                                  ),
+                                                                                      content: setupAlertDialoadContainer(),
+                                                                                    );
+                                                                            });
+                                                                        },
                                                             child: Text('Mês: ${DateFormat('MMM').format(selectedDate)}',
                                                               style: Theme.of(context).textTheme.headline4,
                                                               textAlign: TextAlign.center,

@@ -1,8 +1,11 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:louvor_app/common/custom_drawer/drop_down_list_string.dart';
 import 'package:louvor_app/models/Song.dart';
 import 'package:louvor_app/models/Service.dart';
+import 'package:louvor_app/models/user.dart';
+import 'package:louvor_app/models/user_manager.dart';
 import 'package:louvor_app/screens/songs/songs_service_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:louvor_app/models/service_manager.dart';
@@ -11,6 +14,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'dart:async';
 //import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:intl/intl.dart';
+
+import 'TeamServiceScreen.dart';
 
 class ServiceScreen extends StatefulWidget {
   final Service service;
@@ -79,7 +84,7 @@ class ServiceScreenState extends State<ServiceScreen> {
               child:
               Column(
                 children: <Widget>[
-                  Column( //crossAxisAlignment: CrossAxisAlignment.stretch,
+                  Column(
                       children: <Widget>[
                         GestureDetector(
                           onTap: () => _selectDate(),
@@ -135,19 +140,43 @@ class ServiceScreenState extends State<ServiceScreen> {
                                             shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.circular(4)),
                                             child: Container(
-                                                height: 200,
-                                                width: 320,
-                                                padding: const EdgeInsets.all(8),
-                                                child: Column(
-                                                    children:[ Text('Equipe',
-                                                      style: TextStyle(
-                                                        fontSize: 20,
-                                                        fontWeight: FontWeight.bold,
-                                                        color: primaryColor,
-                                                      ),
-                                                    )
-                                                    ]
-                                                )
+                                                      height: 200,
+                                                      width: 320,
+                                                      padding: const EdgeInsets.all(8),
+                                                      child: Column(
+
+                                                                children:[
+                                                                            Row(
+                                                                              children: [
+                                                                                Text('Equipe',
+                                                                                  style: TextStyle(
+                                                                                    fontSize: 20,
+                                                                                    fontWeight: FontWeight.bold,
+                                                                                    color: primaryColor,
+                                                                                  ),
+                                                                                ),
+                                                                                Visibility(visible: UserManager.isUserAdmin,
+                                                                                            child: GestureDetector(
+                                                                                                        onTap: () {
+                                                                                                          if (widget.formKey.currentState.validate()) {
+                                                                                                            widget.formKey.currentState.save();
+                                                                                                            Navigator.of(context).pop();
+                                                                                                          }
+                                                                                                          //todo
+                                                                                                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => TeamServiceScreen.buildTeamServiceScreen(widget.service)));
+                                                                                                        },
+                                                                                                        child: Icon(
+                                                                                                          Icons.add_circle_sharp,
+                                                                                                          color: Colors.blueGrey,
+                                                                                                        ),
+                                                                                            ),
+
+                                                                                )
+                                                                              ],
+                                                                            ),
+
+                                                                          ]
+                                                              )
                                             )
                                         )
 
@@ -158,35 +187,35 @@ class ServiceScreenState extends State<ServiceScreen> {
                     ,
                   ),
 
-                  Padding(
-                    padding: const EdgeInsets.only(top: 6),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Insira as músicas aqui',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: primaryColor,
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            if (widget.formKey.currentState.validate()) {
-                              widget.formKey.currentState.save();
-                              Navigator.of(context).pop();
-                            }
-                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => SongsServiceScreen.buildSongsServiceScreen(widget.service)));
-                          },
-                          child: Icon(
-                            Icons.add,
-                            color: Colors.blueGrey,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.only(top: 6),
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //     children: [
+                  //       Text(
+                  //         'Insira as músicas aqui',
+                  //         style: TextStyle(
+                  //           fontSize: 20,
+                  //           fontWeight: FontWeight.bold,
+                  //           color: primaryColor,
+                  //         ),
+                  //       ),
+                  //       GestureDetector(
+                  //         onTap: () {
+                  //           if (widget.formKey.currentState.validate()) {
+                  //             widget.formKey.currentState.save();
+                  //             Navigator.of(context).pop();
+                  //           }
+                  //           Navigator.of(context).push(MaterialPageRoute(builder: (context) => SongsServiceScreen.buildSongsServiceScreen(widget.service)));
+                  //         },
+                  //         child: Icon(
+                  //           Icons.add_circle_sharp,
+                  //           color: Colors.blueGrey,
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
 
                   Expanded(
                     flex: 2,
