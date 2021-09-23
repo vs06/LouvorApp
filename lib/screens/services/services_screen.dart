@@ -10,8 +10,8 @@ import 'components/service_list_tile.dart';
 class ServicesScreen extends StatelessWidget {
 
   ServicesScreen();
-
-  ServicesScreen.buildByMounth(DateTime dateTime);
+  DateTime filterByMounth;
+  ServicesScreen.buildByMounth(this.filterByMounth);
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +84,7 @@ class ServicesScreen extends StatelessWidget {
       ),
       body: Consumer<ServiceManager>(
         builder: (_, serviceManager, __) {
-          final filteredServices = serviceManager.filteredServices;
+          final filteredServices = serviceManager.filteredServicesByMounth(filterByMounth);
           return ListView.builder(
               padding: const EdgeInsets.all(4),
               itemCount: filteredServices.length,

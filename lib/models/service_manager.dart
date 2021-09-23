@@ -47,6 +47,17 @@ class ServiceManager extends ChangeNotifier{
     return filteredServices;
   }
 
+  List<Service> filteredServicesByMounth(DateTime DateTime) {
+    final List<Service> filteredServices = [];
+
+    filteredServices.addAll(allServices.where(
+                                              (service) => ((service.data.year == DateTime.year) && (service.data.month == DateTime.month) )
+                                              )
+                            );
+
+    return filteredServices;
+  }
+
   Future<void> _loadAllServices() async {
     final QuerySnapshot snapServices =
     await firestore.collection('services').getDocuments();
