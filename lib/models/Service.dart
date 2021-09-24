@@ -19,7 +19,7 @@ class Service extends ChangeNotifier {
   Map<String, List<String>> team = new Map(); //
 
   Service(
-      {this.id, this.dirigente, this.data, this.ativo, this.lstSongs});
+      {this.id, this.dirigente, this.data, this.ativo, this.lstSongs, this.team});
 
   Service.fromDocument(DocumentSnapshot document){
     id = document.documentID;
@@ -105,6 +105,7 @@ class Service extends ChangeNotifier {
       data: data,
       ativo: ativo,
       lstSongs: lstSongs,
+      team: team
     );
   }
 

@@ -274,7 +274,7 @@ class TeamServiceScreenState extends State<TeamServiceScreen> {
                                                   GestureDetector(
                                                     onTap: () {
                                                       setState(() {
-                                                        //widget._lstSongSelecionadas.removeWhere((element) => element.nome == widget._lstSongSelecionadas[index].nome);
+                                                        widget.service.team.remove(valueRoleDropDownSelected);
                                                       });
                                                     },
                                                     child:Icon(Icons.delete , color: Colors.blueGrey,),
@@ -325,7 +325,7 @@ class TeamServiceScreenState extends State<TeamServiceScreen> {
               //fillSongsNameIntoService(widget.service);
               Navigator.of(context).pop();
               Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => ServiceScreen.buildSongs(widget.service))
+                  MaterialPageRoute(builder: (context) => ServiceScreen(widget.service))
               );
             },
             icon: Icon(Icons.add, size: 10),
