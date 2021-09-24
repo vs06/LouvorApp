@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:louvor_app/helpers/date_utils.dart';
 import 'package:louvor_app/models/Service.dart';
 import 'package:louvor_app/models/service_manager.dart';
 import 'package:louvor_app/models/user_manager.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
-
 
 class ServiceListTile extends StatelessWidget {
 
@@ -64,7 +63,7 @@ class ServiceListTile extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            _getDateService(service.data),
+                            DateUtils.convertDatePtBr(service.data),
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w800,
@@ -120,36 +119,5 @@ class ServiceListTile extends StatelessWidget {
           ),
         ),
     );
-  }
-  String _getDateService(DateTime datetime){
-
-    var dayOfWeekPtbr = "";
-      switch (DateFormat('EEEE').format(service.data).toUpperCase()) {
-        case "SUNDAY":
-          dayOfWeekPtbr = "Domingo";
-          break;
-        case "MONDAY":
-          dayOfWeekPtbr = "Segunda";
-          break;
-        case "TUESDAY":
-          dayOfWeekPtbr = "Terça";
-          break;
-        case "WEDNESDAY":
-          dayOfWeekPtbr = "Quarta";
-          break;
-        case "THURSDAY":
-          dayOfWeekPtbr = "Quinta";
-          break;
-        case "FRIDAY":
-          dayOfWeekPtbr = "Sexta";
-          break;
-        case "SATURDAY":
-          dayOfWeekPtbr = "Sábado";
-          break;
-      }
-
-      var dayMounth =  DateFormat('dd/MM').format(service.data);
-      var hourMinute24 = DateFormat('HH:mm').format(datetime);
-      return datetime == null ? "" : dayOfWeekPtbr + " - " + dayMounth + " - "+ hourMinute24;
   }
 }

@@ -227,7 +227,7 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
                     );
                   }),
             ),
-            Text('Musicas Selecionadas',
+            Text('Músicas Selecionadas',
               style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w800,
@@ -312,26 +312,7 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
             ),
           ],
         ),
-        // floatingActionButton: FloatingActionButton(
-        //     onPressed: () {
-        //   // Add your onPressed code here!
-        //   },
-        //   child: const Icon(Icons.check),
-        //   backgroundColor: Colors.blueGrey,
-        // ),
     );
   }
-
-  /*Criado para na volta para a tela de services,
-   * o objeto services conter alem da List<Song>
-   *ter também a List<String> com as chaves das songs a serem persistidas
-   */
-  // void fillSongsNameIntoService(Service serv){
-  //   if(serv.lstSongs.isNotEmpty && serv.lstSongs.length > 0){
-  //     List<String> lstSongsName = [];
-  //     serv.lstSongs.forEach((element) => lstSongsName.add(element.id));
-  //     serv.songs = lstSongsName;
-  //   }
-  // }
 
 }

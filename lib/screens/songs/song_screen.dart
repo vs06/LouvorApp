@@ -127,23 +127,6 @@ class SongScreen extends StatelessWidget {
                                 style: TextStyle(fontSize: 18.0),
                               ),
                             ));
-                        //   RaisedButton(
-                        //   onPressed: () async {
-                        //     if (formKey.currentState.validate()) {
-                        //       formKey.currentState.save();
-                        //       await sermon.save();
-                        //       context.read<SongManager>().update(sermon);
-                        //       Navigator.of(context).pop();
-                        //     }
-                        //   },
-                        //   textColor: Colors.white,
-                        //   color: primaryColor,
-                        //   disabledColor: primaryColor.withAlpha(100),
-                        //   child: const Text(
-                        //     'Salvar',
-                        //     style: TextStyle(fontSize: 18.0),
-                        //   ),
-                        // );
                       },
                     ),
                   ],

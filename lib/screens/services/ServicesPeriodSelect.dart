@@ -101,9 +101,9 @@ class ServicesPeriodSelectState extends State<ServicesPeriodSelect>{
                                                           GestureDetector(
                                                             onTap: () { selectYear(); },
                                                             child: Text('Ano: ${selectedDate.year}',
-                                                              style: Theme.of(context).textTheme.headline4,
-                                                              textAlign: TextAlign.center,
-                                                            ),
+                                                                          style: Theme.of(context).textTheme.headline4,
+                                                                          textAlign: TextAlign.center,
+                                                                        ),
                                                           ),
                                                           GestureDetector(
                                                             onTap: () { showDialog(
@@ -140,7 +140,8 @@ class ServicesPeriodSelectState extends State<ServicesPeriodSelect>{
                 children: [
                   FloatingActionButton(
                     child: Icon(
-                        Icons.send
+                        Icons.search,
+                        size: 30,
                     ),
                     onPressed: () {
                       Navigator.of(context).push(MaterialPageRoute(builder: (context) => ServicesScreen.buildByMounth(selectedDate)));
