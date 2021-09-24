@@ -169,11 +169,3 @@ class SongListTile extends StatelessWidget {
   void _launchChordsURL() async =>
       await canLaunch(song.cifra) ? await launch(song.cifra) : throw 'Could not launch $song.cifra';
 }
-
-class YoutubeVideoLinks extends StatefulWidget{
-  @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    throw UnimplementedError();
-  }
-}
