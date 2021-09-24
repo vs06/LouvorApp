@@ -16,6 +16,7 @@ class Service extends ChangeNotifier {
   String dirigente;
   List<Song> lstSongs = [];
   Map<String, dynamic> dynamicSongs = new Map();
+  Map<String, List<String>> team = new Map(); //
 
   Service(
       {this.id, this.dirigente, this.data, this.ativo, this.lstSongs});

@@ -33,15 +33,15 @@ class TeamServiceScreen extends StatefulWidget {
 
 class TeamServiceScreenState extends State<TeamServiceScreen> {
 
-  String referenceRole;
-  String referenceUser;
+  String valueRoleDropDownSelected = AppListPool.serviceRoles[0];
+  String valueUserDropDownSelected = AppListPool.users[0];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: CustomDrawer(),
       appBar: AppBar(
-        title: Text('Culto ${widget.service.data != null ? DateFormat('MMM').format(widget.service.data) : ''} ',
+        title: Text('Culto ${widget.service.data != null ? DateFormat('dd/MM').format(widget.service.data) : ''} ',
           textAlign: TextAlign.center,),
         centerTitle: true,
       ),
@@ -67,7 +67,7 @@ class TeamServiceScreenState extends State<TeamServiceScreen> {
                               Row(
                                 children: [
                                   Expanded(
-                                    flex: 5,
+                                   // flex: 5,
                                     child:
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,7 +85,33 @@ class TeamServiceScreenState extends State<TeamServiceScreen> {
                                         ),
                                         Row(
                                           children: [
-                                            DropDownListString(AppListPool.serviceRoles),
+                                            Container(
+                                              width: 140.0,
+                                                  child:
+                                                      DropdownButton<String>(
+                                                      value: valueRoleDropDownSelected,
+                                                      icon: const Icon(Icons.arrow_downward),
+                                                      iconSize: 24,
+                                                      elevation: 16,
+                                                      style: const TextStyle(color: Colors.deepPurple),
+                                                      underline: Container(
+                                                        height: 2,
+                                                        color: Colors.lightBlue,
+                                                      ),
+                                                      onChanged: (String newValue) {
+                                                        setState(() {
+                                                          valueRoleDropDownSelected = newValue;
+                                                        });
+                                                      },
+                                                      items: AppListPool.serviceRoles.map<DropdownMenuItem<String>>((String value) {
+                                                        return DropdownMenuItem<String>(
+                                                          value: value,
+                                                          child: Text(value),
+                                                        );
+                                                      }).toList(),
+                                                    )
+                                            )
+                                            //DropDownListString(AppListPool.serviceRoles),
                                           ],
 
                                         ),
@@ -93,7 +119,7 @@ class TeamServiceScreenState extends State<TeamServiceScreen> {
                                     ),
                                   ),
                                   Expanded(
-                                    flex: 5,
+                                   // flex: 5,
                                     child:
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,7 +137,33 @@ class TeamServiceScreenState extends State<TeamServiceScreen> {
                                         ),
                                         Row(
                                           children: [
-                                            DropDownListString(AppListPool.users),
+                                            Container(
+                                                width: 140.0,
+                                                child:
+                                                    DropdownButton<String>(
+                                                      value: valueUserDropDownSelected,
+                                                      icon: const Icon(Icons.arrow_downward),
+                                                      iconSize: 24,
+                                                      elevation: 16,
+                                                      style: const TextStyle(color: Colors.deepPurple),
+                                                      underline: Container(
+                                                        height: 2,
+                                                        color: Colors.lightBlue,
+                                                      ),
+                                                      onChanged: (String newValue) {
+                                                        setState(() {
+                                                          valueUserDropDownSelected = newValue;
+                                                        });
+                                                      },
+                                                      items: AppListPool.users.map<DropdownMenuItem<String>>((String value) {
+                                                        return DropdownMenuItem<String>(
+                                                          value: value,
+                                                          child: Text(value),
+                                                        );
+                                                      }).toList(),
+                                                    )
+                                            )
+                                            //DropDownListString(AppListPool.users),
                                           ],
                                         ),
                                       ],
@@ -140,9 +192,7 @@ class TeamServiceScreenState extends State<TeamServiceScreen> {
                                                         child:
                                                         ElevatedButton.icon(
                                                           onPressed: () {
-                                                            setState(() {
-                                                              //  widget._lstSongSelecionadas.add(filteredSongs[index]);
-                                                            });
+                                                              addTeamMap(valueRoleDropDownSelected, valueUserDropDownSelected);
                                                           },
                                                           icon: Icon(Icons.add, size: 10),
                                                           label: Text("Add"),
@@ -176,9 +226,10 @@ class TeamServiceScreenState extends State<TeamServiceScreen> {
             flex: 4, // 40%
             child: ListView.builder(
                 padding: const EdgeInsets.all(8),
-                itemCount: widget._lstSongSelecionadas.length,
+                itemCount: widget.service.team.length,
                 shrinkWrap: true,
                 itemBuilder: (BuildContext context, int index) {
+                  String role =  widget.service.team.keys.elementAt(index);
                   return Expanded(
                     child: Card(
                       shape: RoundedRectangleBorder(
@@ -199,30 +250,62 @@ class TeamServiceScreenState extends State<TeamServiceScreen> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Flexible(
-                                        child: Text(
-                                          widget._lstSongSelecionadas[index].nome,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w800,
-                                          ),
-                                        ),
-                                      ),
-                                      Align(
-                                        alignment: Alignment.center,
-                                        child:
-                                        GestureDetector(
-                                          onTap: () {
-                                            setState(() {
-                                              widget._lstSongSelecionadas.removeWhere((element) => element.nome == widget._lstSongSelecionadas[index].nome);
-                                            });
-                                          },
-                                          child:Icon(Icons.delete , color: Colors.blueGrey,),
-                                        ),
-                                      ),
-                                    ],
+
+                                                  Text( role +':',
+                                                                 overflow: TextOverflow.ellipsis,
+                                                                 style: TextStyle(
+                                                                   fontSize: 16,
+                                                                   fontWeight: FontWeight.w800,
+                                                                   color: Colors.lightBlue,
+                                                                 ),
+                                                              ),
+
+                                                  Text( splitVolunteers(widget.service.team[role]),
+                                                              overflow: TextOverflow.ellipsis,
+                                                              style: TextStyle(
+                                                                fontSize: 16,
+                                                                fontWeight: FontWeight.w800,
+                                                              ),
+                                                  ),
+
+                                                Align(
+                                                  alignment: Alignment.center,
+                                                  child:
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        //widget._lstSongSelecionadas.removeWhere((element) => element.nome == widget._lstSongSelecionadas[index].nome);
+                                                      });
+                                                    },
+                                                    child:Icon(Icons.delete , color: Colors.blueGrey,),
+                                                  ),
+                                                ),
+                                            ],
                                   ),
+                                  // tentativa de listar os volunteers por role, para edicao em separado
+                                  // Column(
+                                  //   children: [
+                                  //                   Row(
+                                  //                             children: [
+                                  //                                       ListView.builder(
+                                  //                                       padding: const EdgeInsets.all(8),
+                                  //                                       itemCount: widget.service.team[role].length,
+                                  //                                       shrinkWrap: true,
+                                  //                                       itemBuilder: (BuildContext context, int index) {
+                                  //                                             String users =  widget.service.team[role].elementAt(index);
+                                  //                                             return Expanded(child: Card(shape:
+                                  //                                                             RoundedRectangleBorder(
+                                  //                                                             borderRadius: BorderRadius.circular(4)
+                                  //                                                             )
+                                  //                                                             )
+                                  //                                                     );}
+                                  //                                       )
+                                  //
+                                  //                             ],
+                                  //                   )
+                                  //   ],
+                                  // ),
+                                  
                                 ],
                               ),
                             ),
@@ -251,6 +334,40 @@ class TeamServiceScreenState extends State<TeamServiceScreen> {
         ],
       ),
     );
+  }
+
+  String splitVolunteers(List<String> lstVolunteers) {
+    String volunteers = "";
+    int counter = lstVolunteers.length;
+    lstVolunteers.forEach((element) {
+                                      volunteers += element;
+                                      counter--;
+                                      if(counter > 0)
+                                        volunteers +=  ', ';
+                                    }
+                         );
+    return  volunteers;
+  }
+
+  void addTeamMap(String valueRoleDropDownSelected, String valueUserDropDownSelected) {
+    if(!valueRoleDropDownSelected.isEmpty && !valueUserDropDownSelected.isEmpty){
+
+      if(widget.service.team.containsKey(valueRoleDropDownSelected)){
+        if(!widget.service.team[valueRoleDropDownSelected].contains(valueUserDropDownSelected)){
+          setState(() {
+            widget.service.team[valueRoleDropDownSelected].add(valueUserDropDownSelected);
+          });
+        }else{
+          setState(() {
+            widget.service.team.putIfAbsent(valueRoleDropDownSelected, () => [valueUserDropDownSelected]);
+          });
+        }
+      } else {
+        setState(() {
+          widget.service.team.putIfAbsent(valueRoleDropDownSelected, () => [valueUserDropDownSelected]);
+        });
+      }
+    }
   }
 
 }
