@@ -187,35 +187,35 @@ class ServiceScreenState extends State<ServiceScreen> {
                     ,
                   ),
 
-                  // Padding(
-                  //   padding: const EdgeInsets.only(top: 6),
-                  //   child: Row(
-                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //     children: [
-                  //       Text(
-                  //         'Insira as músicas aqui',
-                  //         style: TextStyle(
-                  //           fontSize: 20,
-                  //           fontWeight: FontWeight.bold,
-                  //           color: primaryColor,
-                  //         ),
-                  //       ),
-                  //       GestureDetector(
-                  //         onTap: () {
-                  //           if (widget.formKey.currentState.validate()) {
-                  //             widget.formKey.currentState.save();
-                  //             Navigator.of(context).pop();
-                  //           }
-                  //           Navigator.of(context).push(MaterialPageRoute(builder: (context) => SongsServiceScreen.buildSongsServiceScreen(widget.service)));
-                  //         },
-                  //         child: Icon(
-                  //           Icons.add_circle_sharp,
-                  //           color: Colors.blueGrey,
-                  //         ),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 6),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Insira as músicas aqui',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: primaryColor,
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            if (widget.formKey.currentState.validate()) {
+                              widget.formKey.currentState.save();
+                              Navigator.of(context).pop();
+                            }
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => SongsServiceScreen.buildSongsServiceScreen(widget.service)));
+                          },
+                          child: Icon(
+                            Icons.add_circle_sharp,
+                            color: Colors.blueGrey,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
 
                   Expanded(
                     flex: 2,
