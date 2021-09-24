@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:louvor_app/models/Service.dart';
 import 'package:louvor_app/models/service_manager.dart';
+import 'package:louvor_app/models/user_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
@@ -77,12 +78,16 @@ class ServiceListTile extends StatelessWidget {
                                 color: Theme.of(context).primaryColor
                             ),
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              _showAlertDialog(context, 'Confirma a exclusão desse culto?', service);
-                            },
-                            child: Icon(Icons.delete, color: Colors.blueGrey,),
-                          ),
+                          Visibility(
+                            visible: UserManager.isUserAdmin,
+                            child: GestureDetector(
+                                      onTap: () {
+                                        _showAlertDialog(context, 'Confirma a exclusão desse culto?', service);
+                                      },
+                                      child: Icon(Icons.delete, color: Colors.blueGrey,),
+                                  ),
+                          )
+
                         ],
                       ),
 
