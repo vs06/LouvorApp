@@ -226,7 +226,7 @@ class TeamServiceScreenState extends State<TeamServiceScreen> {
             flex: 4, // 40%
             child: ListView.builder(
                 padding: const EdgeInsets.all(8),
-                itemCount: widget.service.team.length,
+                itemCount: widget.service.team != null ? widget.service.team.length : 0,
                 shrinkWrap: true,
                 itemBuilder: (BuildContext context, int index) {
                   String role =  widget.service.team.keys.elementAt(index);

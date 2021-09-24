@@ -16,10 +16,10 @@ class Service extends ChangeNotifier {
   String dirigente;
   List<Song> lstSongs = [];
   Map<String, dynamic> dynamicSongs = new Map();
-  Map<String, List<String>> team = new Map(); //
 
-  Service(
-      {this.id, this.dirigente, this.data, this.ativo, this.lstSongs, this.team});
+  Map<String, List<String>> team = new Map();
+
+  Service({this.id, this.dirigente, this.data, this.ativo, this.lstSongs, this.team});
 
   Service.fromDocument(DocumentSnapshot document){
     id = document.documentID;
@@ -27,18 +27,46 @@ class Service extends ChangeNotifier {
     data = (document['data'] as Timestamp).toDate();
     ativo = document['ativo'] as String;
 
-    Map.from(document.data['lstSongs']).forEach((key, value) {
-      if (lstSongs == null)
-        lstSongs = [];
-      Song s = Song.byMap(key, value);
-      s.id = key;
-      lstSongs.add(s);
-    });
+    Map.from(document.data['lstSongs']).
+        forEach((key, value) { if (lstSongs == null)
+                                      lstSongs = [];
 
-    lstSongs.forEach((element) {
-      print(element.id);
-    });
+                                Song s = Song.byMap(key, value);
+                                s.id = key;
+                                lstSongs.add(s);
+                              });
+
+    Map.from(document['team']).
+        forEach((key, value) {
+        //team.putIfAbsent(key, () => value);
+          generateTeam(key, value);
+        });
   }
+
+  Map<String, List<String>> generateTeam(String role, List<dynamic> volunteers){
+
+    List<String> teste = [];
+    volunteers.forEach((volunteer) => teste.add(volunteer.toString()));
+
+    team.putIfAbsent(role, () => teste);
+  }
+
+  Service.fromMap(Map<dynamic, dynamic> map)
+      : dirigente = map['dirigente'],
+        ativo = map['ativo'],
+        data = map['data'],
+        lstSongs = map['lstSongs'].map( (set) {
+                                                return Set.from(set);
+                                              }).toList();
+
+  Map<String, dynamic> toMap() =>
+      {
+        "dirigente": this.dirigente,
+        "ativo": this.ativo,
+        "data": this.data,
+        "lstSongs": this.dynamicSongs,
+        "team": this.team,
+      };
 
   Future<void> save() async {
     final Map<String, dynamic> blob = {
@@ -46,7 +74,9 @@ class Service extends ChangeNotifier {
       'dirigente': dirigente,
       'ativo': ativo,
       'lstSongs': lstSongs,
+      'team': team
     };
+
     if (ativo == null)
       ativo = 'True';
 
@@ -57,8 +87,8 @@ class Service extends ChangeNotifier {
       this.lstSongs.forEach((element) =>
           this.dynamicSongs.addAll(element.toMap()));
 
-      final doc = await firestore.collection('services').document().setData(
-          this.toMap());
+      final doc = await firestore.collection('services').document().setData(this.toMap());
+
       id = firestore
           .collection('services')
           .document()
@@ -74,28 +104,6 @@ class Service extends ChangeNotifier {
 
     notifyListeners();
   }
-
-  // Service.fromData(String data) {
-  //   this.data = data;
-  // }
-
-  Service.fromMap(Map<dynamic, dynamic> map)
-      : dirigente = map['dirigente'],
-        ativo = map['ativo'],
-        data = map['data'],
-        lstSongs = map['lstSongs'].map(
-                (set) {
-              return Set.from(set);
-            }
-        ).toList();
-
-  Map<String, dynamic> toMap() =>
-      {
-        "dirigente": this.dirigente,
-        "ativo": this.ativo,
-        "data": this.data,
-        "lstSongs": this.dynamicSongs,
-      };
 
   Service clone() {
     print('CLONEI');
