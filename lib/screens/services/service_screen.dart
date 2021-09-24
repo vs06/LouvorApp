@@ -26,16 +26,7 @@ class ServiceScreen extends StatefulWidget {
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  var _users = [
-    "Vitor",
-    "Mariana",
-    // "Valdir",
-    // "Marcio",
-    // "Daniele",
-    "Bianca"
-  ];
-
-  @override
+    @override
   State<StatefulWidget> createState() {
     return ServiceScreenState();
   }

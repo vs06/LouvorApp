@@ -145,7 +145,7 @@ class SongListTile extends StatelessWidget {
                               Visibility(
                                 child: GestureDetector(
                                   onTap: () {_showAlertDialog(context, 'Confirma a exclusão dessa música do repertório?', song);},
-                                  child:Icon(Icons.delete , color: Colors.red,),
+                                  child:Icon(Icons.delete , color: Colors.blueGrey,),
                                 ),
                                 visible: UserManager.isUserAdmin,
                               ),
