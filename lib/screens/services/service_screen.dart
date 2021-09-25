@@ -365,6 +365,19 @@ class ServiceScreenState extends State<ServiceScreen> {
                                                     ),
                                                   ),
                                                 ),
+
+                                                Text(
+                                                  'Tom: ' + widget.service.lstSongs[index].tom,
+                                                  overflow:
+                                                  TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                    color: Colors.blueGrey,
+                                                    fontSize: 12,
+                                                    fontWeight:
+                                                    FontWeight.w800,
+                                                  ),
+                                                ),
+
                                                 Align(
                                                   alignment: Alignment.topRight,
                                                   child: GestureDetector(
