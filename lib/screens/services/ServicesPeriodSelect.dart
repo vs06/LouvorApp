@@ -92,19 +92,27 @@ class ServicesPeriodSelectState extends State<ServicesPeriodSelect>{
       ),
       body: Center(
                 child:
-                    Column(
-                       children: [
-
+                    Container(
+                      width: 350,
+                        child:
                                   Padding(
-                                    padding: const EdgeInsets.all(103),
+                                    padding: const EdgeInsets.fromLTRB(90, 230, 50, 100),
                                     child: Column(
                                               children: [
                                                           GestureDetector(
                                                             onTap: () { selectYear(); },
-                                                            child: Text('Ano: ${selectedDate.year}',
-                                                                         style: Theme.of(context).textTheme.headline4,
-                                                                         textAlign: TextAlign.center,
-                                                                        ),
+                                                            child: Row(
+                                                                      children: [
+                                                                                Text('Ano: ',
+                                                                                  style: Theme.of(context).textTheme.headline4,
+                                                                                  textAlign: TextAlign.center,
+                                                                                ),
+                                                                                Text(selectedDate.year.toString(),
+                                                                                  style: TextStyle(fontSize: 40, color: Colors.lightBlue, fontWeight: FontWeight.bold),
+                                                                                  textAlign: TextAlign.center,
+                                                                                ),
+                                                                      ],
+                                                                    )
                                                           ),
                                                           GestureDetector(
                                                             onTap: () { showDialog(
@@ -119,20 +127,23 @@ class ServicesPeriodSelectState extends State<ServicesPeriodSelect>{
                                                                                     );
                                                                             });
                                                                         },
-                                                            child: Text('Mês: ${DateUtils.mounthBr(selectedDate)}',
-                                                                         style: Theme.of(context).textTheme.headline4,
-                                                                         textAlign: TextAlign.center,
-                                                                        ),
+                                                            child: Row(
+                                                                        children: [
+                                                                                      Text('Mês: ',
+                                                                                        style: Theme.of(context).textTheme.headline4,
+                                                                                        textAlign: TextAlign.center,
+                                                                                      ),
+                                                                                      Text( DateUtils.mounthBr(selectedDate),
+                                                                                        style: TextStyle(fontSize: 40, color: Colors.lightBlue, fontWeight: FontWeight.bold),
+                                                                                        textAlign: TextAlign.center,
+                                                                                      ),
+
+                                                                                    ],
+                                                                      )
                                                           )
-
-                                                //setMounth(),
-
                                               ],
                                           ),
-
                                   ),
-
-                                 ]
                     )
                 ),
       floatingActionButton:
