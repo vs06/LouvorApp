@@ -27,11 +27,11 @@ class BaseScreen extends StatelessWidget {
               Scaffold(
                 drawer: CustomDrawer(),
                 appBar: AppBar(
-                  title: const Text('Louvor-'),
+                  title: const Text('CEU Louvor'),
                 ),
                 body: Padding(
                   padding: const EdgeInsets.all(4.0),
-                  child: Image.asset("assets/sermon_tile.png", width: 300),
+                  child: Image.asset("assets/worship_tile.png", width: 600),
                 ),
               ),
               SongsScreen(),

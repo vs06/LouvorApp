@@ -49,8 +49,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProxyProvider<UserManager, SongManager>(
           create: (_) => SongManager(),
           lazy: false,
-          update: (_, userManager, sermonManager) =>
-              sermonManager..updateUser(userManager),
+          update: (_, userManager, songManager) =>
+              songManager..updateUser(userManager),
         ),
         ChangeNotifierProxyProvider<UserManager, ServiceManager>(
            create: (_) => ServiceManager(),

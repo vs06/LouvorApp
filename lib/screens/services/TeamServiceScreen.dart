@@ -126,7 +126,7 @@ class TeamServiceScreenState extends State<TeamServiceScreen> {
                                       children: <Widget>[
                                         Row(
                                             children: [
-                                              Text('Responsável',
+                                              Text('Voluntário',
                                                 style: TextStyle(
                                                     fontSize: 20,
                                                     fontWeight: FontWeight.w800,
