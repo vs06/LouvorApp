@@ -140,7 +140,11 @@ class ServiceScreenState extends State<ServiceScreen> {
                                                                   widget.formKey.currentState.save();
                                                                   Navigator.of(context).pop();
                                                                 }
-                                                                //todo
+
+                                                                //Fix null pointer
+                                                                if(widget.service.team == null)
+                                                                  widget.service.team = new Map();
+
                                                                 Navigator.of(context).push(MaterialPageRoute(builder: (context) => TeamServiceScreen.buildTeamServiceScreen(widget.service)));
                                                               },
                                                               child: Icon(
