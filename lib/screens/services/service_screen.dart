@@ -45,7 +45,6 @@ class ServiceScreenState extends State<ServiceScreen> {
         lastDate: DateTime(2050)
     );
     if (picked != null){
-     // setState(() => selectedDate = picked);
       setState(() => widget.dateController.text = "${picked.toLocal().day}/${picked.toLocal().month}/${picked.toLocal().year}");
       setState(() => widget.service.data = picked);
     }
@@ -55,7 +54,6 @@ class ServiceScreenState extends State<ServiceScreen> {
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
-    //_dateController.text(widget.service.data);
 
     return ChangeNotifierProvider.value(
       value: widget.service,
@@ -78,7 +76,30 @@ class ServiceScreenState extends State<ServiceScreen> {
                   Row(
                       children: <Widget>[
                         Container(
-                          width: 140,
+                          width: 150,
+                          child:
+                          Padding(
+                            padding: const EdgeInsets.only(top: 2),
+                            child: TextFormField(
+                              initialValue: widget.service.dirigente,
+                              onSaved: (dr) => widget.service.dirigente = dr,
+                              decoration: const InputDecoration(
+                                hintText: 'Dirigente',
+                                border: InputBorder.none,
+                                labelText: 'Dirigente',
+                                labelStyle: TextStyle(fontSize: 15),
+                                icon: Icon(Icons.person_pin_sharp, size: 30,),
+                              ),
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: primaryColor,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: 125,
                           child:
                               GestureDetector(
                                 onTap: () => _selectDate(),
@@ -90,7 +111,6 @@ class ServiceScreenState extends State<ServiceScreen> {
                                     // },
                                     controller: widget.dateController,
                                     decoration: InputDecoration(
-                                                    //labelText: widget.service.data == null ? "Data" : DateFormat('dd/MM/yyyy').format(widget.service.data).toString(),
                                                     labelText: "Data",
                                                     border: InputBorder.none,
                                                     icon: Icon(Icons.calendar_today),
@@ -108,30 +128,16 @@ class ServiceScreenState extends State<ServiceScreen> {
                                   ),
                                 ),
                               ),
-                            ),
+                        ),
+
                         Container(
-                            width: 150,
-                            child:
-                              Padding(
-                                padding: const EdgeInsets.only(top: 2),
-                                child: TextFormField(
-                                  initialValue: widget.service.dirigente,
-                                  onSaved: (dr) => widget.service.dirigente = dr,
-                                  decoration: const InputDecoration(
-                                                      hintText: 'Dirigente',
-                                                      border: InputBorder.none,
-                                                      labelText: 'Dirigente',
-                                                      labelStyle: TextStyle(fontSize: 15),
-                                                      icon: Icon(Icons.person_pin_sharp, size: 30,),
-                                                  ),
-                                  style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold,
-                                              color: primaryColor,
-                                            ),
-                                ),
-                              ),
-                        )
+                          width: 30,
+                          child:
+                          GestureDetector(
+                              onTap: () => _selectDate(),
+                              child: Icon(Icons.access_time, size: 25, color: Colors.blueGrey,)
+                          ),
+                        ),
 
                       ]
                   ),
@@ -190,7 +196,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                                           borderRadius: BorderRadius.circular(4)
                                       ),
                                       child: Container(
-                                        height: 40,
+                                        height: 35,
                                         padding: const EdgeInsets.all(8),
                                         child: Row(
                                           children: <Widget>[
@@ -350,7 +356,6 @@ class ServiceScreenState extends State<ServiceScreen> {
                                                       Icons.straighten_rounded,
                                                       color: Colors.blueGrey,
                                                     ),
-                                                    //child: IconData(0xe457, fontFamily: 'MaterialIcons'),
                                                   ),
                                                 ),
                                               ],
