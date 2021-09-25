@@ -182,12 +182,9 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
                                                         child:
                                                         ElevatedButton.icon(
                                                           onPressed: () {
-                                                            //widget._lstSongSelecionadas.add(filteredSongs[index]);
                                                             setState(() {
                                                               widget._lstSongSelecionadas.add(filteredSongs[index]);
-                                                              //widget.service.songs.add(filteredSongs[index].id);
                                                             });
-                                                            // Respond to button press
                                                           },
                                                           icon: Icon(Icons.add, size: 10),
                                                           label: Text("Add"),

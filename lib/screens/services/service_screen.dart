@@ -53,7 +53,9 @@ class ServiceScreenState extends State<ServiceScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     final primaryColor = Theme.of(context).primaryColor;
+    String periodService = 'Noite';
 
     return ChangeNotifierProvider.value(
       value: widget.service,
@@ -76,7 +78,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                   Row(
                       children: <Widget>[
                         Container(
-                          width: 150,
+                          width: 135,
                           child:
                           Padding(
                             padding: const EdgeInsets.only(top: 2),
@@ -99,16 +101,13 @@ class ServiceScreenState extends State<ServiceScreen> {
                           ),
                         ),
                         Container(
-                          width: 125,
+                          width: 140,
                           child:
                               GestureDetector(
                                 onTap: () => _selectDate(),
                                 child: AbsorbPointer(
                                   child:
                                   TextFormField(
-                                    // onSaved: (val) {
-                                    //   widget.service.data = selectedDate;
-                                    // },
                                     controller: widget.dateController,
                                     decoration: InputDecoration(
                                                     labelText: "Data",
@@ -131,12 +130,33 @@ class ServiceScreenState extends State<ServiceScreen> {
                         ),
 
                         Container(
-                          width: 30,
+                          //height: 40,
+                          width: 50,
                           child:
-                          GestureDetector(
-                              onTap: () => _selectDate(),
-                              child: Icon(Icons.access_time, size: 25, color: Colors.blueGrey,)
-                          ),
+                              Column(
+                                children: [
+                                  Row(
+                                   children: [
+                                               IconButton(
+                                                 icon: Icon(Icons.access_time,  size: 28, color: Colors.blueGrey,),
+                                                 onPressed: () { setState(() {
+                                                   periodService = periodService == 'Noite' ? 'Manhã': 'Noite';
+                                                 });},
+                                              ),
+                                            ],
+                                   ),
+                                  Row(
+                                    children: [
+                                      Text( periodService,
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                color: Theme.of(context).primaryColor
+                                            ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              )
                         ),
 
                       ]
