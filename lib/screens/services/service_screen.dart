@@ -122,153 +122,122 @@ class ServiceScreenState extends State<ServiceScreen> {
                   ),
 
                   Padding(
-                    padding: const EdgeInsets.only(top: 8),
-                    child: Row(
-                        children: [
-                                    Column(
-                                      children: [
-                                        Card(
-                                            shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(4)),
-                                            child: Container(
-                                                      height: 200,
-                                                      width: 320,
-                                                      padding: const EdgeInsets.all(8),
-                                                      child: Column(
+                    padding: const EdgeInsets.only(top: 6),
+                    child:Row(
+                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                           children: [
+                                      Text('Equipe',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          color: primaryColor,
+                                        ),
+                                      ),
+                                      Visibility(visible: UserManager.isUserAdmin,
+                                                  child: GestureDetector(
+                                                              onTap: () {
+                                                                if (widget.formKey.currentState.validate()) {
+                                                                  widget.formKey.currentState.save();
+                                                                  Navigator.of(context).pop();
+                                                                }
+                                                                //todo
+                                                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => TeamServiceScreen.buildTeamServiceScreen(widget.service)));
+                                                              },
+                                                              child: Icon(
+                                                                Icons.add_circle_sharp,
+                                                                color: Colors.blueGrey,
+                                                              ),
+                                                  ),
+                                      )
+                                  ],
+                    ),
+                  ),
 
-                                                                children:[
-                                                                            Row(
-                                                                              children: [
-                                                                                Text('Equipe',
-                                                                                  style: TextStyle(
-                                                                                    fontSize: 20,
-                                                                                    fontWeight: FontWeight.bold,
-                                                                                    color: primaryColor,
-                                                                                  ),
-                                                                                ),
-                                                                                Visibility(visible: UserManager.isUserAdmin,
-                                                                                            child: GestureDetector(
-                                                                                                        onTap: () {
-                                                                                                          if (widget.formKey.currentState.validate()) {
-                                                                                                            widget.formKey.currentState.save();
-                                                                                                            Navigator.of(context).pop();
-                                                                                                          }
-                                                                                                          //todo
-                                                                                                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => TeamServiceScreen.buildTeamServiceScreen(widget.service)));
-                                                                                                        },
-                                                                                                        child: Icon(
-                                                                                                          Icons.add_circle_sharp,
-                                                                                                          color: Colors.blueGrey,
-                                                                                                        ),
-                                                                                            ),
+                  Expanded(
+                    flex: 2,
+                    child:
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child:ListView.builder(
+                                padding: const EdgeInsets.all(8),
+                                itemCount: widget.service.team != null ? widget.service.team.length: 0,
+                                shrinkWrap: true,
+                                itemBuilder: (BuildContext context, int index) {
+                                  String role =  widget.service.team.keys.elementAt(index);
+                                  return Expanded(
+                                    child: Card(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(4)
+                                      ),
+                                      child: Container(
+                                        height: 40,
+                                        padding: const EdgeInsets.all(8),
+                                        child: Row(
+                                          children: <Widget>[
+                                            const SizedBox(width: 16,),
+                                            Expanded(
+                                              flex: 5,
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: <Widget>[
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    children: [
 
-                                                                                )
-                                                                              ],
-                                                                            ),
-                                                                            ListView.builder(
-                                                                                padding: const EdgeInsets.all(8),
-                                                                                itemCount: widget.service.team != null ? widget.service.team.length: 0,
-                                                                                shrinkWrap: true,
-                                                                                itemBuilder: (BuildContext context, int index) {
-                                                                                  String role =  widget.service.team.keys.elementAt(index);
-                                                                                  return Expanded(
-                                                                                    child: Card(
-                                                                                      shape: RoundedRectangleBorder(
-                                                                                          borderRadius: BorderRadius.circular(4)
-                                                                                      ),
-                                                                                      child: Container(
-                                                                                        height: 40,
-                                                                                        padding: const EdgeInsets.all(8),
-                                                                                        child: Row(
-                                                                                          children: <Widget>[
-                                                                                            const SizedBox(width: 16,),
-                                                                                            Expanded(
-                                                                                              flex: 5,
-                                                                                              child: Column(
-                                                                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                                                                children: <Widget>[
-                                                                                                  Row(
-                                                                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                                                    children: [
+                                                      Text( role +':',
+                                                        overflow: TextOverflow.ellipsis,
+                                                        style: TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight: FontWeight.w800,
+                                                          color: Colors.lightBlue,
+                                                        ),
+                                                      ),
 
-                                                                                                      Text( role +':',
-                                                                                                        overflow: TextOverflow.ellipsis,
-                                                                                                        style: TextStyle(
-                                                                                                          fontSize: 16,
-                                                                                                          fontWeight: FontWeight.w800,
-                                                                                                          color: Colors.lightBlue,
-                                                                                                        ),
-                                                                                                      ),
+                                                      Text( splitVolunteers(widget.service.team[role]),
+                                                        overflow: TextOverflow.ellipsis,
+                                                        style: TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight: FontWeight.w800,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  // tentativa de listar os volunteers por role, para edicao em separado
+                                                  // Column(
+                                                  //   children: [
+                                                  //                   Row(
+                                                  //                             children: [
+                                                  //                                       ListView.builder(
+                                                  //                                       padding: const EdgeInsets.all(8),
+                                                  //                                       itemCount: widget.service.team[role].length,
+                                                  //                                       shrinkWrap: true,
+                                                  //                                       itemBuilder: (BuildContext context, int index) {
+                                                  //                                             String users =  widget.service.team[role].elementAt(index);
+                                                  //                                             return Expanded(child: Card(shape:
+                                                  //                                                             RoundedRectangleBorder(
+                                                  //                                                             borderRadius: BorderRadius.circular(4)
+                                                  //                                                             )
+                                                  //                                                             )
+                                                  //                                                     );}
+                                                  //                                       )
+                                                  //
+                                                  //                             ],
+                                                  //                   )
+                                                  //   ],
+                                                  // ),
 
-                                                                                                      Text( splitVolunteers(widget.service.team[role]),
-                                                                                                        overflow: TextOverflow.ellipsis,
-                                                                                                        style: TextStyle(
-                                                                                                          fontSize: 16,
-                                                                                                          fontWeight: FontWeight.w800,
-                                                                                                        ),
-                                                                                                      ),
-
-                                                                                                      Align(
-                                                                                                        alignment: Alignment.center,
-                                                                                                        child:
-                                                                                                        GestureDetector(
-                                                                                                          onTap: () {
-                                                                                                            setState(() {
-                                                                                                              //widget.service.team.remove(valueRoleDropDownSelected);
-                                                                                                            });
-                                                                                                          },
-                                                                                                          child:Icon(Icons.delete , color: Colors.blueGrey,),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                    ],
-                                                                                                  ),
-                                                                                                  // tentativa de listar os volunteers por role, para edicao em separado
-                                                                                                  // Column(
-                                                                                                  //   children: [
-                                                                                                  //                   Row(
-                                                                                                  //                             children: [
-                                                                                                  //                                       ListView.builder(
-                                                                                                  //                                       padding: const EdgeInsets.all(8),
-                                                                                                  //                                       itemCount: widget.service.team[role].length,
-                                                                                                  //                                       shrinkWrap: true,
-                                                                                                  //                                       itemBuilder: (BuildContext context, int index) {
-                                                                                                  //                                             String users =  widget.service.team[role].elementAt(index);
-                                                                                                  //                                             return Expanded(child: Card(shape:
-                                                                                                  //                                                             RoundedRectangleBorder(
-                                                                                                  //                                                             borderRadius: BorderRadius.circular(4)
-                                                                                                  //                                                             )
-                                                                                                  //                                                             )
-                                                                                                  //                                                     );}
-                                                                                                  //                                       )
-                                                                                                  //
-                                                                                                  //                             ],
-                                                                                                  //                   )
-                                                                                                  //   ],
-                                                                                                  // ),
-
-                                                                                                ],
-                                                                                              ),
-                                                                                            ),
-                                                                                          ],
-                                                                                        ),
-                                                                                      ),
-                                                                                    ),
-                                                                                  );
-                                                                                }
-                                                                            ),
-
-
-                                                                          ]
-                                                              )
-                                            )
-                                        )
-
-                                      ],
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                     ),
-                        ],
-                    )
-                    ,
+                                  );
+                                }
+                            ),
+                    ),
                   ),
 
                   Padding(
@@ -277,7 +246,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Insira as músicas aqui',
+                          'Músicas',
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -301,6 +270,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                     ),
                   ),
 
+
                   Expanded(
                     flex: 2,
                     child:
@@ -316,7 +286,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(4)),
                                 child: Container(
-                                  height: 60,
+                                  height: 40,
                                   padding: const EdgeInsets.all(8),
                                   child: Row(
                                     children: <Widget>[
