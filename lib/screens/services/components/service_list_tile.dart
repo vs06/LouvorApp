@@ -130,7 +130,7 @@ class ServiceListTile extends StatelessWidget {
                                       }
                         );
 
-    singersVolunteers.replaceAll('Vocal:,','Vocal: ');
+    singersVolunteers = singersVolunteers.replaceAll('Vocal: ,','Vocal: ');
     return singersVolunteers;
   }
 
@@ -144,7 +144,7 @@ class ServiceListTile extends StatelessWidget {
                                       }
     );
 
-    musiciansVolunteers.replaceAll('Instrumental:,','Instrumental: ');
+    musiciansVolunteers = musiciansVolunteers.replaceAll('Instrumental: ,','Instrumental: ');
     return musiciansVolunteers;
 
   }
