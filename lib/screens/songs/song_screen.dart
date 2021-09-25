@@ -107,15 +107,15 @@ class SongScreen extends StatelessWidget {
                       ),
                     ),
                     Consumer<Song>(
-                      builder: (_, sermon, __) {
+                      builder: (_, song, __) {
                         return Visibility(
                             visible: UserManager.isUserAdmin,
                             child: RaisedButton(
                               onPressed: () async {
                                 if (formKey.currentState.validate()) {
                                   formKey.currentState.save();
-                                  await sermon.save();
-                                  context.read<SongManager>().update(sermon);
+                                  await song.save();
+                                  context.read<SongManager>().update(song);
                                   Navigator.of(context).pop();
                                 }
                               },

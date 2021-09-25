@@ -12,12 +12,25 @@ class DrawerTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final int curPage = context.watch<PageManager>().page;
+    final int curPage = 0;
+    /// context.watch<PageManager>().page;
     final Color primaryColor = Theme.of(context).primaryColor;
 
     return InkWell(
       onTap: (){
-        context.read<PageManager>().setPage(page);
+        ///context.read<PageManager>().setPage(page);
+        //TODO Fix this POG
+      switch(this.title) {
+        case 'Repertório':
+          Navigator.of(context).pushNamed('/songs');
+          return;
+        case 'Cultos':
+          Navigator.of(context).pushNamed('/servicesperiod');
+          return;
+        default:
+          Navigator.of(context).pushNamed('base');
+          return;
+      }
       },
       child: SizedBox(
         height: 60,

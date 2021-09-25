@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:louvor_app/screens/services/ServicesPeriodSelect.dart';
 import 'package:louvor_app/screens/services/service_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:louvor_app/models/user_manager.dart';
@@ -48,8 +49,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProxyProvider<UserManager, SongManager>(
           create: (_) => SongManager(),
           lazy: false,
-          update: (_, userManager, sermonManager) =>
-              sermonManager..updateUser(userManager),
+          update: (_, userManager, songManager) =>
+              songManager..updateUser(userManager),
         ),
         ChangeNotifierProxyProvider<UserManager, ServiceManager>(
            create: (_) => ServiceManager(),
@@ -99,6 +100,10 @@ class MyApp extends StatelessWidget {
             case '/services':
               return MaterialPageRoute(
                   builder: (_) => ServicesScreen()
+              );
+            case '/servicesperiod':
+              return MaterialPageRoute(
+                  builder: (_) => ServicesPeriodSelect()
               );
             case '/base':
             default:
