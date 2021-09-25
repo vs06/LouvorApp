@@ -2,16 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:louvor_app/helpers/date_utils.dart';
 import 'package:louvor_app/models/Service.dart';
 import 'package:louvor_app/models/service_manager.dart';
+import 'package:louvor_app/models/user.dart';
 import 'package:louvor_app/models/user_manager.dart';
 import 'package:provider/provider.dart';
 
-class ServiceListTile extends StatelessWidget {
+class UserListTile extends StatelessWidget {
 
-  const ServiceListTile(this.service);
+  const UserListTile(this.user);
 
-  final Service service;
+  final User user;
 
-  _showAlertDialog(BuildContext context, String conteudo, Service s) {
+  _showAlertDialog(BuildContext context, String conteudo, User u) {
     showDialog(
       context: context,
       builder: (context) {
@@ -26,9 +27,8 @@ class ServiceListTile extends StatelessWidget {
             FlatButton(
               child: Text('Sim'),
               onPressed: () {
-                //TODO fix this POG
-                s.delete(s);
-                context.read<ServiceManager>().update(s);
+                 u.userInactivated();
+                 context.read<UserManager>().update(u);
                 Navigator.pop(context);
               },
             )
@@ -40,16 +40,12 @@ class ServiceListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.of(context).pushNamed('/service', arguments: service);
-      },
-       child: Card(
+    return Card(
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(4)
           ),
           child: Container(
-            height: 100,
+            height: 85,
             padding: const EdgeInsets.all(6),
             child: Row(
               children: <Widget>[
@@ -63,16 +59,9 @@ class ServiceListTile extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            DateUtils.convertDatePtBr(service.data),
+                            user.name,
                             style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                          Text(
-                            ' ${service.dirigente}',
-                            style: TextStyle(
-                                fontSize: 15,
+                                fontSize: 16,
                                 fontWeight: FontWeight.w800,
                                 color: Theme.of(context).primaryColor
                             ),
@@ -81,32 +70,30 @@ class ServiceListTile extends StatelessWidget {
                             visible: UserManager.isUserAdmin,
                             child: GestureDetector(
                                       onTap: () {
-                                        _showAlertDialog(context, 'Confirma a exclusão desse culto?', service);
+                                        _showAlertDialog(context, 'Confirma a exclusão desse Usuário?', user);
                                       },
                                       child: Icon(Icons.delete, color: Colors.blueGrey,),
                                   ),
                           )
-
                         ],
                       ),
-
                       Padding(
                         padding: const EdgeInsets.only(top: 4),
                         child: Text(
-                          getSingersVolunteers(),
+                          user.email,
                           style: TextStyle(
                             color: Colors.grey[400],
-                            fontSize: 12,
+                            fontSize: 14,
                           ),
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 4),
                         child: Text(
-                          getMusiciansVolunteers(),
+                          user.isAdmin,
                           style: TextStyle(
                             color: Colors.grey[400],
-                            fontSize: 12,
+                            fontSize: 14,
                           ),
                         ),
                       )
@@ -117,35 +104,6 @@ class ServiceListTile extends StatelessWidget {
               ],
             ),
           ),
-        ),
-    );
-  }
-
-  String getSingersVolunteers(){
-    String singersVolunteers = 'Vocal: ';
-    service.team.forEach((key, value) {
-                                        if(key == 'Vocal') {
-                                          value.forEach((volunteer) => singersVolunteers += ', ' + volunteer);
-                                        }
-                                      }
-                        );
-
-    singersVolunteers.replaceAll('Vocal:,','Vocal: ');
-    return singersVolunteers;
-  }
-
-  String getMusiciansVolunteers(){
-    String musiciansVolunteers = 'Instrumental: ';
-
-    service.team.forEach((key, value) {
-                                        if(key != 'Vocal') {
-                                          value.forEach((volunteer) => musiciansVolunteers +=', ' +  volunteer);
-                                        }
-                                      }
-    );
-
-    musiciansVolunteers.replaceAll('Instrumental:,','Instrumental: ');
-    return musiciansVolunteers;
-
+        );
   }
 }

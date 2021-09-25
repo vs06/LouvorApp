@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:louvor_app/common/custom_drawer/custom_drawer.dart';
 import 'package:louvor_app/models/page_manager.dart';
+import 'package:louvor_app/screens/User/users_screen.dart';
 import 'package:louvor_app/screens/services/ServicesPeriodSelect.dart';
 import 'package:louvor_app/screens/services/services_screen.dart';
 import 'package:provider/provider.dart';
@@ -36,7 +37,7 @@ class BaseScreen extends StatelessWidget {
               ),
               SongsScreen(),
               ServicesPeriodSelect(),
-              //PeoplePeriodSelect(),
+              UsersScreen(),
             ],
           );
         },

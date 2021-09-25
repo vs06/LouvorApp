@@ -3,6 +3,7 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:louvor_app/common/custom_drawer/custom_drawer.dart';
 import 'package:louvor_app/helpers/app_list_pool.dart';
+import 'package:louvor_app/helpers/date_utils.dart';
 import 'package:louvor_app/screens/services/services_screen.dart';
 import 'package:intl/intl.dart';
 
@@ -95,14 +96,14 @@ class ServicesPeriodSelectState extends State<ServicesPeriodSelect>{
                        children: [
 
                                   Padding(
-                                    padding: const EdgeInsets.all(100),
+                                    padding: const EdgeInsets.all(103),
                                     child: Column(
                                               children: [
                                                           GestureDetector(
                                                             onTap: () { selectYear(); },
                                                             child: Text('Ano: ${selectedDate.year}',
-                                                                          style: Theme.of(context).textTheme.headline4,
-                                                                          textAlign: TextAlign.center,
+                                                                         style: Theme.of(context).textTheme.headline4,
+                                                                         textAlign: TextAlign.center,
                                                                         ),
                                                           ),
                                                           GestureDetector(
@@ -118,10 +119,10 @@ class ServicesPeriodSelectState extends State<ServicesPeriodSelect>{
                                                                                     );
                                                                             });
                                                                         },
-                                                            child: Text('Mês: ${DateFormat('MMM').format(selectedDate)}',
-                                                              style: Theme.of(context).textTheme.headline4,
-                                                              textAlign: TextAlign.center,
-                                                            ),
+                                                            child: Text('Mês: ${DateUtils.mounthBr(selectedDate)}',
+                                                                         style: Theme.of(context).textTheme.headline4,
+                                                                         textAlign: TextAlign.center,
+                                                                        ),
                                                           )
 
                                                 //setMounth(),

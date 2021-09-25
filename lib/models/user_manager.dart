@@ -9,6 +9,7 @@ class UserManager extends ChangeNotifier {
 
   UserManager(){
     _loadCurrentUser();
+    _loadAllUsers();
   }
 
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -16,6 +17,8 @@ class UserManager extends ChangeNotifier {
 
   User user;
   static bool isUserAdmin;
+
+  List<User> allUsers = [];
 
   bool _loading = false;
   bool get loading => _loading;
@@ -77,4 +80,33 @@ class UserManager extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+
+  Future<void> _loadAllUsers() async {
+    final QuerySnapshot snapServices =
+    await firestore.collection('users').where('ativo', isEqualTo: 'TRUE').getDocuments();
+
+    allUsers = snapServices.documents.map(
+            (d) => User.fromDocument(d)).toList();
+
+    notifyListeners();
+  }
+
+  List<User> get filteredUsers {
+    return allUsers;
+  }
+
+  void update(User u){
+    allUsers.removeWhere((u) => u.id == user.id);
+    allUsers.add(user);
+    user.saveData();
+    notifyListeners();
+  }
+
+  void userInactivated(User u){
+    allUsers.removeWhere((u) => u.id == user.id);
+    user.userInactivated ();
+    notifyListeners();
+  }
+
 }

@@ -33,10 +33,6 @@ class ServiceManager extends ChangeNotifier{
     if(search.isEmpty){
       filteredServices.addAll(allServices);
     } else {
-      // filteredServices.addAll(
-      //     allServices.where(
-      //             (p) => p.data.toLowerCase().contains(search.toLowerCase())
-      //     )
       filteredServices.addAll(
           allServices.where(
                   (p) => p.data.toString().toLowerCase().contains(search.toLowerCase())
@@ -85,8 +81,8 @@ class ServiceManager extends ChangeNotifier{
     allServices.removeWhere((s) => s.id == service.id);
     allServices.add(service);
     service.save();
-  notifyListeners();
-}
+    notifyListeners();
+  }
 
   updateUser(UserManager userManager) {
     user = userManager.user;
