@@ -17,20 +17,23 @@ class DrawerTile extends StatelessWidget {
     final Color primaryColor = Theme.of(context).primaryColor;
 
     return InkWell(
-      onTap: (){
-        ///context.read<PageManager>().setPage(page);
-        //TODO Fix this POG
-      switch(this.title) {
-        case 'Repertório':
-          Navigator.of(context).pushNamed('/songs');
-          return;
-        case 'Cultos':
-          Navigator.of(context).pushNamed('/servicesperiod');
-          return;
-        default:
-          Navigator.of(context).pushNamed('base');
-          return;
-      }
+        onTap: (){
+          ///context.read<PageManager>().setPage(page);
+          //TODO Fix this POG
+        switch(this.title) {
+          case 'Repertório':
+            Navigator.of(context).pushNamed('/songs');
+            return;
+          case 'Cultos':
+            Navigator.of(context).pushNamed('/servicesperiod');
+            return;
+          case 'Usuários':
+            Navigator.of(context).pushNamed('/users');
+            return;
+          default:
+            Navigator.of(context).pushNamed('base');
+            return;
+        }
       },
       child: SizedBox(
         height: 60,

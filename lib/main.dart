@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:louvor_app/screens/User/users_screen.dart';
 import 'package:louvor_app/screens/services/ServicesPeriodSelect.dart';
 import 'package:louvor_app/screens/services/service_screen.dart';
 import 'package:provider/provider.dart';
@@ -104,6 +105,10 @@ class MyApp extends StatelessWidget {
             case '/servicesperiod':
               return MaterialPageRoute(
                   builder: (_) => ServicesPeriodSelect()
+              );
+            case '/users':
+              return MaterialPageRoute(
+                  builder: (_) => UsersScreen()
               );
             case '/base':
             default:
