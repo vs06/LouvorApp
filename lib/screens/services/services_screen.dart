@@ -75,9 +75,7 @@ class ServicesScreen extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.add),
             onPressed: () {
-              Navigator.of(context).pushNamed(
-                '/service',
-              );
+              Navigator.of(context).pushNamed('/service',);
             },
           )
         ],

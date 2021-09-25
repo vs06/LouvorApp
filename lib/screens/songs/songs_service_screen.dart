@@ -304,7 +304,7 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
                 //fillSongsNameIntoService(widget.service);
                 Navigator.of(context).pop();
                 Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => ServiceScreen.buildSongs(widget.service))
+                    MaterialPageRoute(builder: (context) => ServiceScreen(widget.service))
                 );
               },
               icon: Icon(Icons.add, size: 10),

@@ -1,32 +1,34 @@
-import 'dart:math';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:louvor_app/common/custom_drawer/drop_down_list_string.dart';
-import 'package:louvor_app/models/Song.dart';
+//import 'package:syncfusion_flutter_calendar/calendar.dart';
+import 'package:intl/intl.dart';
 import 'package:louvor_app/models/Service.dart';
-import 'package:louvor_app/models/user.dart';
+import 'package:louvor_app/models/Song.dart';
+import 'package:louvor_app/models/service_manager.dart';
 import 'package:louvor_app/models/user_manager.dart';
 import 'package:louvor_app/screens/songs/songs_service_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:louvor_app/models/service_manager.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'dart:async';
-//import 'package:syncfusion_flutter_calendar/calendar.dart';
-import 'package:intl/intl.dart';
 
 import 'TeamServiceScreen.dart';
 
 class ServiceScreen extends StatefulWidget {
-  final Service service;
 
-  ServiceScreen(Service s) : service = s != null ? s.clone() : Service();
+  Service service;
+  TextEditingController dateController = TextEditingController();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  ServiceScreen(Service s){
+    service = s != null ? s.clone() : Service();
+    if(service.data != null){
+      dateController.text = DateFormat('dd/MM/yyyy').format(service.data).toString();
+    }
+  }
 
   ServiceScreen.buildSongs(this.service);
 
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
-    @override
+  @override
   State<StatefulWidget> createState() {
     return ServiceScreenState();
   }
@@ -34,10 +36,7 @@ class ServiceScreen extends StatefulWidget {
 
 class ServiceScreenState extends State<ServiceScreen> {
 
-  TextEditingController _dateController = TextEditingController();
-  TextEditingController _dirigenteController = TextEditingController();
-  DateTime selectedDate = DateTime.now();
-  String dropdownValue = 'Dirigente';
+  //DateTime selectedDate = DateTime.now();
 
   Future _selectDate() async {
     DateTime picked = await showDatePicker(context: context,
@@ -46,9 +45,9 @@ class ServiceScreenState extends State<ServiceScreen> {
         lastDate: DateTime(2050)
     );
     if (picked != null){
-      setState(() => selectedDate = picked);
-      setState(() => _dateController.text = "${picked.toLocal().day}/${picked.toLocal().month}/${picked.toLocal().year}");
-      setState(() => widget.service.data = selectedDate);
+     // setState(() => selectedDate = picked);
+      setState(() => widget.dateController.text = "${picked.toLocal().day}/${picked.toLocal().month}/${picked.toLocal().year}");
+      setState(() => widget.service.data = picked);
     }
 
   }
@@ -56,6 +55,7 @@ class ServiceScreenState extends State<ServiceScreen> {
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
+    //_dateController.text(widget.service.data);
 
     return ChangeNotifierProvider.value(
       value: widget.service,
@@ -75,49 +75,64 @@ class ServiceScreenState extends State<ServiceScreen> {
               child:
               Column(
                 children: <Widget>[
-                  Column(
+                  Row(
                       children: <Widget>[
-                        GestureDetector(
-                          onTap: () => _selectDate(),
-                          child: AbsorbPointer(
-                            child: TextFormField(
-                              onSaved: (val) {
-                                widget.service.data = selectedDate;
-                              },
-                              controller: _dateController,
-                              decoration: InputDecoration(
-                                labelText: widget.service.data == null ? "Data" : DateFormat('dd/MM/yyyy').format(widget.service.data).toString(),
-                                icon: Icon(Icons.calendar_today),
+                        Container(
+                          width: 140,
+                          child:
+                              GestureDetector(
+                                onTap: () => _selectDate(),
+                                child: AbsorbPointer(
+                                  child:
+                                  TextFormField(
+                                    // onSaved: (val) {
+                                    //   widget.service.data = selectedDate;
+                                    // },
+                                    controller: widget.dateController,
+                                    decoration: InputDecoration(
+                                                    //labelText: widget.service.data == null ? "Data" : DateFormat('dd/MM/yyyy').format(widget.service.data).toString(),
+                                                    labelText: "Data",
+                                                    border: InputBorder.none,
+                                                    icon: Icon(Icons.calendar_today),
+                                                  ),
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.bold,
+                                      color: primaryColor,
+                                    ),
+                                    validator: (value) {
+                                      if (widget.service.data == null)
+                                        return "Please enter a date for your serice";
+                                      return null;
+                                    },
+                                  ),
+                                ),
                               ),
-                              validator: (value) {
-                                if (widget.service.data == null)
-                                  return "Please enter a date for your serice";
-                                return null;
-                              },
                             ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 2),
-                          child: TextFormField(
-                            //controller: _dirigenteController,
-                            initialValue: widget.service.dirigente,
-                            onSaved: (dr) => widget.service.dirigente = dr,
-                            //onEditingComplete: () => widget.service.dirigente = _dirigenteController.text,
-                            decoration: const InputDecoration(
-                              hintText: 'Dirigente',
-                              border: InputBorder.none,
-                              labelText: 'Dirigente',
-                              labelStyle: TextStyle(fontSize: 15),
-                              icon: Icon(Icons.person_pin_sharp),
-                            ),
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: primaryColor,
-                            ),
-                          ),
-                        ),
+                        Container(
+                            width: 150,
+                            child:
+                              Padding(
+                                padding: const EdgeInsets.only(top: 2),
+                                child: TextFormField(
+                                  initialValue: widget.service.dirigente,
+                                  onSaved: (dr) => widget.service.dirigente = dr,
+                                  decoration: const InputDecoration(
+                                                      hintText: 'Dirigente',
+                                                      border: InputBorder.none,
+                                                      labelText: 'Dirigente',
+                                                      labelStyle: TextStyle(fontSize: 15),
+                                                      icon: Icon(Icons.person_pin_sharp, size: 30,),
+                                                  ),
+                                  style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                              color: primaryColor,
+                                            ),
+                                ),
+                              ),
+                        )
+
                       ]
                   ),
 
@@ -150,6 +165,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                                                               child: Icon(
                                                                 Icons.add_circle_sharp,
                                                                 color: Colors.blueGrey,
+                                                                size: 30,
                                                               ),
                                                   ),
                                       )
@@ -268,6 +284,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                           child: Icon(
                             Icons.add_circle_sharp,
                             color: Colors.blueGrey,
+                            size: 30,
                           ),
                         ),
                       ],

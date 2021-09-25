@@ -29,7 +29,7 @@ class UserListTile extends StatelessWidget {
               onPressed: () {
                  u.userInactivated();
                  context.read<UserManager>().update(u);
-                Navigator.pop(context);
+                 Navigator.pop(context);
               },
             )
           ],

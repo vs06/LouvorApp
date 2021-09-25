@@ -33,6 +33,8 @@ class UserManager extends ChangeNotifier {
 
       await _loadCurrentUser(firebaseUser: result.user);
 
+      _loadAllUsers();
+
       onSuccess();
     } on PlatformException catch (e){
       onFail(getErrorString(e.code));
@@ -98,7 +100,6 @@ class UserManager extends ChangeNotifier {
 
   void update(User u){
     allUsers.removeWhere((u) => u.id == user.id);
-    allUsers.add(user);
     user.saveData();
     notifyListeners();
   }
