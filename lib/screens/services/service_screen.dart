@@ -56,6 +56,7 @@ class ServiceScreenState extends State<ServiceScreen> {
 
     final primaryColor = Theme.of(context).primaryColor;
     String periodService = 'Noite';
+    bool toggle = true;
 
     return ChangeNotifierProvider.value(
       value: widget.service,
@@ -135,26 +136,36 @@ class ServiceScreenState extends State<ServiceScreen> {
                           child:
                               Column(
                                 children: [
-                                  Row(
-                                   children: [
-                                               IconButton(
-                                                 icon: Icon(Icons.access_time,  size: 28, color: Colors.blueGrey,),
-                                                 onPressed: () { setState(() {
-                                                   periodService = periodService == 'Noite' ? 'Manhã': 'Noite';
-                                                 });},
-                                              ),
-                                            ],
-                                   ),
-                                  Row(
-                                    children: [
-                                      Text( periodService,
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                color: Theme.of(context).primaryColor
-                                            ),
-                                      ),
-                                    ],
-                                  ),
+                                  IconButton(
+                                      icon: toggle
+                                          ? Icon(Icons.nights_stay)
+                                          : Icon(Icons.wb_sunny_sharp),
+                                      color: Colors.blueGrey,
+                                      onPressed: () {
+                                        setState(() {
+                                          toggle = !toggle;
+                                        });
+                                      }),
+                                  // Row(
+                                  //  children: [
+                                  //              IconButton(
+                                  //                icon: Icon(Icons.access_time,  size: 28, color: Colors.blueGrey,),
+                                  //                onPressed: () { setState(() {
+                                  //                  periodService = periodService == 'Noite' ? 'Manhã': 'Noite';
+                                  //                });},
+                                  //             ),
+                                  //           ],
+                                  //  ),
+                                  // Row(
+                                  //   children: [
+                                  //     Text( periodService,
+                                  //           style: TextStyle(
+                                  //               fontSize: 15,
+                                  //               color: Theme.of(context).primaryColor
+                                  //           ),
+                                  //     ),
+                                  //   ],
+                                  // ),
                                 ],
                               )
                         ),
