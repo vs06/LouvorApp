@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 //import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:intl/intl.dart';
+import 'package:louvor_app/helpers/string_utils.dart';
 import 'package:louvor_app/models/Service.dart';
 import 'package:louvor_app/models/Song.dart';
 import 'package:louvor_app/models/service_manager.dart';
@@ -377,6 +378,21 @@ class ServiceScreenState extends State<ServiceScreen> {
                                                   ),
                                                 ),
 
+                                                Visibility(
+                                                  visible: StringUtils.isNotNUllNotEmpty(widget.service.lstSongs[index].cifra),
+                                                  child:
+                                                  Align(
+                                                    alignment: Alignment.topRight,
+                                                    child: GestureDetector(
+                                                      onTap: () => _launchChordsURL(widget.service.lstSongs[index]),
+                                                      child: Icon(
+                                                        Icons.straighten_rounded,
+                                                        color: Colors.blueGrey,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+
                                                 Text(
                                                   'Tom: ' + widget.service.lstSongs[index].tom,
                                                   overflow:
@@ -389,19 +405,6 @@ class ServiceScreenState extends State<ServiceScreen> {
                                                   ),
                                                 ),
 
-                                                Align(
-                                                  alignment: Alignment.topRight,
-                                                  child: GestureDetector(
-                                                    onTap: () =>
-                                                        _launchChordsURL(widget
-                                                            .service
-                                                            .lstSongs[index]),
-                                                    child: Icon(
-                                                      Icons.straighten_rounded,
-                                                      color: Colors.blueGrey,
-                                                    ),
-                                                  ),
-                                                ),
                                               ],
                                             ),
                                           ],

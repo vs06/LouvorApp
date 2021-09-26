@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:louvor_app/helpers/string_utils.dart';
 import 'package:louvor_app/models/Song.dart';
 import 'package:louvor_app/models/song_manager.dart';
 import 'package:louvor_app/models/user_manager.dart';
@@ -108,20 +109,28 @@ class SongListTile extends StatelessWidget {
                         Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Align(
-                                alignment: Alignment.topRight,
-                                    child: GestureDetector(
-                                      onTap: _launchChordsURL,
-                                      child: Icon(Icons.straighten_rounded, color: Colors.blueGrey,),
-                                      //child: IconData(0xe457, fontFamily: 'MaterialIcons'),
-                                    ),
-                              ),
-                              Align(
-                                alignment: Alignment.topRight,
+                              Visibility(
+                                visible: StringUtils.isNotNUllNotEmpty(song.videoUrl),
+                                child:
+                                    Align(
+                                      alignment: Alignment.topRight,
                                       child: GestureDetector(
                                         onTap: _launchVideoURL,
                                         child: Icon(Icons.ondemand_video, color: Colors.blueGrey,),
                                       ),
+                                    ),
+                              ),
+                              Visibility(
+                                visible: StringUtils.isNotNUllNotEmpty(song.cifra),
+                                child:
+                                Align(
+                                  alignment: Alignment.topRight,
+                                  child: GestureDetector(
+                                    onTap: _launchChordsURL,
+                                    child: Icon(Icons.straighten_rounded, color: Colors.blueGrey,),
+                                    //child: IconData(0xe457, fontFamily: 'MaterialIcons'),
+                                  ),
+                                ),
                               ),
                             ]
                         ),
