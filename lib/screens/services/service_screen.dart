@@ -37,9 +37,6 @@ class ServiceScreen extends StatefulWidget {
 
 class ServiceScreenState extends State<ServiceScreen> {
 
-  //DateTime selectedDate = DateTime.now();
-  bool toggle = true;
-
   Future _selectDate() async {
     DateTime picked = await showDatePicker(context: context,
         initialDate: DateTime.now(),
@@ -57,7 +54,7 @@ class ServiceScreenState extends State<ServiceScreen> {
   Widget build(BuildContext context) {
 
     final primaryColor = Theme.of(context).primaryColor;
-    String periodService = 'Noite';
+    bool toggleNight = widget.service.data.hour >= 16;
 
     return ChangeNotifierProvider.value(
       value: widget.service,
@@ -132,20 +129,20 @@ class ServiceScreenState extends State<ServiceScreen> {
                         ),
 
                         Container(
-                          //height: 40,
                           width: 50,
                           child:
                               Column(
                                 children: [
                                   IconButton(
-                                      icon: toggle
+                                      icon: toggleNight
                                           ? Icon(Icons.nights_stay)
                                           : Icon(Icons.wb_sunny_sharp),
                                       color: Colors.blueGrey,
                                       onPressed: () {
                                         setState(() {
-                                          toggle = !toggle;
-                                        });
+                                              toggleNight = !toggleNight;
+                                            });
+                                        widget.service.data = _getHourByToggle(widget.service.data, toggleNight);
                                       }),
                                   // Row(
                                   //  children: [
@@ -425,6 +422,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                     builder: (_, service, __) {
                       return RaisedButton(
                         onPressed: () async {
+                          widget.service.data = _getHourByToggle(widget.service.data, toggleNight);
                           if (widget.formKey.currentState.validate()) {
                             widget.formKey.currentState.save();
                             await service.save();
@@ -466,6 +464,14 @@ class ServiceScreenState extends State<ServiceScreen> {
     }
     );
     return  volunteers;
+  }
+
+   DateTime _getHourByToggle(DateTime serviceDate, bool toggleNight){
+     if(toggleNight){
+       return new DateTime(serviceDate.year, serviceDate.month, serviceDate.day, 20, 00);
+     }else{
+       return new DateTime(serviceDate.year, serviceDate.month, serviceDate.day, 10, 00);
+     }
   }
 
   void addTeamMap(String valueRoleDropDownSelected, String valueUserDropDownSelected) {
