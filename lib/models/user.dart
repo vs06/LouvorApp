@@ -2,6 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class User {
 
+  String id;
+  String name;
+  String email;
+  String password;
+  String isAdmin;
+  String ativo;
+
   final Firestore firestore = Firestore.instance;
 
   DocumentReference get firestoreRef => firestore.document('users/$id');
@@ -16,18 +23,11 @@ class User {
     ativo = document.data['ativo'] as String;
   }
 
-  String id;
-  String name;
-  String email;
-  String password;
-  String isAdmin;
-  String ativo;
-
   String confirmPassword;
 
   Future<void> userInactivated() async {
-    this.isAdmin = 'False';
-    this.ativo = 'False';
+    this.isAdmin = 'FALSE';
+    this.ativo = 'FALSE';
     await firestoreRef.setData(toMap());
   }
 
@@ -40,6 +40,7 @@ class User {
       'name': name,
       'email': email,
       'ativo': ativo,
+      'isAdmin': isAdmin,
     };
   }
 }

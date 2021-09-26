@@ -50,6 +50,8 @@ class UserManager extends ChangeNotifier {
           email: user.email, password: user.password);
 
       user.id = result.user.uid;
+      user.isAdmin = 'FALSE';
+      user.ativo = 'TRUE';
       this.user = user;
 
       await user.saveData();
