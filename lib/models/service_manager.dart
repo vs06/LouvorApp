@@ -51,8 +51,7 @@ class ServiceManager extends ChangeNotifier{
                                               )
                             );
 
-    //Todo rever, para ordernar da data mais recente para a mais antiga.
-    filteredServices.sort((a, b) => a.data.compareTo(b.data));
+    filteredServices.sort((a, b) => b.data.compareTo(a.data));
 
     return filteredServices;
   }
