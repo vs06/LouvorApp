@@ -121,7 +121,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                                     ),
                                     validator: (value) {
                                       if (widget.service.data == null)
-                                        return "Please enter a date for your serice";
+                                        return "Insira uma data para o culto";
                                       return null;
                                     },
                                   ),

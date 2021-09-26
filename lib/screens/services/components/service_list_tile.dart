@@ -49,7 +49,7 @@ class ServiceListTile extends StatelessWidget {
               borderRadius: BorderRadius.circular(4)
           ),
           child: Container(
-            height: 100,
+            height: 110,
             padding: const EdgeInsets.all(6),
             child: Row(
               children: <Widget>[
@@ -95,7 +95,7 @@ class ServiceListTile extends StatelessWidget {
                         child: Text(
                           getSingersVolunteers(),
                           style: TextStyle(
-                            color: Colors.grey[400],
+                            color: Colors.grey[800],
                             fontSize: 12,
                           ),
                         ),
@@ -104,6 +104,18 @@ class ServiceListTile extends StatelessWidget {
                         padding: const EdgeInsets.only(top: 4),
                         child: Text(
                           getMusiciansVolunteers(),
+                          style: TextStyle(
+                            color: Colors.grey[800],
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 4),
+                        child: Text(
+                          getSongsofaService(),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
                           style: TextStyle(
                             color: Colors.grey[400],
                             fontSize: 12,
@@ -146,6 +158,15 @@ class ServiceListTile extends StatelessWidget {
 
     musiciansVolunteers = musiciansVolunteers.replaceAll('Instrumental: ,','Instrumental: ');
     return musiciansVolunteers;
+  }
 
+  String getSongsofaService(){
+    String songs = 'Músicas: ';
+
+    service.lstSongs.forEach((element) {
+      songs += element.nome + ' ,';
+    });
+
+    return songs;
   }
 }
