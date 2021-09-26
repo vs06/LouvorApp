@@ -97,8 +97,8 @@ class SongScreen extends StatelessWidget {
                         decoration: InputDecoration(
                           border: const OutlineInputBorder(),
                           filled: true,
-                          hintText: 'Cifra',
-                          labelText: 'Cifra',
+                          hintText: 'Link cifra',
+                          labelText: 'Link cifra',
                         ),
                         onChanged: (value) {
                           song.cifra = value;
