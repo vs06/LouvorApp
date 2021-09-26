@@ -130,7 +130,7 @@ class SongListTile extends StatelessWidget {
                             children: [
                               Flexible(
                                   child: Align(
-                                alignment: Alignment.topRight,
+                                alignment: Alignment.topLeft,
                                 child: Text(
                                   "Tom: " + '${song.tom}',
                                   overflow: TextOverflow.ellipsis ,
