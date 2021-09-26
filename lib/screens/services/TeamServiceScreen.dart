@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:louvor_app/common/custom_drawer/custom_drawer.dart';
-import 'package:louvor_app/common/custom_drawer/drop_down_list_string.dart';
 import 'package:louvor_app/helpers/app_list_pool.dart';
+import 'package:louvor_app/helpers/date_utils.dart';
 import 'package:louvor_app/models/Song.dart';
 import 'package:louvor_app/screens/services/service_screen.dart';
 import 'package:louvor_app/models/Service.dart';
@@ -41,8 +41,12 @@ class TeamServiceScreenState extends State<TeamServiceScreen> {
     return Scaffold(
       drawer: CustomDrawer(),
       appBar: AppBar(
-        title: Text('Culto ${widget.service.data != null ? DateFormat('dd/MM').format(widget.service.data) : ''} ',
-          textAlign: TextAlign.center,),
+        title: Text('Culto ${widget.service.data != null ? DateUtils.convertDatePtBr(widget.service.data) : ''} ',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                            fontSize: 18,
+                           )
+                    ),
         centerTitle: true,
       ),
       body:
@@ -329,7 +333,7 @@ class TeamServiceScreenState extends State<TeamServiceScreen> {
               );
             },
             icon: Icon(Icons.add, size: 10),
-            label: Text("Adicionar selecionadas"),
+            label: Text("Adicionar selecionados"),
           ),
         ],
       ),
