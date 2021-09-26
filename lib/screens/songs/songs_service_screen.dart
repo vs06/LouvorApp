@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:louvor_app/common/custom_drawer/custom_drawer.dart';
+import 'package:louvor_app/helpers/date_utils.dart';
 import 'package:louvor_app/models/Song.dart';
 import 'package:louvor_app/models/song_manager.dart';
 import 'package:louvor_app/screens/services/service_screen.dart';
@@ -42,7 +43,12 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
           title: Consumer<SongManager>(
             builder: (_, songManager, __) {
               if (songManager.search.isEmpty) {
-                return const Text('Músicas');
+                return Text('Músicas:  ${widget.service.data != null ? DateUtils.convertDatePtBr(widget.service.data) : ''} ',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 16,
+                          )
+                      );
               } else {
                 return LayoutBuilder(
                   builder: (_, constraints) {
