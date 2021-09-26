@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:louvor_app/helpers/app_list_pool.dart';
 import 'package:louvor_app/helpers/firebase_errors.dart';
 import 'package:louvor_app/models/user.dart';
 
@@ -90,6 +91,8 @@ class UserManager extends ChangeNotifier {
 
     allUsers = snapServices.documents.map(
             (d) => User.fromDocument(d)).toList();
+
+    AppListPool.fillUsers(allUsers);
 
     notifyListeners();
   }

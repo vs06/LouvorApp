@@ -34,7 +34,7 @@ class TeamServiceScreen extends StatefulWidget {
 class TeamServiceScreenState extends State<TeamServiceScreen> {
 
   String valueRoleDropDownSelected = AppListPool.serviceRoles[0];
-  String valueUserDropDownSelected = AppListPool.users[0];
+  String valueUserDropDownSelected = AppListPool.usersFirstName[0];
 
   @override
   Widget build(BuildContext context) {
@@ -155,7 +155,7 @@ class TeamServiceScreenState extends State<TeamServiceScreen> {
                                                           valueUserDropDownSelected = newValue;
                                                         });
                                                       },
-                                                      items: AppListPool.users.map<DropdownMenuItem<String>>((String value) {
+                                                      items: AppListPool.usersFirstName.map<DropdownMenuItem<String>>((String value) {
                                                         return DropdownMenuItem<String>(
                                                           value: value,
                                                           child: Text(value),
