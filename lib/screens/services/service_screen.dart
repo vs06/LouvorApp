@@ -37,6 +37,7 @@ class ServiceScreen extends StatefulWidget {
 class ServiceScreenState extends State<ServiceScreen> {
 
   //DateTime selectedDate = DateTime.now();
+  bool toggle = true;
 
   Future _selectDate() async {
     DateTime picked = await showDatePicker(context: context,
@@ -56,7 +57,6 @@ class ServiceScreenState extends State<ServiceScreen> {
 
     final primaryColor = Theme.of(context).primaryColor;
     String periodService = 'Noite';
-    bool toggle = true;
 
     return ChangeNotifierProvider.value(
       value: widget.service,
