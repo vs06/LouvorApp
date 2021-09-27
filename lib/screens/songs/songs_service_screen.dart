@@ -316,6 +316,7 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
                 widget.service.lstSongs.addAll(widget._lstSongSelecionadas);
                 //fillSongsNameIntoService(widget.service);
                 Navigator.of(context).pop();
+                Navigator.of(context).pop();
                 Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => ServiceScreen(widget.service))
                 );
