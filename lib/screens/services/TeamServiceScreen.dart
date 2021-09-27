@@ -34,7 +34,7 @@ class TeamServiceScreen extends StatefulWidget {
 class TeamServiceScreenState extends State<TeamServiceScreen> {
 
   String valueRoleDropDownSelected = AppListPool.serviceRoles[0];
-  String valueUserDropDownSelected = AppListPool.usersFirstName[0];
+  String valueUserDropDownSelected = AppListPool.usersName[0];
 
   @override
   Widget build(BuildContext context) {
@@ -160,6 +160,7 @@ class TeamServiceScreenState extends State<TeamServiceScreen> {
                                                       icon: const Icon(Icons.arrow_downward),
                                                       iconSize: 24,
                                                       elevation: 16,
+                                                      isExpanded: true,
                                                       style: const TextStyle(color: Colors.deepPurple),
                                                       underline: Container(
                                                         height: 2,
@@ -170,10 +171,10 @@ class TeamServiceScreenState extends State<TeamServiceScreen> {
                                                           valueUserDropDownSelected = newValue;
                                                         });
                                                       },
-                                                      items: AppListPool.usersFirstName.map<DropdownMenuItem<String>>((String value) {
+                                                      items: AppListPool.usersName.map<DropdownMenuItem<String>>((String value) {
                                                         return DropdownMenuItem<String>(
                                                           value: value,
-                                                          child: Text(value),
+                                                          child: Text(value, overflow: TextOverflow.ellipsis,),
                                                         );
                                                       }).toList(),
                                                     )

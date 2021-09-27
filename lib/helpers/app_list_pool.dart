@@ -11,17 +11,10 @@ class AppListPool {
 
    //static final List<String> users = ['Cida','Danielle','Gloria','Jaqueline','Junior','Leonardo','Lucas','Léo','Mariana','Mateus','Márcio''Valdir','Victor','Vinicius',];
 
-   static final List<String> usersFirstName = [];
+   static final List<String> usersName = [];
 
    static void fillUsers(List<User> allUsers ){
-      allUsers.forEach((user) {
-               int firstSpace = user.name.indexOf(' ');
-               if(firstSpace != -1){
-                  usersFirstName.add(user.name.substring(0, firstSpace));
-               } else {
-                  usersFirstName.add(user.name);
-               }
-      });
+      allUsers.forEach((user) => usersName.add(user.name));
    }
 
 }
