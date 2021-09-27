@@ -37,7 +37,7 @@ class ServiceScreen extends StatefulWidget {
 
 class ServiceScreenState extends State<ServiceScreen> {
 
-  Future _selectDate() async {
+  Future _selectDate(bool toggleNight) async {
     DateTime picked = await showDatePicker(context: context,
         initialDate: DateTime.now(),
         firstDate: DateTime(2021),
@@ -45,7 +45,7 @@ class ServiceScreenState extends State<ServiceScreen> {
     );
     if (picked != null){
       setState(() => widget.dateController.text = "${picked.toLocal().day}/${picked.toLocal().month}/${picked.toLocal().year}");
-      setState(() => widget.service.data = picked);
+      setState(() => widget.service.data = _getHourByToggle(picked, toggleNight));
     }
 
   }
@@ -106,7 +106,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                           width: 140,
                           child:
                               GestureDetector(
-                                onTap: () => _selectDate(),
+                                onTap: () => _selectDate(toggleNight),
                                 child: AbsorbPointer(
                                   child:
                                   TextFormField(
@@ -145,7 +145,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                                         setState(() {
                                               toggleNight = !toggleNight;
                                             });
-                                        widget.service.data = _getHourByToggle(widget.service.data, toggleNight);
+                                        widget.service.data = _getHourByToggle(widget.service.data == null ? DateTime.now() : widget.service.data, toggleNight);
                                       }),
                                   // Row(
                                   //  children: [

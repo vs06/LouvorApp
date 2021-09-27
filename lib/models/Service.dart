@@ -77,15 +77,22 @@ class Service extends ChangeNotifier {
       'team': team
     };
 
-    if (ativo == null)
+    if (ativo == null){
       ativo = 'True';
+    }
+
 
     if (id == null) {
-      if (this.dynamicSongs == null)
+      if (this.dynamicSongs == null){
         this.dynamicSongs = new Map();
+    }
 
-      this.lstSongs.forEach((element) =>
-          this.dynamicSongs.addAll(element.toMap()));
+    if(this.lstSongs == null){
+      this.lstSongs = new List();
+    }
+
+    this.lstSongs.forEach((element) => this.dynamicSongs.addAll(element.toMap()));
+
 
       final doc = await firestore.collection('services').document().setData(this.toMap());
 

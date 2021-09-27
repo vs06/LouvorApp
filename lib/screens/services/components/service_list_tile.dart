@@ -135,12 +135,15 @@ class ServiceListTile extends StatelessWidget {
 
   String getSingersVolunteers(){
     String singersVolunteers = 'Vocal: ';
-    service.team.forEach((key, value) {
-                                        if(key == 'Vocal') {
-                                          value.forEach((volunteer) => singersVolunteers += ', ' + volunteer);
-                                        }
-                                      }
-                        );
+
+    if(service.team != null){
+        service.team.forEach((key, value) {
+          if(key == 'Vocal') {
+            value.forEach((volunteer) => singersVolunteers += ', ' + volunteer);
+          }
+        }
+        );
+    }
 
     singersVolunteers = singersVolunteers.replaceAll('Vocal: ,','Vocal: ');
     return singersVolunteers;
@@ -149,12 +152,14 @@ class ServiceListTile extends StatelessWidget {
   String getMusiciansVolunteers(){
     String musiciansVolunteers = 'Instrumental: ';
 
-    service.team.forEach((key, value) {
-                                        if(key != 'Vocal') {
-                                          value.forEach((volunteer) => musiciansVolunteers +=', ' +  volunteer);
-                                        }
-                                      }
-    );
+    if(service.team != null){
+        service.team.forEach((key, value) {
+          if(key != 'Vocal') {
+            value.forEach((volunteer) => musiciansVolunteers +=', ' +  volunteer);
+          }
+        }
+        );
+    }
 
     musiciansVolunteers = musiciansVolunteers.replaceAll('Instrumental: ,','Instrumental: ');
     return musiciansVolunteers;
