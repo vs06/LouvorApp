@@ -7,6 +7,7 @@ import 'package:louvor_app/models/Service.dart';
 import 'package:louvor_app/models/service_manager.dart';
 import 'package:louvor_app/screens/services/components/service_list_tile.dart';
 import 'package:provider/provider.dart';
+import 'package:louvor_app/models/user_manager.dart';
 
 import 'components/search_dialog.dart';
 import 'components/service_list_tile.dart';
@@ -101,19 +102,22 @@ class ServicesScreen extends StatelessWidget {
         },
       ),
         floatingActionButton:
-        Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            FloatingActionButton(
-              child: Icon(
-                Icons.list,
-                size: 30,
+        Visibility(
+          visible: UserManager.isUserAdmin,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              FloatingActionButton(
+                child: Icon(
+                  Icons.list,
+                  size: 30,
+                ),
+                onPressed: () {
+                  showAlertDialog1(context, lstServicesUsedAsResume);
+                },
               ),
-              onPressed: () {
-                showAlertDialog1(context, lstServicesUsedAsResume);
-              },
-            ),
-          ],
+            ],
+          ),
         )
 
     );
