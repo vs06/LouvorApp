@@ -14,7 +14,16 @@ class AppListPool {
    static final List<String> usersName = [];
 
    static void fillUsers(List<User> allUsers ){
-      allUsers.forEach((user) => usersName.add(user.name));
+      allUsers.forEach((user) {
+         int firstSpace = user.name.indexOf(' ');
+         int lastName = user.name.lastIndexOf(' ');
+         if(firstSpace != -1){
+            usersName.add(user.name.substring(0, firstSpace)  + user.name.substring(lastName, user.name.length ) );
+         } else {
+            usersName.add(user.name);
+         }
+         print('-----\n\n\n\n\n ${usersName}-----\n\n\n');
+      });
    }
 
 }
