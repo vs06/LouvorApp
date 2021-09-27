@@ -63,7 +63,7 @@ class Song extends ChangeNotifier {
       'videoUrl': videoUrl,
     };
     if (ativo == null)
-      ativo = 'True';
+      ativo = 'TRUE';
     
     if(id == null){
       final doc = await firestore.collection('songs').add(blob);

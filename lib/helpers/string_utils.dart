@@ -1,6 +1,6 @@
 class StringUtils {
 
   static bool isNotNUllNotEmpty(String string){
-    return string.isNotEmpty && string != '';
+    return string != null && string.isNotEmpty && string != '';
   }
 }
