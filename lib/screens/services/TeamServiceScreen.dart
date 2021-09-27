@@ -278,7 +278,7 @@ class TeamServiceScreenState extends State<TeamServiceScreen> {
                                                   GestureDetector(
                                                     onTap: () {
                                                       setState(() {
-                                                        widget.service.team.remove(valueRoleDropDownSelected);
+                                                        widget.service.team.remove(widget.service.team.keys.elementAt(index));
                                                       });
                                                     },
                                                     child:Icon(Icons.delete , color: Colors.blueGrey,),
