@@ -54,7 +54,10 @@ class ServiceScreenState extends State<ServiceScreen> {
   Widget build(BuildContext context) {
 
     final primaryColor = Theme.of(context).primaryColor;
-    bool toggleNight = widget.service.data.hour >= 16;
+    bool toggleNight = true;
+    if(widget.service.data != null) {
+      toggleNight = widget.service.data.hour >= 16;
+    }
 
     return ChangeNotifierProvider.value(
       value: widget.service,
