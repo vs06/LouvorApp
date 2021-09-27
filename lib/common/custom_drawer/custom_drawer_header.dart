@@ -41,7 +41,7 @@ class CustomDrawerHeader extends StatelessWidget {
                 child: Text(
                   userManager.isLoggedIn
                       ? 'Sair'
-                      : 'Entre ou cadastre-se >',
+                      : 'Entre',
                   style: TextStyle(
                     color: Theme.of(context).primaryColor,
                     fontSize: 16,

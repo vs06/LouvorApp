@@ -26,36 +26,43 @@ class CustomDrawer extends StatelessWidget {
                 )
             ),
           ),
-          ListView(
-            children: <Widget>[
-              CustomDrawerHeader(),
-              const Divider(),
-              DrawerTile(
-                iconData: Icons.home,
-                title: 'Início',
-                page: 0,
-              ),
-              DrawerTile(
-                iconData: Icons.library_books,
-                title: 'Repertório',
-                page: 1,
-              ),
-              DrawerTile(
-                iconData: Icons.home_work,
-                title: 'Cultos',
-                page: 2,
-              ),
-               Visibility(
-                 visible: UserManager.isUserAdmin != null ? UserManager.isUserAdmin : false,
-                 child:
-                     DrawerTile(
-                       iconData: Icons.supervised_user_circle_sharp,
-                       title: 'Usuários',
-                       page: 3,
-                     ),
-               )
-            ],
-          ),
+            ListView(
+              children: <Widget>[
+                CustomDrawerHeader(),
+                const Divider(),
+                Visibility(
+                  visible: userManager.user != null,
+                  child: Column(
+                    children: [
+                        DrawerTile(
+                          iconData: Icons.home,
+                          title: 'Início',
+                          page: 0,
+                        ),
+                        DrawerTile(
+                          iconData: Icons.library_books,
+                          title: 'Repertório',
+                          page: 1,
+                        ),
+                        DrawerTile(
+                          iconData: Icons.home_work,
+                          title: 'Cultos',
+                          page: 2,
+                        ),
+                        Visibility(
+                          visible: UserManager.isUserAdmin != null ? UserManager.isUserAdmin : false,
+                          child:
+                          DrawerTile(
+                            iconData: Icons.supervised_user_circle_sharp,
+                            title: 'Usuários',
+                            page: 3,
+                          ),
+                        )
+                    ],
+                  ),
+                )
+              ],
+            ),
         ],
       );
     }

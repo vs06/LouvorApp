@@ -80,11 +80,15 @@ class ServicesScreen extends StatelessWidget {
               }
             },
           ),
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {
-              Navigator.of(context).pushNamed('/service',);
-            },
+          Visibility(
+              visible: UserManager.isUserAdmin,
+              child:
+                IconButton(
+                  icon: Icon(Icons.add),
+                  onPressed: () {
+                    Navigator.of(context).pushNamed('/service',);
+                  },
+                )
           )
         ],
       ),
