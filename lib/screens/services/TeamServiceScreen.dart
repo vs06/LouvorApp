@@ -335,7 +335,6 @@ class TeamServiceScreenState extends State<TeamServiceScreen> {
           ),
           ElevatedButton.icon(
             onPressed: () {
-              print('${widget._lstSongSelecionadas} ${widget.service.data} ${widget.service.dirigente}');
               widget.service.lstSongs.clear();
               widget.service.lstSongs.addAll(widget._lstSongSelecionadas);
               //fillSongsNameIntoService(widget.service);

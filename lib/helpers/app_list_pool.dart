@@ -22,7 +22,6 @@ class AppListPool {
          } else {
             usersName.add(user.name);
          }
-         print('-----\n\n\n\n\n ${usersName}-----\n\n\n');
       });
    }
 
