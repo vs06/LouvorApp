@@ -52,7 +52,9 @@ class UserManager extends ChangeNotifier {
       user.id = result.user.uid;
       user.isAdmin = 'FALSE';
       user.ativo = 'TRUE';
-      this.user = user;
+      //Retirado linha abaixo, para não logar
+      // trocar o usuário ao admin, cadastrar um novo user
+      //this.user = user;
 
       await user.saveData();
 

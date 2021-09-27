@@ -89,15 +89,11 @@ class UserListTile extends StatelessWidget {
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 4),
-                        child: Text(
-                          user.isAdmin,
-                          style: TextStyle(
-                            color: Colors.grey[400],
-                            fontSize: 14,
-                          ),
-                        ),
+                        child: Visibility(
+                                  visible: user.isAdmin == 'TRUE',
+                                  child: Icon(Icons.admin_panel_settings, color: Colors.lightBlue,),
+                              )
                       )
-
                     ],
                   ),
                 )
