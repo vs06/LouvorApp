@@ -41,6 +41,17 @@ class TeamServiceScreenState extends State<TeamServiceScreen> {
     return Scaffold(
       drawer: CustomDrawer(),
       appBar: AppBar(
+        leading: Builder(
+          builder: (BuildContext context) {
+                return IconButton(
+                  icon: const Icon(Icons.arrow_back),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  //tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+                );
+              },
+            ),
         title: Text('Culto ${widget.service.data != null ? DateUtils.convertDatePtBr(widget.service.data) : ''} ',
                     textAlign: TextAlign.center,
                     style: TextStyle(

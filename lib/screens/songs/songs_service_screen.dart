@@ -40,6 +40,16 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
     return Scaffold(
         drawer: CustomDrawer(),
         appBar: AppBar(
+          leading: Builder(
+            builder: (BuildContext context) {
+              return IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              );
+            },
+          ),
           title: Consumer<SongManager>(
             builder: (_, songManager, __) {
               if (songManager.search.isEmpty) {

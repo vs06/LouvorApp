@@ -89,6 +89,16 @@ class ServicesPeriodSelectState extends State<ServicesPeriodSelect>{
       appBar: AppBar(
         title: Text('Seleção Mês'),
         centerTitle: true,
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            );
+          },
+        ),
       ),
       body: Center(
                 child:
