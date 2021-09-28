@@ -202,7 +202,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                                                               },
                                                               child: Icon(
                                                                 Icons.add_circle_sharp,
-                                                                color: Colors.blueGrey,
+                                                                color: Colors.lightBlue,
                                                                 size: 30,
                                                               ),
                                                   ),
@@ -320,7 +320,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                           },
                           child: Icon(
                             Icons.add_circle_sharp,
-                            color: Colors.blueGrey,
+                            color: Colors.lightBlue,
                             size: 30,
                           ),
                         ),

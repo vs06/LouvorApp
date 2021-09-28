@@ -195,16 +195,30 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
                                                   children: [
                                                     Align(
                                                         alignment: Alignment.topRight,
-                                                        child:
-                                                        ElevatedButton.icon(
-                                                          onPressed: () {
-                                                            setState(() {
-                                                              widget._lstSongSelecionadas.add(filteredSongs[index]);
-                                                            });
-                                                          },
-                                                          icon: Icon(Icons.add, size: 10),
-                                                          label: Text("Add"),
-                                                        )
+                                                        child: GestureDetector(
+                                                                  onTap: () {
+                                                                    if(!widget._lstSongSelecionadas.any((song) => song.id == filteredSongs[index].id)){
+                                                                        setState(() {
+                                                                          widget._lstSongSelecionadas.add(filteredSongs[index]);
+                                                                        });
+                                                                    }
+                                                                  },
+                                                                  child: Icon(
+                                                                    Icons.add_circle_sharp,
+                                                                    color: Colors.lightBlue,
+                                                                    size: 30,
+                                                                  ),
+                                                                ),
+
+                                                            // ElevatedButton.icon(
+                                                            //   onPressed: () {
+                                                            //     setState(() {
+                                                            //       widget._lstSongSelecionadas.add(filteredSongs[index]);
+                                                            //     });
+                                                            //   },
+                                                            //   icon: Icon(Icons.add, size: 10),
+                                                            //   label: Text("Add"),
+                                                            // )
                                                     ),
                                                   ]
                                               ),
