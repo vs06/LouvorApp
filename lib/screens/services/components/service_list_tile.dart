@@ -113,7 +113,7 @@ class ServiceListTile extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(top: 4),
                         child: Text(
-                          getSongsofaService(),
+                          getSongsOfService(),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
                           style: TextStyle(
@@ -165,7 +165,7 @@ class ServiceListTile extends StatelessWidget {
     return musiciansVolunteers;
   }
 
-  String getSongsofaService(){
+  String getSongsOfService(){
     String songs = 'Músicas: ';
 
     service.lstSongs.forEach((element) {
