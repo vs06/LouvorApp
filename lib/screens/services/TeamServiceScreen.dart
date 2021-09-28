@@ -72,7 +72,7 @@ class TeamServiceScreenState extends State<TeamServiceScreen> {
                     ),
                       child: Container(
                         height: 180,
-                        padding: const EdgeInsets.all(8),
+                        padding: const EdgeInsets.all(10),
                         child:
                         Center(
                           child:
@@ -188,40 +188,39 @@ class TeamServiceScreenState extends State<TeamServiceScreen> {
 
                                 ],
                               ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                    flex: 2, // 20%
-                                    child:
-                                    Padding(
-                                        padding: const EdgeInsets.fromLTRB(100, 30, 120, 0),
-                                        child:
-                                        Column(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Row(
-                                                  mainAxisAlignment: MainAxisAlignment.end,
-                                                  children: [
-                                                    Align(
-                                                      //alignment: Alignment.bottomRight,
-                                                        child:
-                                                        ElevatedButton.icon(
-                                                          onPressed: () {
-                                                              addTeamMap(valueRoleDropDownSelected, valueUserDropDownSelected);
-                                                          },
-                                                          icon: Icon(Icons.add, size: 10),
-                                                          label: Text("Add"),
-                                                        )
-                                                    ),
-                                                  ]
-                                              ),
-                                            ]
-                                        )
+                              Center(
+                                child:
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Expanded(
+                                            flex: 2, // 20%
+                                            child:
+                                            Padding(
+                                              padding: const EdgeInsets.all(20),
+                                            child:
+                                            Column(
+                                                children: [
+                                                  Row(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: [
+                                                            GestureDetector(
+                                                              onTap: () { addTeamMap(valueRoleDropDownSelected, valueUserDropDownSelected); },
+                                                              child: Icon(
+                                                                Icons.add_circle_sharp,
+                                                                color: Colors.lightBlue,
+                                                                size: 40,
+                                                              ),
+                                                            )
+                                                      ]
+                                                  ),
+                                                ]
+                                            )
+                                           ),
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                ],
-                              ),
+                              )
                             ],
                           ),
                         ),
