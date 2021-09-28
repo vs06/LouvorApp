@@ -36,11 +36,14 @@ class Service extends ChangeNotifier {
                                 lstSongs.add(s);
                               });
 
-    Map.from(document['team']).
-        forEach((key, value) {
+    if(document['team'] != null) {
+      Map.from(document['team']).
+      forEach((key, value) {
         //team.putIfAbsent(key, () => value);
-          generateTeam(key, value);
-        });
+        generateTeam(key, value);
+      });
+    }
+
   }
 
   Map<String, List<String>> generateTeam(String role, List<dynamic> volunteers){
