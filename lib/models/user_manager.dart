@@ -96,7 +96,9 @@ class UserManager extends ChangeNotifier {
     allUsers = snapServices.documents.map(
             (d) => User.fromDocument(d)).toList();
 
-    AppListPool.fillUsers(allUsers);
+    if(AppListPool.usersName.isEmpty){
+      AppListPool.fillUsers(allUsers);
+    }
 
     notifyListeners();
   }
