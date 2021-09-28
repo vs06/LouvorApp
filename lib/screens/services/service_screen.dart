@@ -211,92 +211,99 @@ class ServiceScreenState extends State<ServiceScreen> {
                     ),
                   ),
 
-                  Expanded(
-                    flex: 2,
-                    child:
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8),
-                      child:ListView.builder(
-                                padding: const EdgeInsets.all(8),
-                                itemCount: widget.service.team != null ? widget.service.team.length: 0,
-                                shrinkWrap: true,
-                                itemBuilder: (BuildContext context, int index) {
-                                  String role =  widget.service.team.keys.elementAt(index);
-                                  return Expanded(
-                                    child: Card(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(4)
-                                      ),
-                                      child: Container(
-                                        height: 35,
-                                        padding: const EdgeInsets.all(8),
-                                        child: Row(
-                                          children: <Widget>[
-                                            const SizedBox(width: 16,),
-                                            Expanded(
-                                              flex: 5,
-                                              child: Column(
-                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: <Widget>[
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                    children: [
 
-                                                      Text( role +':',
-                                                        overflow: TextOverflow.ellipsis,
-                                                        style: TextStyle(
-                                                          fontSize: 16,
-                                                          fontWeight: FontWeight.w800,
-                                                          color: Colors.lightBlue,
-                                                        ),
-                                                      ),
+                       Expanded(
+                         flex: 2,
+                        //  child:
+                        // Padding(
+                        //   padding: const EdgeInsets.only(top: 8),
+                          child: ListView.builder(
+                                    padding: const EdgeInsets.all(8),
+                                    itemCount: widget.service.team != null ? widget.service.team.length: 0,
+                                    shrinkWrap: true,
+                                    itemBuilder: (BuildContext context, int index) {
+                                      String role =  widget.service.team.keys.elementAt(index);
+                                      return Column(
+                                          children:[
+                                               Card(
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(4)
+                                                ),
+                                                child: Container(
+                                                  height: 35,
+                                                  padding: const EdgeInsets.all(8),
+                                                  child: Row(
+                                                    children: <Widget>[
+                                                      const SizedBox(width: 16,),
+                                                           Column(
+                                                               children:<Widget>[
+                                                                  Expanded(
+                                                                    flex: 5,
+                                                                    child: Column(
+                                                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                                      children: <Widget>[
+                                                                        Row(
+                                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                          children: [
 
-                                                      Text( splitVolunteers(widget.service.team[role]),
-                                                        overflow: TextOverflow.ellipsis,
-                                                        style: TextStyle(
-                                                          fontSize: 16,
-                                                          fontWeight: FontWeight.w800,
-                                                        ),
-                                                      ),
+                                                                            Text( role +':',
+                                                                              overflow: TextOverflow.ellipsis,
+                                                                              style: TextStyle(
+                                                                                fontSize: 16,
+                                                                                fontWeight: FontWeight.w800,
+                                                                                color: Colors.lightBlue,
+                                                                              ),
+                                                                            ),
+
+                                                                            Text( splitVolunteers(widget.service.team[role]),
+                                                                              overflow: TextOverflow.ellipsis,
+                                                                              style: TextStyle(
+                                                                                fontSize: 16,
+                                                                                fontWeight: FontWeight.w800,
+                                                                              ),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                        // tentativa de listar os volunteers por role, para edicao em separado
+                                                                        // Column(
+                                                                        //   children: [
+                                                                        //                   Row(
+                                                                        //                             children: [
+                                                                        //                                       ListView.builder(
+                                                                        //                                       padding: const EdgeInsets.all(8),
+                                                                        //                                       itemCount: widget.service.team[role].length,
+                                                                        //                                       shrinkWrap: true,
+                                                                        //                                       itemBuilder: (BuildContext context, int index) {
+                                                                        //                                             String users =  widget.service.team[role].elementAt(index);
+                                                                        //                                             return Expanded(child: Card(shape:
+                                                                        //                                                             RoundedRectangleBorder(
+                                                                        //                                                             borderRadius: BorderRadius.circular(4)
+                                                                        //                                                             )
+                                                                        //                                                             )
+                                                                        //                                                     );}
+                                                                        //                                       )
+                                                                        //
+                                                                        //                             ],
+                                                                        //                   )
+                                                                        //   ],
+                                                                        // ),
+
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                          ]
+                                                        )
                                                     ],
                                                   ),
-                                                  // tentativa de listar os volunteers por role, para edicao em separado
-                                                  // Column(
-                                                  //   children: [
-                                                  //                   Row(
-                                                  //                             children: [
-                                                  //                                       ListView.builder(
-                                                  //                                       padding: const EdgeInsets.all(8),
-                                                  //                                       itemCount: widget.service.team[role].length,
-                                                  //                                       shrinkWrap: true,
-                                                  //                                       itemBuilder: (BuildContext context, int index) {
-                                                  //                                             String users =  widget.service.team[role].elementAt(index);
-                                                  //                                             return Expanded(child: Card(shape:
-                                                  //                                                             RoundedRectangleBorder(
-                                                  //                                                             borderRadius: BorderRadius.circular(4)
-                                                  //                                                             )
-                                                  //                                                             )
-                                                  //                                                     );}
-                                                  //                                       )
-                                                  //
-                                                  //                             ],
-                                                  //                   )
-                                                  //   ],
-                                                  // ),
-
-                                                ],
+                                                ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                }
-                            ),
-                    ),
-                  ),
+                                          ]
+                                      );
+                                    }
+                                ),
+                        //),
+                       ),
 
                   Padding(
                     padding: const EdgeInsets.only(top: 6),
@@ -328,97 +335,99 @@ class ServiceScreenState extends State<ServiceScreen> {
                     ),
                   ),
 
-
                   Expanded(
                     flex: 2,
                     child:
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8),
-                      child: ListView.builder(
+                        ListView.builder(
                           padding: const EdgeInsets.all(8),
                           itemCount: widget.service.lstSongs == null ? 0 : widget.service.lstSongs.length,
                           shrinkWrap: true,
                           itemBuilder: (BuildContext context, int index) {
-                            return Expanded(
-                              child: Card(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(4)),
-                                child: Container(
-                                  height: 40,
-                                  padding: const EdgeInsets.all(8),
-                                  child: Row(
-                                    children: <Widget>[
-                                      const SizedBox(
-                                        width: 16,
-                                      ),
-                                      Expanded(
-                                        flex: 5,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            Row(
-                                              mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Flexible(
-                                                  child: Text(
-                                                    widget.service
-                                                        .lstSongs[index].nome,
-                                                    overflow:
-                                                    TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                      FontWeight.w800,
+                            return
+                                Column(
+                                    children: [
+                                        Card(
+                                            shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(4)),
+                                        child: Container(
+                                          height: 40,
+                                          padding: const EdgeInsets.all(8),
+                                          child: Row(
+                                            children: <Widget>[
+                                              const SizedBox(
+                                                width: 16,
+                                              ),
+                                              Column(
+                                                children:<Widget>[
+                                                  Expanded(
+                                                    flex: 5,
+                                                    child: Column(
+                                                      mainAxisAlignment:
+                                                      MainAxisAlignment.spaceEvenly,
+                                                      crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                      children: <Widget>[
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                          MainAxisAlignment.spaceBetween,
+                                                          children: [
+                                                          //  Flexible(child:
+                                                               Text(
+                                                                widget.service
+                                                                    .lstSongs[index].nome,
+                                                                overflow:
+                                                                TextOverflow.ellipsis,
+                                                                style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  fontWeight:
+                                                                  FontWeight.w800,
+                                                                ),
+                                                              ),
+                                                            //),
+
+                                                            Visibility(
+                                                              visible: StringUtils.isNotNUllNotEmpty(widget.service.lstSongs[index].cifra),
+                                                              child:
+                                                              Align(
+                                                                alignment: Alignment.topRight,
+                                                                child: GestureDetector(
+                                                                  onTap: () => _launchChordsURL(widget.service.lstSongs[index]),
+                                                                  child: Icon(
+                                                                    Icons.straighten_rounded,
+                                                                    color: Colors.blueGrey,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+
+                                                            Text(
+                                                              'Tom: ' + widget.service.lstSongs[index].tom,
+                                                              overflow:
+                                                              TextOverflow.ellipsis,
+                                                              style: TextStyle(
+                                                                color: Colors.blueGrey,
+                                                                fontSize: 12,
+                                                                fontWeight:
+                                                                FontWeight.w800,
+                                                              ),
+                                                            ),
+
+                                                          ],
+                                                        ),
+                                                      ],
                                                     ),
                                                   ),
-                                                ),
-
-                                                Visibility(
-                                                  visible: StringUtils.isNotNUllNotEmpty(widget.service.lstSongs[index].cifra),
-                                                  child:
-                                                  Align(
-                                                    alignment: Alignment.topRight,
-                                                    child: GestureDetector(
-                                                      onTap: () => _launchChordsURL(widget.service.lstSongs[index]),
-                                                      child: Icon(
-                                                        Icons.straighten_rounded,
-                                                        color: Colors.blueGrey,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-
-                                                Text(
-                                                  'Tom: ' + widget.service.lstSongs[index].tom,
-                                                  overflow:
-                                                  TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                    color: Colors.blueGrey,
-                                                    fontSize: 12,
-                                                    fontWeight:
-                                                    FontWeight.w800,
-                                                  ),
-                                                ),
-
-                                              ],
-                                            ),
-                                          ],
+                                                 ]
+                                                )
+                                            ],
+                                          ),
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
+                                 ]
+                              );
                           }),
-                    ),
-
-
                   ),
+
 //----------------------------------------------bto salvar------------------
                   Consumer<Service>(
                     builder: (_, service, __) {
