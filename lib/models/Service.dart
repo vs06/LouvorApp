@@ -69,6 +69,7 @@ class Service extends ChangeNotifier {
       };
 
   Future<void> save() async {
+
     final Map<String, dynamic> blob = {
       'data': data,
       'dirigente': dirigente,
@@ -83,31 +84,26 @@ class Service extends ChangeNotifier {
 
 
     if (id == null) {
-      if (this.dynamicSongs == null){
-        this.dynamicSongs = new Map();
-    }
 
-    //Row back para teste
-    // if(this.lstSongs == null){
-    //   this.lstSongs = new List();
-    // }
+        if (this.dynamicSongs == null){
+          this.dynamicSongs = new Map();
+        }
 
-    this.lstSongs.forEach((element) => this.dynamicSongs.addAll(element.toMap()));
+        if(this.lstSongs == null){
+          this.lstSongs = new List();
+        }
 
+        this.lstSongs.forEach((element) => this.dynamicSongs.addAll(element.toMap()));
 
-      final doc = await firestore.collection('services').document().setData(this.toMap());
+        final doc = await firestore.collection('services').add(this.toMap());
+        id = doc.documentID;
 
-      id = firestore
-          .collection('services')
-          .document()
-          .documentID;
-      print('SALVANDO $blob $data $dirigente');
+        print('SALVANDO $blob $data $dirigente');
     } else {
-      print('ATUALIZANDO $blob $data $dirigente');
+        print('ATUALIZANDO $blob $data $dirigente');
 
-      this.lstSongs.forEach((element) =>
-          this.dynamicSongs.addAll(element.toMap()));
-      await firestoreRef.updateData(this.toMap());
+        this.lstSongs.forEach((element) => this.dynamicSongs.addAll(element.toMap()));
+        await firestoreRef.updateData(this.toMap());
     }
 
     notifyListeners();

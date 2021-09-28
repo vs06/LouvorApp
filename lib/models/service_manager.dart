@@ -43,6 +43,10 @@ class ServiceManager extends ChangeNotifier{
     return filteredServices;
   }
 
+  void removeFromAllServices(Service serviceRemoved){
+    allServices.removeWhere((service) => service.id == serviceRemoved.id);
+  }
+
   List<Service> filteredServicesByMounth(DateTime DateTime) {
     final List<Service> filteredServices = [];
 

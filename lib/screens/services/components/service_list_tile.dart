@@ -3,6 +3,7 @@ import 'package:louvor_app/helpers/date_utils.dart';
 import 'package:louvor_app/models/Service.dart';
 import 'package:louvor_app/models/service_manager.dart';
 import 'package:louvor_app/models/user_manager.dart';
+import 'package:louvor_app/screens/services/services_screen.dart';
 import 'package:provider/provider.dart';
 
 class ServiceListTile extends StatelessWidget {
@@ -26,10 +27,15 @@ class ServiceListTile extends StatelessWidget {
             FlatButton(
               child: Text('Sim'),
               onPressed: () {
-                //TODO fix this POG
-                s.delete(s);
+                s.ativo = 'False';
                 context.read<ServiceManager>().update(s);
+
+                //remover esse Service do allServices
+                context.read<ServiceManager>().removeFromAllServices(s);
+
                 Navigator.pop(context);
+                Navigator.pop(context);
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => ServicesScreen.buildByMounth(s.data)));
               },
             )
           ],
