@@ -87,9 +87,10 @@ class Service extends ChangeNotifier {
         this.dynamicSongs = new Map();
     }
 
-    if(this.lstSongs == null){
-      this.lstSongs = new List();
-    }
+    //Row back para teste
+    // if(this.lstSongs == null){
+    //   this.lstSongs = new List();
+    // }
 
     this.lstSongs.forEach((element) => this.dynamicSongs.addAll(element.toMap()));
 
