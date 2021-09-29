@@ -50,6 +50,8 @@ class ServiceManager extends ChangeNotifier{
   List<Service> filteredServicesByMounth(DateTime DateTime) {
     List<Service> filteredServices = [];
 
+    _loadAllServicesbyDate(DateTime);
+    //filteredServices.addAll(allServices);
     filteredServices.addAll(allServices.where(
                                               (service) => ((service.data.year == DateTime.year) && (service.data.month == DateTime.month) )
                                               )
@@ -84,11 +86,22 @@ class ServiceManager extends ChangeNotifier{
 
   Future<void> _loadAllServices() async {
     final QuerySnapshot snapServices =
-    await firestore.collection('services').getDocuments();
+    await firestore.collection('services').where('ativo', isEqualTo: 'True').getDocuments();
 
     allServices = snapServices.documents.map(
             (d) => Service.fromDocument(d)).toList();
 
+    notifyListeners();
+  }
+
+  Future<void> _loadAllServicesbyDate(DateTime dateTime) async {
+    final lastdayofmounth = new DateTime(dateTime.year,dateTime.month+1,1);
+    final firstdayofmount = new DateTime(dateTime.year,dateTime.month,1);
+    QuerySnapshot snapServices =
+    await firestore.collection('services').where('data', isGreaterThanOrEqualTo: firstdayofmount).where('data', isLessThanOrEqualTo: lastdayofmounth).getDocuments();
+
+    allServices = snapServices.documents.map(
+            (d) => Service.fromDocument(d)).toList();
     notifyListeners();
   }
 
