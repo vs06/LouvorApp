@@ -479,7 +479,11 @@ class ServiceScreenState extends State<ServiceScreen> {
 
    DateTime _getHourByToggle(DateTime serviceDate, bool toggleNight){
      if(toggleNight){
-       return new DateTime(serviceDate.year, serviceDate.month, serviceDate.day, 20, 00);
+       if(DateFormat('EEEE').format(serviceDate).toUpperCase() == 'SUNDAY'){
+         return new DateTime(serviceDate.year, serviceDate.month, serviceDate.day, 19, 00);
+       }else{
+         return new DateTime(serviceDate.year, serviceDate.month, serviceDate.day, 20, 00);
+       }
      }else{
        return new DateTime(serviceDate.year, serviceDate.month, serviceDate.day, 10, 00);
      }
