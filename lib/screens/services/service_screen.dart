@@ -86,6 +86,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                             padding: const EdgeInsets.only(top: 2),
                             child: TextFormField(
                               initialValue: widget.service.dirigente,
+                              enabled:  UserManager.isUserAdmin,
                               onSaved: (dr) => widget.service.dirigente = dr,
                               decoration: const InputDecoration(
                                 hintText: 'Dirigente',
@@ -106,10 +107,15 @@ class ServiceScreenState extends State<ServiceScreen> {
                           width: 140,
                           child:
                               GestureDetector(
-                                onTap: () => _selectDate(toggleNight),
+                                      onTap: () {
+                                          if(UserManager.isUserAdmin){
+                                            _selectDate(toggleNight);
+                                          }
+                                      },
                                 child: AbsorbPointer(
                                   child:
                                   TextFormField(
+                                    enabled:  UserManager.isUserAdmin,
                                     controller: widget.dateController,
                                     decoration: InputDecoration(
                                                     labelText: "Data",
@@ -142,10 +148,12 @@ class ServiceScreenState extends State<ServiceScreen> {
                                           : Icon(Icons.wb_sunny_sharp),
                                       color: Colors.blueGrey,
                                       onPressed: () {
-                                        setState(() {
-                                              toggleNight = !toggleNight;
-                                            });
-                                        widget.service.data = _getHourByToggle(widget.service.data == null ? DateTime.now() : widget.service.data, toggleNight);
+                                            if(UserManager.isUserAdmin){
+                                                setState(() {
+                                                toggleNight = !toggleNight;
+                                                });
+                                                widget.service.data = _getHourByToggle(widget.service.data == null ? DateTime.now() : widget.service.data, toggleNight);
+                                          }
                                       }),
                                   // Row(
                                   //  children: [
