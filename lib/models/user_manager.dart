@@ -97,6 +97,8 @@ class UserManager extends ChangeNotifier {
             (d) => User.fromDocument(d)).toList();
 
     if(AppListPool.usersName.isEmpty){
+
+      allUsers.sort((a, b) => a.name.compareTo(b.name));
       AppListPool.fillUsers(allUsers);
     }
 
