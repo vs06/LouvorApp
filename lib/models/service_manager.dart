@@ -48,7 +48,7 @@ class ServiceManager extends ChangeNotifier{
   }
 
   List<Service> filteredServicesByMounth(DateTime DateTime) {
-    final List<Service> filteredServices = [];
+    List<Service> filteredServices = [];
 
     filteredServices.addAll(allServices.where(
                                               (service) => ((service.data.year == DateTime.year) && (service.data.month == DateTime.month) )
@@ -56,6 +56,28 @@ class ServiceManager extends ChangeNotifier{
                             );
 
     filteredServices.sort((a, b) => b.data.compareTo(a.data));
+
+    if(_search != ''){
+      List<Service> filteredServicesSearch = [];
+
+      filteredServices.forEach((service) {
+                                service.team.forEach((key, volunteers) {
+                                                            volunteers.forEach((volunteer) {
+                                                              if(volunteer.contains(_search)){
+                                                                if(!filteredServicesSearch.any((element) => element.id == service.id)){
+                                                                  filteredServicesSearch.add(service);
+                                                                }
+                                                              }
+                                                            }
+                                                           );
+                                                        }
+                                                    );
+                                          }
+      );
+
+      return filteredServicesSearch;
+
+    }
 
     return filteredServices;
   }

@@ -73,8 +73,9 @@ class ServicesScreen extends StatelessWidget {
                   icon: Icon(Icons.search),
                   onPressed: () async {
                     final search = await showDialog<String>(
-                        context: context,
-                        builder: (_) => SearchDialog(serviceManager.search));
+                                              context: context,
+                                              builder: (_) => SearchDialog(serviceManager.search)
+                                          );
                     if (search != null) {
                       serviceManager.search = search;
                     }
