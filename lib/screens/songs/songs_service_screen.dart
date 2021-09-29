@@ -141,116 +141,96 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
                                 child: Row(
                                   children: <Widget>[
                                     const SizedBox(width: 16,),
-                                    Column( children:[
-                                          Expanded(
-                                            flex: 5,
-                                            child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: <Widget>[
-                                                Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                  children: [
-                                                    //Flexible( child:
-                                                      Text(
-                                                        filteredSongs[index].nome,
-                                                        overflow: TextOverflow.ellipsis,
-                                                        style: TextStyle(
-                                                          fontSize: 16,
-                                                          fontWeight: FontWeight.w800,
-                                                        ),
-                                                      ),
-                                                    //),
-                                                  ],
-                                                ),
-                                                Padding(
-                                                  padding: const EdgeInsets.only(top: 4),
-                                                  child: Text(
-                                                    '${filteredSongs[index].letra}',
-                                                    overflow: TextOverflow.ellipsis ,
-                                                    style: TextStyle(
-                                                      color: Colors.grey[400],
-                                                      fontSize: 12,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Text(
-                                                  '${filteredSongs[index].artista}',
+                                    Expanded(
+                                      flex: 5,
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Flexible(
+                                                child: Text(
+                                                  filteredSongs[index].nome,
+                                                  overflow: TextOverflow.ellipsis,
                                                   style: TextStyle(
-                                                      fontSize: 15,
-                                                      fontWeight: FontWeight.w800,
-                                                      color: Theme.of(context).primaryColor
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w800,
                                                   ),
                                                 ),
-                                              ],
+                                              ),
+                                            ],
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(top: 4),
+                                            child: Text(
+                                              '${filteredSongs[index].letra}',
+                                              overflow: TextOverflow.ellipsis ,
+                                              style: TextStyle(
+                                                color: Colors.grey[400],
+                                                fontSize: 12,
+                                              ),
                                             ),
                                           ),
-                                     ]
-                                    ),
-                                    Column(
-                                        children: [
-                                            Expanded(
-                                                flex: 2, // 20%
-                                                child: Column(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                    //crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Row(
-                                                          mainAxisAlignment: MainAxisAlignment.end,
-                                                          children: [
-                                                            Align(
-                                                                alignment: Alignment.topRight,
-                                                                child: GestureDetector(
-                                                                          onTap: () {
-                                                                            if(!widget._lstSongSelecionadas.any((song) => song.id == filteredSongs[index].id)){
-                                                                                setState(() {
-                                                                                  widget._lstSongSelecionadas.add(filteredSongs[index]);
-                                                                                });
-                                                                            }
-                                                                          },
-                                                                          child: Icon(
-                                                                            Icons.add_circle_sharp,
-                                                                            color: Colors.lightBlue,
-                                                                            size: 30,
-                                                                          ),
-                                                                        ),
-
-                                                                    // ElevatedButton.icon(
-                                                                    //   onPressed: () {
-                                                                    //     setState(() {
-                                                                    //       widget._lstSongSelecionadas.add(filteredSongs[index]);
-                                                                    //     });
-                                                                    //   },
-                                                                    //   icon: Icon(Icons.add, size: 10),
-                                                                    //   label: Text("Add"),
-                                                                    // )
-                                                            ),
-                                                          ]
-                                                      ),
-                                                      Row(
-                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                          children: [
-                                                            //Flexible( child:
-                                                              Align(
-                                                                alignment: Alignment.topRight,
-                                                                child: Text(
-                                                                  "Tom: " + '${filteredSongs[index].tom}',
-                                                                  overflow: TextOverflow.ellipsis ,
-                                                                  style: TextStyle(
-                                                                    color: Colors.blueGrey,
-                                                                    fontSize: 15,
-                                                                    fontWeight: FontWeight.w800,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            //),
-                                                          ]
-                                                      ),
-                                                    ]
-                                                )
+                                          Text(
+                                            '${filteredSongs[index].artista}',
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w800,
+                                                color: Theme.of(context).primaryColor
                                             ),
-                                    ]
-                                   ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Expanded(
+                                        flex: 2, // 20%
+                                        child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            //crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: [
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        if(!widget._lstSongSelecionadas.any((song) => song.id == filteredSongs[index].id)){
+                                                          setState(() {
+                                                            widget._lstSongSelecionadas.add(filteredSongs[index]);
+                                                          });
+                                                        }
+                                                      },
+                                                      child: Icon(
+                                                        Icons.add_circle_sharp,
+                                                        color: Colors.lightBlue,
+                                                        size: 30,
+                                                      ),
+                                                    ),
+                                                  ]
+                                              ),
+                                              Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: [
+                                                    Flexible(
+                                                      child: Align(
+                                                        alignment: Alignment.topLeft,
+                                                        child: Text(
+                                                          "Tom: " + '${filteredSongs[index].tom}',
+                                                          overflow: TextOverflow.ellipsis ,
+                                                          style: TextStyle(
+                                                            color: Colors.blueGrey,
+                                                            fontSize: 15,
+                                                            fontWeight: FontWeight.w800,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ]
+                                              ),
+                                            ]
+                                        )
+                                    ),
                                   ],
                                 ),
                               ),
