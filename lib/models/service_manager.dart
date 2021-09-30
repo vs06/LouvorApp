@@ -98,7 +98,10 @@ class ServiceManager extends ChangeNotifier{
     final lastdayofmounth = new DateTime(dateTime.year,dateTime.month+1,1);
     final firstdayofmount = new DateTime(dateTime.year,dateTime.month,1);
     QuerySnapshot snapServices =
-    await firestore.collection('services').where('data', isGreaterThanOrEqualTo: firstdayofmount).where('data', isLessThanOrEqualTo: lastdayofmounth).getDocuments();
+    await firestore.collection('services')
+        .where('data', isGreaterThanOrEqualTo: firstdayofmount)
+        .where('data', isLessThanOrEqualTo: lastdayofmounth)
+        .where('ativo', isEqualTo: 'True').getDocuments();
 
     allServices = snapServices.documents.map(
             (d) => Service.fromDocument(d)).toList();
