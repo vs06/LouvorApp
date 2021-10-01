@@ -155,26 +155,6 @@ class ServiceScreenState extends State<ServiceScreen> {
                                                 widget.service.data = _getHourByToggle(widget.service.data == null ? DateTime.now() : widget.service.data, toggleNight);
                                           }
                                       }),
-                                  // Row(
-                                  //  children: [
-                                  //              IconButton(
-                                  //                icon: Icon(Icons.access_time,  size: 28, color: Colors.blueGrey,),
-                                  //                onPressed: () { setState(() {
-                                  //                  periodService = periodService == 'Noite' ? 'Manhã': 'Noite';
-                                  //                });},
-                                  //             ),
-                                  //           ],
-                                  //  ),
-                                  // Row(
-                                  //   children: [
-                                  //     Text( periodService,
-                                  //           style: TextStyle(
-                                  //               fontSize: 15,
-                                  //               color: Theme.of(context).primaryColor
-                                  //           ),
-                                  //     ),
-                                  //   ],
-                                  // ),
                                 ],
                               )
                         ),
@@ -199,7 +179,6 @@ class ServiceScreenState extends State<ServiceScreen> {
                                                               onTap: () {
                                                                 if (widget.formKey.currentState.validate()) {
                                                                   widget.formKey.currentState.save();
-                                                                  //Navigator.of(context).pop();
                                                                 }
 
                                                                 //Fix null pointer
@@ -222,9 +201,6 @@ class ServiceScreenState extends State<ServiceScreen> {
 
                        Expanded(
                          flex: 2,
-                        //  child:
-                        // Padding(
-                        //   padding: const EdgeInsets.only(top: 8),
                           child: ListView.builder(
                                     padding: const EdgeInsets.all(8),
                                     itemCount: widget.service.team != null ? widget.service.team.length: 0,
@@ -310,7 +286,6 @@ class ServiceScreenState extends State<ServiceScreen> {
                                       );
                                     }
                                 ),
-                        //),
                        ),
 
                   Padding(
