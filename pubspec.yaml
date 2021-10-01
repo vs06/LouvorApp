@@ -41,6 +41,8 @@ dependencies:
   flutter_launcher_icons: ^0.8.0
   firebase_admob: ^0.8.0
   url_launcher: ^5.4.0
+  loading_animations: "^2.1.0"
+
 #  syncfusion_flutter_calendar: ^17.4.40-beta
 
 dev_dependencies:

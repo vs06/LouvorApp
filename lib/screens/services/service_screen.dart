@@ -1,13 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-//import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:intl/intl.dart';
 import 'package:louvor_app/helpers/string_utils.dart';
 import 'package:louvor_app/models/Service.dart';
 import 'package:louvor_app/models/Song.dart';
 import 'package:louvor_app/models/service_manager.dart';
 import 'package:louvor_app/models/user_manager.dart';
+import 'package:louvor_app/screens/loading_screen.dart';
 import 'package:louvor_app/screens/songs/songs_service_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -447,6 +447,8 @@ class ServiceScreenState extends State<ServiceScreen> {
                             //await service.save();
                             context.read<ServiceManager>().update(service);
                             Navigator.of(context).pop();
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoadingScreen()));
+
                           }
                         },
                         textColor: Colors.white,

@@ -3,6 +3,7 @@ import 'package:louvor_app/models/Song.dart';
 import 'package:provider/provider.dart';
 import 'package:louvor_app/models/song_manager.dart';
 import 'package:louvor_app/models/user_manager.dart';
+import 'package:louvor_app/screens/loading_screen.dart';
 
 class SongScreen extends StatelessWidget {
   SongScreen(Song s) : song = s != null ? s.clone() : Song();
@@ -117,6 +118,7 @@ class SongScreen extends StatelessWidget {
                                   await song.save();
                                   context.read<SongManager>().update(song);
                                   Navigator.of(context).pop();
+                                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoadingScreen()));
                                 }
                               },
                               textColor: Colors.white,
