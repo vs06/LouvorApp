@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:louvor_app/common/custom_drawer/custom_drawer.dart';
 import 'package:louvor_app/helpers/app_list_pool.dart';
 import 'package:louvor_app/helpers/date_utils.dart';
+import 'package:louvor_app/helpers/multi_utils.dart';
+import 'package:louvor_app/helpers/string_utils.dart';
 import 'package:louvor_app/models/Song.dart';
 import 'package:louvor_app/screens/services/service_screen.dart';
 import 'package:louvor_app/models/Service.dart';
@@ -255,7 +257,7 @@ class TeamServiceScreenState extends State<TeamServiceScreen> {
                                                                   borderRadius: BorderRadius.circular(4)
                                                               ),
                                                               child: Container(
-                                                                height: 40,
+                                                                height: MultiUtils.calculaHeightTile(widget.service.team[role].length),
                                                                 padding: const EdgeInsets.all(8),
                                                                 child: Row(
                                                                   children: <Widget>[
@@ -271,7 +273,7 @@ class TeamServiceScreenState extends State<TeamServiceScreen> {
                                                                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                                                   children: [
 
-                                                                                    Text( role +':',
+                                                                                    Text( role +':  ',
                                                                                       overflow: TextOverflow.ellipsis,
                                                                                       style: TextStyle(
                                                                                         fontSize: 16,
@@ -280,7 +282,7 @@ class TeamServiceScreenState extends State<TeamServiceScreen> {
                                                                                       ),
                                                                                     ),
 
-                                                                                    Text( splitVolunteers(widget.service.team[role]),
+                                                                                    Text( StringUtils.splitVolunteersToTile(widget.service.team[role]),
                                                                                       overflow: TextOverflow.ellipsis,
                                                                                       style: TextStyle(
                                                                                         fontSize: 16,
@@ -360,19 +362,6 @@ class TeamServiceScreenState extends State<TeamServiceScreen> {
         ],
       ),
     );
-  }
-
-  String splitVolunteers(List<String> lstVolunteers) {
-    String volunteers = "";
-    int counter = lstVolunteers.length;
-    lstVolunteers.forEach((element) {
-                                      volunteers += element;
-                                      counter--;
-                                      if(counter > 0)
-                                        volunteers +=  ', ';
-                                    }
-                         );
-    return  volunteers;
   }
 
   void addTeamMap(String valueRoleDropDownSelected, String valueUserDropDownSelected) {

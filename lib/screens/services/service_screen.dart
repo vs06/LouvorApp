@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:louvor_app/helpers/multi_utils.dart';
 import 'package:louvor_app/helpers/string_utils.dart';
 import 'package:louvor_app/models/Service.dart';
 import 'package:louvor_app/models/Song.dart';
@@ -214,7 +216,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                                                     borderRadius: BorderRadius.circular(4)
                                                 ),
                                                 child: Container(
-                                                  height: 35,
+                                                  height: MultiUtils.calculaHeightTile(widget.service.team[role].length),
                                                   padding: const EdgeInsets.all(8),
                                                   child: Row(
                                                     children: <Widget>[
@@ -230,23 +232,31 @@ class ServiceScreenState extends State<ServiceScreen> {
                                                                         Row(
                                                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                                           children: [
-
-                                                                            Text( role +':',
-                                                                              overflow: TextOverflow.ellipsis,
-                                                                              style: TextStyle(
-                                                                                fontSize: 16,
-                                                                                fontWeight: FontWeight.w800,
-                                                                                color: Colors.lightBlue,
+                                                                              Center(
+                                                                                child: Column( children: [
+                                                                                          Text( role +':  ',
+                                                                                            overflow: TextOverflow.ellipsis,
+                                                                                            style: TextStyle(
+                                                                                              fontSize: 16,
+                                                                                              fontWeight: FontWeight.w800,
+                                                                                              color: Colors.lightBlue,
+                                                                                            ),
+                                                                                          ),
+                                                                                        ],
+                                                                                        ),
                                                                               ),
-                                                                            ),
-
-                                                                            Text( splitVolunteers(widget.service.team[role]),
-                                                                              overflow: TextOverflow.ellipsis,
-                                                                              style: TextStyle(
-                                                                                fontSize: 16,
-                                                                                fontWeight: FontWeight.w800,
-                                                                              ),
-                                                                            ),
+                                                                             Column(
+                                                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                                                children: [
+                                                                                        Text( StringUtils.splitVolunteersToTile((widget.service.team[role])),
+                                                                                          overflow: TextOverflow.ellipsis,
+                                                                                          style: TextStyle(
+                                                                                            fontSize: 16,
+                                                                                            fontWeight: FontWeight.w800,
+                                                                                          ),
+                                                                                        ),
+                                                                                   ]
+                                                                             ),
                                                                           ],
                                                                         ),
                                                                         // tentativa de listar os volunteers por role, para edicao em separado
@@ -329,83 +339,86 @@ class ServiceScreenState extends State<ServiceScreen> {
                             return
                                 Column(
                                     children: [
-                                        Card(
-                                            shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(4)),
-                                        child: Container(
-                                          height: 40,
-                                          padding: const EdgeInsets.all(8),
-                                          child: Row(
-                                            children: <Widget>[
-                                              const SizedBox(
-                                                width: 16,
-                                              ),
-                                              Column(
-                                                children:<Widget>[
-                                                  Expanded(
-                                                    flex: 5,
-                                                    child: Column(
-                                                      mainAxisAlignment:
-                                                      MainAxisAlignment.spaceEvenly,
-                                                      crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                      children: <Widget>[
-                                                        Row(
-                                                          mainAxisAlignment:
-                                                          MainAxisAlignment.spaceBetween,
-                                                          children: [
-                                                          //  Flexible(child:
-                                                               Text(
-                                                                widget.service
-                                                                    .lstSongs[index].nome,
-                                                                overflow:
-                                                                TextOverflow.ellipsis,
-                                                                style: TextStyle(
-                                                                  fontSize: 16,
-                                                                  fontWeight:
-                                                                  FontWeight.w800,
-                                                                ),
-                                                              ),
-                                                            //),
-
-                                                            Visibility(
-                                                              visible: StringUtils.isNotNUllNotEmpty(widget.service.lstSongs[index].cifra),
+                                      Card(
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(4)),
+                                          child: Container(
+                                              height: 40,
+                                              padding: const EdgeInsets.all(8),
+                                              child:
+                                              Row(
+                                                  children: <Widget>[
+                                                    const SizedBox( width: 16,),
+                                                          Expanded(
+                                                              flex: 5,
+                                                              child: Column(
+                                                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                                  children: <Widget>[
+                                                                    Row(
+                                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                        children: [
+                                                                          Flexible(child:
+                                                                              Text(
+                                                                                widget.service.lstSongs[index].nome,
+                                                                                overflow: TextOverflow.ellipsis,
+                                                                                style: TextStyle(
+                                                                                  fontSize: 16,
+                                                                                  fontWeight:
+                                                                                  FontWeight.w800,
+                                                                                ),
+                                                                              ),
+                                                                          )
+                                                                        ]
+                                                                    )
+                                                                  ]
+                                                              )
+                                                          ),
+                                                          //  SizedBox(width: 5),
+                                                          Expanded(
+                                                              flex: 3, // 20%
                                                               child:
-                                                              Align(
-                                                                alignment: Alignment.topRight,
-                                                                child: GestureDetector(
-                                                                  onTap: () => _launchChordsURL(widget.service.lstSongs[index]),
-                                                                  child: Icon(
-                                                                    Icons.straighten_rounded,
-                                                                    color: Colors.blueGrey,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ),
-
-                                                            Text(
-                                                              'Tom: ' + widget.service.lstSongs[index].tom,
-                                                              overflow:
-                                                              TextOverflow.ellipsis,
-                                                              style: TextStyle(
-                                                                color: Colors.blueGrey,
-                                                                fontSize: 12,
-                                                                fontWeight:
-                                                                FontWeight.w800,
-                                                              ),
-                                                            ),
-
-                                                          ],
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                 ]
-                                                )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
+                                                                      Column(
+                                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                        //crossAxisAlignment: CrossAxisAlignment.start,
+                                                                        children: [
+                                                                          Row(
+                                                                            children: [
+                                                                              Text('Tom: ' + widget.service.lstSongs[index].tom,
+                                                                                overflow: TextOverflow.ellipsis,
+                                                                                style: TextStyle(
+                                                                                  color: Colors.blueGrey,
+                                                                                  fontSize: 13,
+                                                                                  fontWeight:
+                                                                                  FontWeight.w800,
+                                                                                ),
+                                                                              ),
+                                                                              SizedBox(width: 15),
+                                                                              Visibility(
+                                                                                visible: StringUtils.isNotNUllNotEmpty(widget.service.lstSongs[index].cifra),
+                                                                                child:
+                                                                                Align(
+                                                                                  alignment: Alignment.topRight,
+                                                                                  child: GestureDetector(
+                                                                                    onTap: () => _launchChordsURL(widget.service.lstSongs[index]),
+                                                                                    child: Icon(
+                                                                                      Icons.straighten_rounded,
+                                                                                      color: Colors.blueGrey,
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            ],
+                                                                          )
+                                                                        ],
+                                                                    )
+                                                          ),
+                                                   //     ]
+                                                 //   )
+                                                  ]
+                                              )
+                                          )
+                                      )
                                  ]
                               );
                           }),
@@ -419,7 +432,6 @@ class ServiceScreenState extends State<ServiceScreen> {
                           widget.service.data = _getHourByToggle(widget.service.data, toggleNight);
                           if (widget.formKey.currentState.validate()) {
                             widget.formKey.currentState.save();
-                            //await service.save();
                             context.read<ServiceManager>().update(service);
                             Navigator.of(context).pop();
                             Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoadingScreen()));
@@ -449,20 +461,7 @@ class ServiceScreenState extends State<ServiceScreen> {
       ? await launch(song.cifra)
       : throw 'Could not launch $song.cifra';
 
-  String splitVolunteers(List<String> lstVolunteers) {
-    String volunteers = "";
-    int counter = lstVolunteers.length;
-    lstVolunteers.forEach((element) {
-      volunteers += element;
-      counter--;
-      if(counter > 0)
-        volunteers +=  ', ';
-    }
-    );
-    return  volunteers;
-  }
-
-   DateTime _getHourByToggle(DateTime serviceDate, bool toggleNight){
+     DateTime _getHourByToggle(DateTime serviceDate, bool toggleNight){
      if(toggleNight){
        if(DateFormat('EEEE').format(serviceDate).toUpperCase() == 'SUNDAY'){
          return new DateTime(serviceDate.year, serviceDate.month, serviceDate.day, 19, 00);
