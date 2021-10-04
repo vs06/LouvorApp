@@ -57,6 +57,11 @@ class ServiceListTile extends StatelessWidget {
           child: Container(
             height: 110,
             padding: const EdgeInsets.all(6),
+            decoration: BoxDecoration(
+                border: service.data.day == DateTime.now().day ?  Border.all(color: Colors.blueAccent, width: 5): Border(),
+                borderRadius: BorderRadius.circular(4)
+            ),
+
             child: Row(
               children: <Widget>[
                 const SizedBox(width: 16,),

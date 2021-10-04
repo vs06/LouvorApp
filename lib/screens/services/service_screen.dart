@@ -384,16 +384,6 @@ class ServiceScreenState extends State<ServiceScreen> {
                                                                         children: [
                                                                           Row(
                                                                             children: [
-                                                                              Text('Tom: ' + widget.service.lstSongs[index].tom,
-                                                                                overflow: TextOverflow.ellipsis,
-                                                                                style: TextStyle(
-                                                                                  color: Colors.blueGrey,
-                                                                                  fontSize: 13,
-                                                                                  fontWeight:
-                                                                                  FontWeight.w800,
-                                                                                ),
-                                                                              ),
-                                                                              SizedBox(width: 15),
                                                                               Visibility(
                                                                                 visible: StringUtils.isNotNUllNotEmpty(widget.service.lstSongs[index].cifra),
                                                                                 child:
@@ -406,6 +396,16 @@ class ServiceScreenState extends State<ServiceScreen> {
                                                                                       color: Colors.blueGrey,
                                                                                     ),
                                                                                   ),
+                                                                                ),
+                                                                              ),
+                                                                              SizedBox(width: 15),
+                                                                              Text('Tom: ' + widget.service.lstSongs[index].tom,
+                                                                                overflow: TextOverflow.ellipsis,
+                                                                                style: TextStyle(
+                                                                                  color: Colors.blueGrey,
+                                                                                  fontSize: 13,
+                                                                                  fontWeight:
+                                                                                  FontWeight.w800,
                                                                                 ),
                                                                               ),
                                                                             ],
