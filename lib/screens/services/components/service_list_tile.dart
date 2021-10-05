@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:louvor_app/helpers/date_utils.dart';
 import 'package:louvor_app/models/Service.dart';
@@ -58,7 +59,8 @@ class ServiceListTile extends StatelessWidget {
             height: 110,
             padding: const EdgeInsets.all(6),
             decoration: BoxDecoration(
-                border: service.data.day == DateTime.now().day ?  Border.all(color: Colors.blueAccent, width: 5): Border(),
+                border: (service.data.day == DateTime.now().day && service.data.month == DateTime.now().month ) ?  Border.all(color: Colors.blueAccent, width: 5): Border(),
+                color: service.data.isBefore(DateTime.now()) ? CupertinoColors.systemGrey3 : Colors.white,
                 borderRadius: BorderRadius.circular(4)
             ),
 
@@ -89,7 +91,7 @@ class ServiceListTile extends StatelessWidget {
                             ),
                           ),
                           Visibility(
-                            visible: UserManager.isUserAdmin,
+                            visible: UserManager.isUserAdmin && service.data.isAfter(DateTime.now()),
                             child: GestureDetector(
                                       onTap: () {
                                         _showAlertDialog(context, 'Confirma a exclusão desse culto?', service);
@@ -128,7 +130,7 @@ class ServiceListTile extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
                           style: TextStyle(
-                            color: Colors.grey[400],
+                            color: Colors.grey[800],
                             fontSize: 12,
                           ),
                         ),

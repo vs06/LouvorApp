@@ -427,24 +427,27 @@ class ServiceScreenState extends State<ServiceScreen> {
 //----------------------------------------------bto salvar------------------
                   Consumer<Service>(
                     builder: (_, service, __) {
-                      return RaisedButton(
-                        onPressed: () async {
-                          widget.service.data = _getHourByToggle(widget.service.data, toggleNight);
-                          if (widget.formKey.currentState.validate()) {
-                            widget.formKey.currentState.save();
-                            context.read<ServiceManager>().update(service);
-                            Navigator.of(context).pop();
-                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoadingScreen()));
+                      return Visibility(
+                                visible: service.data.isAfter(DateTime.now()),
+                                child:  RaisedButton(
+                                        onPressed: () async {
+                                          widget.service.data = _getHourByToggle(widget.service.data, toggleNight);
+                                          if (widget.formKey.currentState.validate()) {
+                                            widget.formKey.currentState.save();
+                                            context.read<ServiceManager>().update(service);
+                                            Navigator.of(context).pop();
+                                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoadingScreen()));
 
-                          }
-                        },
-                        textColor: Colors.white,
-                        color: primaryColor,
-                        disabledColor: primaryColor.withAlpha(100),
-                        child: const Text(
-                          'Salvar',
-                          style: TextStyle(fontSize: 18.0),
-                        ),
+                                          }
+                                        },
+                                        textColor: Colors.white,
+                                        color: primaryColor,
+                                        disabledColor: primaryColor.withAlpha(100),
+                                        child: const Text(
+                                          'Salvar',
+                                          style: TextStyle(fontSize: 18.0),
+                                        ),
+                                      )
                       );
                     },
                   ),

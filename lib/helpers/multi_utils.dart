@@ -9,4 +9,11 @@ class MultiUtils {
     return 40;
   }
 
+  static bool isListNotNullNotEmpty(Iterable iterable) {
+    return iterable != null && iterable.length > 0;
+  }
+
+  static bool isMapNotNullNotEmpty(Map map) {
+    return map != null && map.length > 0;
+  }
 }

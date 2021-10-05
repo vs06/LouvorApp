@@ -3,7 +3,7 @@ import 'package:louvor_app/models/user_manager.dart';
 
 class AppListPool {
 
-   static final List<String> serviceRoles= ['Vocal', 'Bateria', 'Teclado', 'Violão', 'Guitarra', 'Contrabaixo', 'Téc. de som'];
+   static final List<String> serviceRoles= ['Vocal', 'Teclado', 'Violão', 'Guitarra', 'Contrabaixo', 'Bateria', 'Téc. de som'];
 
    static final List<String> servicesPeriod= ['Período','Manhã','Noite'];
 

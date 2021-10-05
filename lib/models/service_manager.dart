@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:louvor_app/models/user.dart';
 import 'package:louvor_app/models/user_manager.dart';
 
@@ -57,7 +58,7 @@ class ServiceManager extends ChangeNotifier{
                                               )
                             );
 
-    filteredServices.sort((a, b) => b.data.compareTo(a.data));
+    filteredServices.sort((a, b) => a.data.compareTo(b.data));
 
     if(_search != ''){
       List<Service> filteredServicesSearch = [];
@@ -77,11 +78,27 @@ class ServiceManager extends ChangeNotifier{
                                           }
       );
 
-      return filteredServicesSearch;
+      return sortFilteredServices(filteredServicesSearch);//filteredServicesSearch;
 
     }
 
-    return filteredServices;
+    return sortFilteredServices(filteredServices);//filteredServices
+  }
+
+
+  ///De cima para baixo
+  ///mais acima são os cultos mais próximos
+  ///descendo próximas datas
+  ///ao fim cultos que já ocorreram
+  List<Service> sortFilteredServices( List<Service> lstService){
+    //qual á data atual?
+    DateTime dateTime = DateTime.now();
+
+    List<Service> beforeListService = lstService.where((element) => element.data.isBefore(dateTime)).toList();
+    List<Service> afterListService = lstService.where((element) => element.data.isAfter(dateTime)).toList();
+    afterListService.addAll(beforeListService);
+
+    return afterListService;
   }
 
   Future<void> _loadAllServices() async {

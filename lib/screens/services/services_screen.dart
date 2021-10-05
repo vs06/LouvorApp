@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:louvor_app/common/custom_drawer/custom_drawer.dart';
 import 'package:louvor_app/helpers/app_list_pool.dart';
+import 'package:louvor_app/helpers/multi_utils.dart';
 import 'package:louvor_app/models/Service.dart';
 import 'package:louvor_app/models/service_manager.dart';
 import 'package:louvor_app/screens/services/components/service_list_tile.dart';
@@ -105,7 +106,8 @@ class ServicesScreen extends StatelessWidget {
       ),
       body: Consumer<ServiceManager>(
         builder: (_, serviceManager, __) {
-          final filteredServices = serviceManager.filteredServicesByMounth(filterByMounth);
+          var filteredServices = serviceManager.filteredServicesByMounth(filterByMounth);
+          orderTeamRoles(filteredServices);
           lstServicesUsedAsResume = [];
           filteredServices.forEach((service) => lstServicesUsedAsResume.add(service));
           return ListView.builder(
@@ -201,6 +203,24 @@ class ServicesScreen extends StatelessWidget {
       }
     });
 
+  }
+
+  void orderTeamRoles(List<Service> filteredServices) {
+    filteredServices.forEach((service) {
+                                          if(MultiUtils.isMapNotNullNotEmpty(service.team)){
+                                            Map<String, List<String>> teamSorted = new Map();
+
+                                            AppListPool.serviceRoles.forEach((role) {
+                                              if(service.team.keys.contains(role)){
+                                                teamSorted.putIfAbsent(role, () => service.team[role]); 
+                                              }
+                                            });
+
+                                            service.team = teamSorted;
+
+                                          }
+                                       }
+                            );
   }
 
 }
