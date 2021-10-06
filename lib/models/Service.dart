@@ -124,6 +124,22 @@ class Service extends ChangeNotifier {
     );
   }
 
+  static Service specialClone(Service serviceOrigin) {
+    Service serviceClone = new Service();
+
+    serviceClone.lstSongs = [];
+    serviceClone.lstSongs.addAll(serviceOrigin.lstSongs);
+
+    serviceClone.team = new Map();
+    serviceClone.team.addAll(serviceOrigin.team);
+
+
+    serviceClone.ativo = serviceOrigin.ativo;
+    serviceClone.dirigente = serviceOrigin.dirigente;
+    serviceClone.data = serviceOrigin.data;
+    return serviceClone;
+  }
+
   void delete(Service s) {
     s.ativo = 'False';
     s.save();

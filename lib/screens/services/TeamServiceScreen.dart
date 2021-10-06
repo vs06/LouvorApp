@@ -13,6 +13,7 @@ class TeamServiceScreen extends StatefulWidget {
 
   List<Song> _lstSongSelecionadas = new List<Song>();
   Service service;
+  Service serviceWithoutChanges;
 
   TeamServiceScreen.buildTeamServiceScreen(Service s) {
     service = s;
@@ -22,6 +23,13 @@ class TeamServiceScreen extends StatefulWidget {
     } else {
       service.lstSongs = new List();
     }
+
+    //Made a copy of original object
+    //when back to previsly page, return it
+    //which compare original and changes
+    // to enable or not the save button
+    serviceWithoutChanges = Service.specialClone(s);
+
   }
 
   TeamServiceScreen(Service s) : service = s != null ? s.clone() : Service();
@@ -353,7 +361,7 @@ class TeamServiceScreenState extends State<TeamServiceScreen> {
               Navigator.of(context).pop();
               Navigator.of(context).pop();
               Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => ServiceScreen(widget.service))
+                  MaterialPageRoute(builder: (context) => ServiceScreen.modify(widget.service, widget.serviceWithoutChanges))
               );
             },
             icon: Icon(Icons.add, size: 10),

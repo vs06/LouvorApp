@@ -1,16 +1,28 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:loading_animations/loading_animations.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LoadingScreen extends StatefulWidget {
 
+  String whatsUpMessage;
+
+  LoadingScreen();
+
+  LoadingScreen.whatsAppMessage(String whatsUpMessage){
+    this.whatsUpMessage = whatsUpMessage;
+  }
+
   @override
   State<StatefulWidget> createState() {
-    return LoadingScreenState();
+    return LoadingScreenState(whatsUpMessage);
   }
 }
 
 class LoadingScreenState extends State<LoadingScreen> {
+
+  final String whatsUpMessage;
+  LoadingScreenState(this.whatsUpMessage);
 
   @override
   void initState() {
@@ -25,6 +37,9 @@ class LoadingScreenState extends State<LoadingScreen> {
 
   route() {
     Navigator.of(context).pop();
+    if(whatsUpMessage != null){
+      sendNotificationWhatsUp(whatsUpMessage);
+    }
   }
 
   @override
@@ -64,4 +79,21 @@ class LoadingScreenState extends State<LoadingScreen> {
 
   }
 
+  void sendNotificationWhatsUp(String msg) async {
+    try{
+
+      //Funciona mais ou menos, "abre" o grupo, mas não tras a msg
+      //var whatsappURl_android = "https://chat.whatsapp.com/FNS0IsdeyTg3ClTuC1H0mn?text=teste";
+
+      //Abre o whats, pergunta pra quem enviar, e salva a msg
+      var whatsappURl_android = "whatsapp://send?phone=&text=${msg}";
+
+      if(await canLaunch(whatsappURl_android)){
+        await launch(whatsappURl_android);
+      }
+
+    }catch(e){
+      //TODO
+    }
+  }
 }

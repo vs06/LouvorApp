@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:louvor_app/helpers/date_utils.dart';
 import 'package:louvor_app/helpers/multi_utils.dart';
 import 'package:louvor_app/helpers/string_utils.dart';
 import 'package:louvor_app/models/Service.dart';
@@ -19,6 +19,8 @@ import 'TeamServiceScreen.dart';
 class ServiceScreen extends StatefulWidget {
 
   Service service;
+  Service serviceWithoutChanges;
+
   TextEditingController dateController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -27,6 +29,19 @@ class ServiceScreen extends StatefulWidget {
     if(service.data != null){
       dateController.text = DateFormat('dd/MM/yyyy').format(service.data).toString();
     }
+
+    serviceWithoutChanges = service.clone();
+
+  }
+
+  ServiceScreen.modify(Service serviceWithChanges, Service serviceWithoutChanges){
+    service = serviceWithChanges != null ? serviceWithChanges.clone() : Service();
+    if(service.data != null){
+      dateController.text = DateFormat('dd/MM/yyyy').format(service.data).toString();
+    }
+
+    this.serviceWithoutChanges = serviceWithoutChanges != null ? serviceWithoutChanges : null;
+
   }
 
   ServiceScreen.buildSongs(this.service);
@@ -176,7 +191,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                                           color: primaryColor,
                                         ),
                                       ),
-                                      Visibility(visible: UserManager.isUserAdmin,
+                                      Visibility(visible: widget.service.data.isAfter(DateTime.now()) && UserManager.isUserAdmin,
                                                   child: GestureDetector(
                                                               onTap: () {
                                                                 if (widget.formKey.currentState.validate()) {
@@ -311,19 +326,23 @@ class ServiceScreenState extends State<ServiceScreen> {
                             color: primaryColor,
                           ),
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            if (widget.formKey.currentState.validate()) {
-                              widget.formKey.currentState.save();
-                            }
-                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => SongsServiceScreen.buildSongsServiceScreen(widget.service)));
-                          },
-                          child: Icon(
-                            Icons.add_circle_sharp,
-                            color: Colors.lightBlue,
-                            size: 30,
-                          ),
-                        ),
+                        Visibility(
+                            visible: widget.service.data.isAfter(DateTime.now()),
+                            child:
+                            GestureDetector(
+                                      onTap: () {
+                                                  if(widget.formKey.currentState.validate()) {
+                                                       widget.formKey.currentState.save();
+                                                  }
+                                                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => SongsServiceScreen.buildSongsServiceScreen(widget.service)));
+                                      },
+                              child: Icon(
+                                Icons.add_circle_sharp,
+                                color: Colors.lightBlue,
+                                size: 30,
+                              ),
+                            ),
+                        )
                       ],
                     ),
                   ),
@@ -428,7 +447,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                   Consumer<Service>(
                     builder: (_, service, __) {
                       return Visibility(
-                                visible: service.data.isAfter(DateTime.now()),
+                                visible: isSaveOptionEnabled(),
                                 child:  RaisedButton(
                                         onPressed: () async {
                                           widget.service.data = _getHourByToggle(widget.service.data, toggleNight);
@@ -436,7 +455,8 @@ class ServiceScreenState extends State<ServiceScreen> {
                                             widget.formKey.currentState.save();
                                             context.read<ServiceManager>().update(service);
                                             Navigator.of(context).pop();
-                                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoadingScreen()));
+                                            String predifiniedWhatsAppMessage = getPredifiniedWhatsAppMessage(widget.service);
+                                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoadingScreen.whatsAppMessage(predifiniedWhatsAppMessage)));
 
                                           }
                                         },
@@ -458,6 +478,39 @@ class ServiceScreenState extends State<ServiceScreen> {
         ),
       ),
     );
+  }
+
+  bool isSaveOptionEnabled(){
+
+    if(widget.service.data.isBefore(DateTime.now())){
+      return false;
+    }
+
+    return isServicesHasChanges( widget.serviceWithoutChanges, widget.service);
+  }
+
+  bool isServicesHasChanges(Service serviceWithoutChanges, Service serviceWithChanges){
+
+    if(serviceWithoutChanges.data != serviceWithChanges.data){
+      return true;
+    }
+
+    if(serviceWithoutChanges.dirigente != serviceWithChanges.dirigente){
+      return true;
+    }
+
+    int matches = 0;
+    serviceWithoutChanges.lstSongs.forEach((song) {
+      if(serviceWithChanges.lstSongs.contains(song)){
+        matches++;
+      }
+    });
+
+    if(matches != serviceWithChanges.lstSongs.length){
+      return true;
+    }
+
+    return false;
   }
 
   void _launchChordsURL(Song song) async => await canLaunch(song.cifra)
@@ -495,6 +548,10 @@ class ServiceScreenState extends State<ServiceScreen> {
         });
       }
     }
+  }
+
+  String getPredifiniedWhatsAppMessage(Service service) {
+    return 'Músicas culto ' + DateUtils.convertDatePtBr(service.data) + ', dirigente: ${service.dirigente},foram cadastradas.\nConsulte o App do Louvor para mais detalhes.' ;
   }
 
 }
