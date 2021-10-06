@@ -205,7 +205,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                                                                 Navigator.of(context).push(MaterialPageRoute(builder: (context) => TeamServiceScreen.buildTeamServiceScreen(widget.service)));
                                                               },
                                                               child: Icon(
-                                                                Icons.add_circle_sharp,
+                                                                widget.service.team.length > 0  ? Icons.edit_outlined : Icons.add_circle_sharp,
                                                                 color: Colors.lightBlue,
                                                                 size: 30,
                                                               ),
@@ -337,7 +337,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                                                   Navigator.of(context).push(MaterialPageRoute(builder: (context) => SongsServiceScreen.buildSongsServiceScreen(widget.service)));
                                       },
                               child: Icon(
-                                Icons.add_circle_sharp,
+                                widget.service.lstSongs.length > 0  ? Icons.edit_outlined : Icons.add_circle_sharp,
                                 color: Colors.lightBlue,
                                 size: 30,
                               ),
