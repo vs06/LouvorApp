@@ -506,7 +506,7 @@ class ServiceScreenState extends State<ServiceScreen> {
       }
     });
 
-    if(matches != serviceWithChanges.lstSongs.length){
+    if((serviceWithChanges.lstSongs.length != serviceWithoutChanges.lstSongs.length ) || (matches != serviceWithChanges.lstSongs.length)){
       return true;
     }
 

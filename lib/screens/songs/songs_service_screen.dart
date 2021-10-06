@@ -337,7 +337,7 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
                 );
               },
               icon: Icon(Icons.add, size: 10),
-              label: Text("Adicionar selecionadas"),
+              label: Text("Confirmar"),
             ),
           ],
         ),
