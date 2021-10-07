@@ -82,6 +82,14 @@ class ServiceListTile extends StatelessWidget {
                               fontWeight: FontWeight.w800,
                             ),
                           ),
+                          Visibility(
+                           visible: !service.data.isBefore(DateTime.now()),
+                                 child: Icon(
+                                           Icons.check_circle,
+                                           color: songsSelectedColorStatus(service),
+                                           size: 20,
+                                         ),
+                          ),
                           Text(
                             ' ${service.dirigente}',
                             style: TextStyle(
@@ -187,4 +195,19 @@ class ServiceListTile extends StatelessWidget {
 
     return songs;
   }
+
+  Color songsSelectedColorStatus(Service service){
+
+    if(service.lstSongs.length > 0){
+      return Colors.green;
+    }
+
+    DateTime currentDay = DateTime.now();
+    if(service.data.difference(currentDay).inDays < 7){
+      return Colors.red;
+    }
+
+    return Colors.blueGrey;
+  }
+
 }
