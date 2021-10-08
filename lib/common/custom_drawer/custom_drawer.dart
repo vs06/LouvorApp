@@ -57,7 +57,12 @@ class CustomDrawer extends StatelessWidget {
                             title: 'Usuários',
                             page: 3,
                           ),
-                        )
+                        ),
+                        DrawerTile(
+                          iconData: Icons.music_note,
+                          title: 'Ensaios',
+                          page: 4,
+                      ),
                     ],
                   ),
                 )

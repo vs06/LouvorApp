@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:louvor_app/screens/User/users_screen.dart';
+import 'package:louvor_app/screens/rehearsals/rehearsal_period_select.dart';
+import 'package:louvor_app/screens/rehearsals/rehearsal_screen.dart';
 import 'package:louvor_app/screens/services/ServicesPeriodSelect.dart';
 import 'package:louvor_app/screens/services/service_screen.dart';
 import 'package:provider/provider.dart';
@@ -13,7 +15,9 @@ import 'package:louvor_app/screens/songs/songs_screen.dart';
 import 'package:louvor_app/screens/services/services_screen.dart';
 import 'package:louvor_app/screens/signup/signup_screen.dart';
 
+import 'models/Rehearsal.dart';
 import 'models/Song.dart';
+import 'models/rehearsal_manager.dart';
 import 'models/song_manager.dart';
 import 'models/Service.dart';
 import 'models/service_manager.dart';
@@ -58,7 +62,13 @@ class MyApp extends StatelessWidget {
            lazy: false,
            update: (_, userManager, serviceManager) =>
            serviceManager..updateUser(userManager),
-         )
+         ),
+        ChangeNotifierProxyProvider<UserManager, RehearsalManager>(
+          create: (_) => RehearsalManager(),
+          lazy: false,
+          update: (_, userManager, rehearsalManager) =>
+          rehearsalManager..updateUser(userManager),
+        )
       ],
       child: MaterialApp(
         title: 'Louvor',
@@ -105,6 +115,16 @@ class MyApp extends StatelessWidget {
             case '/servicesperiod':
               return MaterialPageRoute(
                   builder: (_) => ServicesPeriodSelect()
+              );
+            case '/rehearsalsperiod':
+              return MaterialPageRoute(
+                  builder: (_) => RehearsalsPeriodSelect()
+              );
+            case '/rehearsal':
+              return MaterialPageRoute(
+                  builder: (_) => RehearsalScreen(
+                      settings.arguments
+                  )
               );
             case '/users':
               return MaterialPageRoute(
