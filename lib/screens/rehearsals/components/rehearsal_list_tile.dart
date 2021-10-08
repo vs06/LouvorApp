@@ -4,7 +4,6 @@ import 'package:louvor_app/helpers/date_utils.dart';
 import 'package:louvor_app/models/Rehearsal.dart';
 import 'package:louvor_app/models/rehearsal_manager.dart';
 import 'package:louvor_app/models/user_manager.dart';
-import 'package:louvor_app/screens/services/services_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../rehearsals_screen.dart';
@@ -38,7 +37,7 @@ class RehearsalListTile extends StatelessWidget {
 
                 Navigator.pop(context);
                 Navigator.pop(context);
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => RehearsalsScreen.buildByMounth(r.data)));
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => RehearsalsScreen.buildByMonth(r.data)));
               },
             )
           ],
@@ -62,7 +61,7 @@ class RehearsalListTile extends StatelessWidget {
             padding: const EdgeInsets.all(6),
             decoration: BoxDecoration(
                 border: (rehearsal.data.day == DateTime.now().day && rehearsal.data.month == DateTime.now().month ) ?  Border.all(color: Colors.blueAccent, width: 5): Border(),
-                color: Colors.white,
+                color: rehearsal.data.isBefore(DateTime.now()) ? CupertinoColors.systemGrey3 : Colors.white,
                 borderRadius: BorderRadius.circular(4)
             ),
 
@@ -112,7 +111,7 @@ class RehearsalListTile extends StatelessWidget {
                           maxLines: 2,
                           style: TextStyle(
                             color: Colors.grey[800],
-                            fontSize: 12,
+                            fontSize: 15,
                           ),
                         ),
                       )
@@ -127,15 +126,14 @@ class RehearsalListTile extends StatelessWidget {
     );
   }
 
-
   String getSongsOfRehearsal(){
     String songs = 'Músicas: ';
 
-    rehearsal.lstSongs.forEach((element) {
-      songs += element.nome + ' ,';
+    rehearsal.lstSongs.forEach((musica) {
+      songs += musica.nome + ', ';
     });
 
-    return songs;
+    return songs.substring(0,songs.length-2);
   }
 
 }

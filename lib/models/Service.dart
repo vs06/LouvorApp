@@ -131,7 +131,7 @@ class Service extends ChangeNotifier {
     serviceClone.lstSongs.addAll(serviceOrigin.lstSongs);
 
     serviceClone.team = new Map();
-    serviceClone.team.addAll(serviceOrigin.team);
+    serviceClone.team.addAll(serviceOrigin.team == null ? new Map() : serviceOrigin.team);
 
 
     serviceClone.ativo = serviceOrigin.ativo;

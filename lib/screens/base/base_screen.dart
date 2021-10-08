@@ -1,17 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:louvor_app/common/custom_drawer/custom_drawer.dart';
 import 'package:louvor_app/models/page_manager.dart';
-import 'package:louvor_app/screens/User/users_screen.dart';
-import 'package:louvor_app/screens/rehearsals/rehearsal_period_select.dart';
-import 'package:louvor_app/screens/rehearsals/rehearsal_screen.dart';
-import 'package:louvor_app/screens/services/ServicesPeriodSelect.dart';
-import 'package:louvor_app/screens/services/services_screen.dart';
-import 'package:provider/provider.dart';
 import 'package:louvor_app/models/user_manager.dart';
-import 'package:louvor_app/screens/login/login_screen.dart';
-import 'package:louvor_app/screens/song_list.dart';
+import 'package:louvor_app/screens/User/users_screen.dart';
+import 'package:louvor_app/screens/services/ServicesPeriodSelect.dart';
 import 'package:louvor_app/screens/songs/songs_screen.dart';
-import 'package:firebase_admob/firebase_admob.dart';
+import 'package:provider/provider.dart';
 
 class BaseScreen extends StatelessWidget {
 
@@ -38,9 +32,9 @@ class BaseScreen extends StatelessWidget {
                 ),
               ),
               SongsScreen(),
-              ServicesPeriodSelect(),
+              ServicesPeriodSelect('Service'),
+              ServicesPeriodSelect('Rehearsal'),
               UsersScreen(),
-              RehearsalsPeriodSelect(),
             ],
           );
         },

@@ -2,12 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:louvor_app/helpers/app_list_pool.dart';
 import 'package:louvor_app/helpers/date_utils.dart';
-import 'package:louvor_app/helpers/multi_utils.dart';
 import 'package:louvor_app/helpers/string_utils.dart';
-import 'package:louvor_app/models/Service.dart';
+import 'package:louvor_app/models/Rehearsal.dart';
 import 'package:louvor_app/models/Song.dart';
-import 'package:louvor_app/models/service_manager.dart';
+import 'package:louvor_app/models/rehearsal_manager.dart';
 import 'package:louvor_app/models/user_manager.dart';
 import 'package:louvor_app/screens/loading_screen.dart';
 import 'package:louvor_app/screens/songs/songs_service_screen.dart';
@@ -16,33 +16,35 @@ import 'package:url_launcher/url_launcher.dart';
 
 class RehearsalScreen extends StatefulWidget {
 
-  Service service;
-  Service serviceWithoutChanges;
+  Rehearsal rehearsal;
+  Rehearsal rehearsalWithoutChanges;
 
   TextEditingController dateController = TextEditingController();
+  TextEditingController timeController = TextEditingController();
+
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  RehearsalScreen(Service s){
-    service = s != null ? s.clone() : Service();
-    if(service.data != null){
-      dateController.text = DateFormat('dd/MM/yyyy').format(service.data).toString();
+  RehearsalScreen(Rehearsal r){
+    rehearsal = r != null ? r.clone() : Rehearsal();
+    if(rehearsal.data != null){
+      dateController.text = DateUtils.dataComplentaFormatada(r.data);
     }
 
-    serviceWithoutChanges = service.clone();
+    rehearsalWithoutChanges = rehearsal.clone();
 
   }
 
-  RehearsalScreen.modify(Service serviceWithChanges, Service serviceWithoutChanges){
-    service = serviceWithChanges != null ? serviceWithChanges.clone() : Service();
-    if(service.data != null){
-      dateController.text = DateFormat('dd/MM/yyyy').format(service.data).toString();
+  RehearsalScreen.modify(Rehearsal rehearsalWithChanges, Rehearsal rehearsalWithoutChanges){
+    rehearsal = rehearsalWithChanges != null ? rehearsalWithChanges.clone() : Rehearsal();
+    if(rehearsal.data != null){
+      dateController.text = DateUtils.dataComplentaFormatada(rehearsalWithChanges.data);
     }
 
-    this.serviceWithoutChanges = serviceWithoutChanges != null ? serviceWithoutChanges : null;
+    this.rehearsalWithoutChanges = rehearsalWithoutChanges != null ? rehearsalWithoutChanges : null;
 
   }
 
-  RehearsalScreen.buildSongs(this.service);
+  RehearsalScreen.buildSongs(this.rehearsal);
 
   @override
   State<StatefulWidget> createState() {
@@ -52,16 +54,37 @@ class RehearsalScreen extends StatefulWidget {
 
 class RehearsalScreenState extends State<RehearsalScreen> {
 
-  Future _selectDate(bool toggleNight) async {
+  String valueRehearsalTypeDropDownSelected = AppListPool.rehearsalTypes[0];
+
+  Future _selectDate() async {
     DateTime picked = await showDatePicker(context: context,
         initialDate: DateTime.now(),
         firstDate: DateTime(2021),
         lastDate: DateTime(2050)
     );
     if (picked != null){
-      setState(() => widget.dateController.text = "${picked.toLocal().day}/${picked.toLocal().month}/${picked.toLocal().year}");
-      setState(() => widget.service.data = _getHourByToggle(picked, toggleNight));
+      setState(() => widget.dateController.text = "${picked.toLocal().day}/${picked.toLocal().month}/${picked.toLocal().year.toString().substring(2,4)}");
+      setState(() => widget.rehearsal.data = picked);
+      _selectTime(context);
     }
+  }
+  TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
+
+  Future<Null> _selectTime(BuildContext context) async {
+    final TimeOfDay picked = await showTimePicker(
+      context: context,
+      initialTime: selectedTime,
+    );
+    if (picked != null){
+        selectedTime = picked;
+
+        String minute = picked.minute < 10 ? '0' + picked.minute.toString() : picked.minute.toString();
+        String hour = picked.hour < 10 ? '0' + picked.hour.toString() : picked.hour.toString();
+
+        setState(() => widget.dateController.text += " - ${hour}:${minute}");
+        setState(() => widget.rehearsal.data = new DateTime(widget.rehearsal.data.year, widget.rehearsal.data.month, widget.rehearsal.data.day, selectedTime.hour , selectedTime.minute));
+
+      }
 
   }
 
@@ -71,12 +94,12 @@ class RehearsalScreenState extends State<RehearsalScreen> {
     final primaryColor = Theme.of(context).primaryColor;
 
     return ChangeNotifierProvider.value(
-      value: widget.service,
+      value: widget.rehearsal,
       child: Scaffold(
         appBar: AppBar(
-          title: widget.service != null
+          title: widget.rehearsal != null
               ? Text("Ensaio")
-              : Text(DateFormat('dd/MM/yyyy').format(widget.service.data)),
+              : Text(DateFormat('dd/MM/yyyy').format(widget.rehearsal.data)),
           centerTitle: true,
         ),
         backgroundColor: Colors.white,
@@ -90,57 +113,75 @@ class RehearsalScreenState extends State<RehearsalScreen> {
                 children: <Widget>[
                   Row(
                       children: <Widget>[
-                        Container(
-                          width: 135,
+                        Padding(
+                          padding: const EdgeInsets.all(6),
                           child:
-                          Padding(
-                            padding: const EdgeInsets.only(top: 2),
-                            child: TextFormField(
-                              initialValue: widget.service.dirigente,
-                              enabled:  UserManager.isUserAdmin,
-                              onSaved: (dr) => widget.service.dirigente = dr,
-                              decoration: const InputDecoration(
-                                hintText: 'Tipo ensaio',
-                                border: InputBorder.none,
-                                labelText: 'Tipo ensaio',
-                                labelStyle: TextStyle(fontSize: 15),
-                                icon: Icon(Icons.person_pin_sharp, size: 30,),
+                            Container(
+                              width: 130,
+                              child:
+                                   DropdownButton<String>(
+                                           value: widget.rehearsal.type == null ? valueRehearsalTypeDropDownSelected : widget.rehearsal.type,
+                                           hint: Text('Tipo ensaio'),
+                                           icon: const Icon(Icons.arrow_downward),
+                                           iconSize: 24,
+                                           elevation: 16,
+                                           style: const TextStyle(color: Colors.lightBlue, fontSize: 17, fontWeight: FontWeight.bold,),
+                                            underline: Container(
+                                              height: 3,
+                                              width: 1,
+                                              color: Colors.lightBlue,
+                                            ),
+                                           onChanged: (String newValue) {
+                                             setState(() {
+                                               valueRehearsalTypeDropDownSelected = newValue;
+                                               widget.rehearsal.type = valueRehearsalTypeDropDownSelected;
+                                             });
+                                           },
+                                           items: AppListPool.rehearsalTypes.map<DropdownMenuItem<String>>((String value) {
+                                             return DropdownMenuItem<String>(
+                                               value: value,
+                                               child: Text(value),
+                                             );
+                                           }).toList(),
+                                         )
                               ),
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: primaryColor,
-                              ),
-                            ),
-                          ),
                         ),
-                        Container(
-                          width: 140,
-                          child:
-                               AbsorbPointer(
-                                  child:
-                                  TextFormField(
-                                    enabled:  UserManager.isUserAdmin,
-                                    controller: widget.dateController,
-                                    decoration: InputDecoration(
-                                                    labelText: "Data",
-                                                    border: InputBorder.none,
-                                                    icon: Icon(Icons.calendar_today),
-                                                  ),
-                                    style: TextStyle(
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.bold,
-                                      color: primaryColor,
-                                    ),
-                                    validator: (value) {
-                                      if (widget.service.data == null)
-                                        return "Insira uma data para o culto";
-                                      return null;
-                                    },
-                                  ),
-                                ),
+                        Padding(
+                            padding: const EdgeInsets.all(6),
+                            child: Container(
+                                      width: 170,
+                                      child:
+                                      GestureDetector(
+                                        onTap: () {
+                                          if(UserManager.isUserAdmin){
+                                            _selectDate();
+                                          }
+                                        },
+                                        child: AbsorbPointer(
+                                          child:
+                                          TextFormField(
+                                            enabled:  UserManager.isUserAdmin,
+                                            controller: widget.dateController,
+                                            decoration: InputDecoration(
+                                              labelText: "Data",
+                                              border: InputBorder.none,
+                                              icon: Icon(Icons.calendar_today),
+                                            ),
+                                            style: TextStyle(
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.bold,
+                                              color: primaryColor,
+                                            ),
+                                            validator: (value) {
+                                              if (widget.rehearsal.data == null)
+                                                return "Insira uma data para o ensaio";
+                                              return null;
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                    )
                         ),
-
                       ]
                   ),
 
@@ -158,17 +199,17 @@ class RehearsalScreenState extends State<RehearsalScreen> {
                           ),
                         ),
                         Visibility(
-                            visible: widget.service.data.isAfter(DateTime.now()),
+                            visible: widget.rehearsal.data == null || widget.rehearsal.data.isAfter(DateTime.now()),
                             child:
                             GestureDetector(
                                       onTap: () {
                                                   if(widget.formKey.currentState.validate()) {
                                                        widget.formKey.currentState.save();
                                                   }
-                                                  //Navigator.of(context).push(MaterialPageRoute(builder: (context) => SongsServiceScreen.buildSongsServiceScreen(widget.service)));
+                                                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => SongsServiceScreen.buildSongsRehearsalScreen(widget.rehearsal)));
                                       },
                               child: Icon(
-                                widget.service.lstSongs.length > 0  ? Icons.edit_outlined : Icons.add_circle_sharp,
+                                (widget.rehearsal.lstSongs == null || widget.rehearsal.lstSongs.length == 0) ? Icons.add_circle_sharp : Icons.edit_outlined,
                                 color: Colors.lightBlue,
                                 size: 30,
                               ),
@@ -183,7 +224,7 @@ class RehearsalScreenState extends State<RehearsalScreen> {
                     child:
                         ListView.builder(
                           padding: const EdgeInsets.all(8),
-                          itemCount: widget.service.lstSongs == null ? 0 : widget.service.lstSongs.length,
+                          itemCount: widget.rehearsal.lstSongs == null ? 0 : widget.rehearsal.lstSongs.length,
                           shrinkWrap: true,
                           itemBuilder: (BuildContext context, int index) {
                             return
@@ -210,7 +251,7 @@ class RehearsalScreenState extends State<RehearsalScreen> {
                                                                         children: [
                                                                           Flexible(child:
                                                                               Text(
-                                                                                widget.service.lstSongs[index].nome,
+                                                                                widget.rehearsal.lstSongs[index].nome,
                                                                                 overflow: TextOverflow.ellipsis,
                                                                                 style: TextStyle(
                                                                                   fontSize: 16,
@@ -235,12 +276,12 @@ class RehearsalScreenState extends State<RehearsalScreen> {
                                                                           Row(
                                                                             children: [
                                                                               Visibility(
-                                                                                visible: StringUtils.isNotNUllNotEmpty(widget.service.lstSongs[index].cifra),
+                                                                                visible: StringUtils.isNotNUllNotEmpty(widget.rehearsal.lstSongs[index].cifra),
                                                                                 child:
                                                                                 Align(
                                                                                   alignment: Alignment.topRight,
                                                                                   child: GestureDetector(
-                                                                                    onTap: () => _launchChordsURL(widget.service.lstSongs[index]),
+                                                                                    onTap: () => _launchChordsURL(widget.rehearsal.lstSongs[index]),
                                                                                     child: Icon(
                                                                                       Icons.straighten_rounded,
                                                                                       color: Colors.blueGrey,
@@ -249,7 +290,7 @@ class RehearsalScreenState extends State<RehearsalScreen> {
                                                                                 ),
                                                                               ),
                                                                               SizedBox(width: 15),
-                                                                              Text('Tom: ' + widget.service.lstSongs[index].tom,
+                                                                              Text('Tom: ' + widget.rehearsal.lstSongs[index].tom,
                                                                                 overflow: TextOverflow.ellipsis,
                                                                                 style: TextStyle(
                                                                                   color: Colors.blueGrey,
@@ -275,18 +316,17 @@ class RehearsalScreenState extends State<RehearsalScreen> {
                   ),
 
 //----------------------------------------------bto salvar------------------
-                  Consumer<Service>(
-                    builder: (_, service, __) {
+                  Consumer<Rehearsal>(
+                    builder: (_, rehearsal, __) {
                       return Visibility(
-                                visible: isSaveOptionEnabled(),
+                                visible: UserManager.isUserAdmin,
                                 child:  RaisedButton(
                                         onPressed: () async {
-                                          //widget.service.data = _getHourByToggle(widget.service.data, toggleNight);
                                           if (widget.formKey.currentState.validate()) {
                                             widget.formKey.currentState.save();
-                                            context.read<ServiceManager>().update(service);
+                                            context.read<RehearsalManager>().update(rehearsal);
                                             Navigator.of(context).pop();
-                                            String predifiniedWhatsAppMessage = getPredifiniedWhatsAppMessage(widget.service);
+                                            String predifiniedWhatsAppMessage = getPredifiniedWhatsAppMessage(widget.rehearsal);
                                             Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoadingScreen.whatsAppMessage(predifiniedWhatsAppMessage)));
 
                                           }
@@ -311,78 +351,12 @@ class RehearsalScreenState extends State<RehearsalScreen> {
     );
   }
 
-  bool isSaveOptionEnabled(){
-
-    if(widget.service.data.isBefore(DateTime.now())){
-      return false;
-    }
-
-    return isServicesHasChanges( widget.serviceWithoutChanges, widget.service);
-  }
-
-  bool isServicesHasChanges(Service serviceWithoutChanges, Service serviceWithChanges){
-
-    if(serviceWithoutChanges.data != serviceWithChanges.data){
-      return true;
-    }
-
-    if(serviceWithoutChanges.dirigente != serviceWithChanges.dirigente){
-      return true;
-    }
-
-    int matches = 0;
-    serviceWithoutChanges.lstSongs.forEach((song) {
-      if(serviceWithChanges.lstSongs.contains(song)){
-        matches++;
-      }
-    });
-
-    if((serviceWithChanges.lstSongs.length != serviceWithoutChanges.lstSongs.length ) || (matches != serviceWithChanges.lstSongs.length)){
-      return true;
-    }
-
-    return false;
-  }
-
   void _launchChordsURL(Song song) async => await canLaunch(song.cifra)
       ? await launch(song.cifra)
       : throw 'Could not launch $song.cifra';
 
-     DateTime _getHourByToggle(DateTime serviceDate, bool toggleNight){
-     if(toggleNight){
-       if(DateFormat('EEEE').format(serviceDate).toUpperCase() == 'SUNDAY'){
-         return new DateTime(serviceDate.year, serviceDate.month, serviceDate.day, 19, 00);
-       }else{
-         return new DateTime(serviceDate.year, serviceDate.month, serviceDate.day, 20, 00);
-       }
-     }else{
-       return new DateTime(serviceDate.year, serviceDate.month, serviceDate.day, 10, 00);
-     }
-  }
-
-  void addTeamMap(String valueRoleDropDownSelected, String valueUserDropDownSelected) {
-    if(!valueRoleDropDownSelected.isEmpty && !valueUserDropDownSelected.isEmpty){
-
-      if(widget.service.team.containsKey(valueRoleDropDownSelected)){
-        if(!widget.service.team[valueRoleDropDownSelected].contains(valueUserDropDownSelected)){
-          setState(() {
-            widget.service.team[valueRoleDropDownSelected].add(valueUserDropDownSelected);
-          });
-        }else{
-          setState(() {
-            widget.service.team.putIfAbsent(valueRoleDropDownSelected, () => [valueUserDropDownSelected]);
-          });
-        }
-      } else {
-        setState(() {
-          widget.service.team.putIfAbsent(valueRoleDropDownSelected, () => [valueUserDropDownSelected]);
-        });
-      }
-    }
-  }
-
-  String getPredifiniedWhatsAppMessage(Service service) {
-    return 'Músicas culto ' + DateUtils.convertDatePtBr(service.data) + ', dirigente: ${service.dirigente},foram cadastradas.\nConsulte o App do Louvor para mais detalhes.' ;
+  String getPredifiniedWhatsAppMessage(Rehearsal rehearsal) {
+    return 'Ensaio em: ' + DateUtils.convertDatePtBr(rehearsal.data) + ', Tipo ensaio: ${rehearsal.type }.\nConsulte o App do Louvor para mais detalhes.' ;
   }
 
 }

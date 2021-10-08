@@ -9,7 +9,8 @@ class AppListPool {
 
    static final List<String> mounths = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 
-   //static final List<String> users = ['Cida','Danielle','Gloria','Jaqueline','Junior','Leonardo','Lucas','Léo','Mariana','Mateus','Márcio''Valdir','Victor','Vinicius',];
+   static final List<String> rehearsalTypes = ['Geral', 'Instrumental', 'Vocal'];
+
 
    static final List<String> usersName = [];
 

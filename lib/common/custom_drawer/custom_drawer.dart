@@ -49,19 +49,19 @@ class CustomDrawer extends StatelessWidget {
                           title: 'Cultos',
                           page: 2,
                         ),
-                        Visibility(
-                          visible: UserManager.isUserAdmin != null ? UserManager.isUserAdmin : false,
-                          child:
-                          DrawerTile(
-                            iconData: Icons.supervised_user_circle_sharp,
-                            title: 'Usuários',
-                            page: 3,
-                          ),
-                        ),
                         DrawerTile(
                           iconData: Icons.music_note,
                           title: 'Ensaios',
+                          page: 3,
+                      ),
+                      Visibility(
+                        visible: UserManager.isUserAdmin != null ? UserManager.isUserAdmin : false,
+                        child:
+                        DrawerTile(
+                          iconData: Icons.supervised_user_circle_sharp,
+                          title: 'Usuários',
                           page: 4,
+                        ),
                       ),
                     ],
                   ),

@@ -11,8 +11,8 @@ import 'components/search_dialog.dart';
 class RehearsalsScreen extends StatelessWidget {
 
   RehearsalsScreen();
-  DateTime filterByMounth;
-  RehearsalsScreen.buildByMounth(this.filterByMounth);
+  DateTime filterByMonth;
+  RehearsalsScreen.buildByMonth(this.filterByMonth);
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +99,7 @@ class RehearsalsScreen extends StatelessWidget {
       ),
       body: Consumer<RehearsalManager>(
         builder: (_, rehearsalManager, __) {
-          final filteredRehearsals = rehearsalManager.filteredRehearsalsByMounth(filterByMounth);
+          final filteredRehearsals = rehearsalManager.filteredRehearsalsByMounth(filterByMonth);
           return ListView.builder(
               padding: const EdgeInsets.all(4),
               itemCount: filteredRehearsals.length,

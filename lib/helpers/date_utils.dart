@@ -1,3 +1,5 @@
+import 'dart:core';
+
 import 'package:intl/intl.dart';
 
 class DateUtils {
@@ -80,6 +82,15 @@ class DateUtils {
     }
 
     return monthShort;
+  }
+
+  ///Retorna data no formato dd/mm/yy hh:mm
+  static dataComplentaFormatada(DateTime dateTime){
+    String minute = dateTime.minute < 10 ? '0' + dateTime.minute.toString() : dateTime.minute.toString();
+    String hour = dateTime.hour < 10 ? '0' + dateTime.hour.toString() : dateTime.hour.toString();
+
+    return DateFormat('dd/MM/yy').format(dateTime).toString() + " - ${hour}:${minute}";
+
   }
 
 }

@@ -191,7 +191,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                                           color: primaryColor,
                                         ),
                                       ),
-                                      Visibility(visible: widget.service.data.isAfter(DateTime.now()) && UserManager.isUserAdmin,
+                                      Visibility(visible: widget.service.data == null || (widget.service.data.isAfter(DateTime.now()) && UserManager.isUserAdmin),
                                                   child: GestureDetector(
                                                               onTap: () {
                                                                 if (widget.formKey.currentState.validate()) {
@@ -205,7 +205,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                                                                 Navigator.of(context).push(MaterialPageRoute(builder: (context) => TeamServiceScreen.buildTeamServiceScreen(widget.service)));
                                                               },
                                                               child: Icon(
-                                                                widget.service.team.length > 0  ? Icons.edit_outlined : Icons.add_circle_sharp,
+                                                                (widget.service.team == null || widget.service.team.length == 0) ? Icons.add_circle_sharp: Icons.edit_outlined,
                                                                 color: Colors.lightBlue,
                                                                 size: 30,
                                                               ),
@@ -327,7 +327,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                           ),
                         ),
                         Visibility(
-                            visible: widget.service.data.isAfter(DateTime.now()),
+                            visible: widget.service.data == null || widget.service.data.isAfter(DateTime.now()),
                             child:
                             GestureDetector(
                                       onTap: () {
@@ -337,7 +337,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                                                   Navigator.of(context).push(MaterialPageRoute(builder: (context) => SongsServiceScreen.buildSongsServiceScreen(widget.service)));
                                       },
                               child: Icon(
-                                widget.service.lstSongs.length > 0  ? Icons.edit_outlined : Icons.add_circle_sharp,
+                                (widget.service.lstSongs == null || widget.service.lstSongs.length == 0) ? Icons.add_circle_sharp : Icons.edit_outlined,
                                 color: Colors.lightBlue,
                                 size: 30,
                               ),
@@ -481,6 +481,10 @@ class ServiceScreenState extends State<ServiceScreen> {
   }
 
   bool isSaveOptionEnabled(){
+
+    if(widget.service.data ==  null){
+      return false;
+    }
 
     if(widget.service.data.isBefore(DateTime.now())){
       return false;

@@ -1,10 +1,10 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:louvor_app/models/Service.dart';
 
 import 'Song.dart';
 
-class Rehearsal extends ChangeNotifier {
+class Rehearsal extends Service {
 
   final Firestore fireStore = Firestore.instance;
 
@@ -23,7 +23,7 @@ class Rehearsal extends ChangeNotifier {
     id = document.documentID;
     type = document['type'] as String;
     data = (document['data'] as Timestamp).toDate();
-    isActive = document['ativo'] as bool;
+    isActive = document['isActive'] as bool;
 
     Map.from(document.data['lstSongs']).
     forEach((key, value) { if (lstSongs == null)
@@ -73,7 +73,7 @@ class Rehearsal extends ChangeNotifier {
 
       this.lstSongs.forEach((element) => this.dynamicSongs.addAll(element.toMap()));
 
-      final doc = await fireStore.collection('services').add(this.toMap());
+      final doc = await fireStore.collection('rehearsals').add(this.toMap());
       id = doc.documentID;
 
     } else {
@@ -95,10 +95,20 @@ class Rehearsal extends ChangeNotifier {
     );
   }
 
-  void delete(Rehearsal rehearsal) {
-    rehearsal.isActive = false;
-    rehearsal.save();
-    notifyListeners();
+  // void delete(Rehearsal rehearsal) {
+  //   rehearsal.isActive = false;
+  //   rehearsal.save();
+  //   notifyListeners();
+  // }
+
+  static Rehearsal serviceCastToRehearsal(Service service, String rehearsalType){
+    return Rehearsal(
+        id: service.id,
+        type: rehearsalType,
+        data: service.data,
+        isActive: true,
+        lstSongs: service.lstSongs
+    );
   }
 
 }

@@ -4,14 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:louvor_app/common/custom_drawer/custom_drawer.dart';
 import 'package:louvor_app/helpers/app_list_pool.dart';
 import 'package:louvor_app/helpers/date_utils.dart';
+import 'package:louvor_app/screens/rehearsals/rehearsals_screen.dart';
 import 'package:louvor_app/screens/services/services_screen.dart';
-import 'package:intl/intl.dart';
 
 class ServicesPeriodSelect extends StatefulWidget {
 
-  final DateTime initialDate;
+  DateTime initialDate;
+  String serviceType;
 
-  const ServicesPeriodSelect({Key key, this.initialDate}) : super(key: key);
+  ServicesPeriodSelect(String serviceType){
+    this.serviceType = serviceType;
+  }
 
   @override
   ServicesPeriodSelectState createState() => ServicesPeriodSelectState();
@@ -166,7 +169,11 @@ class ServicesPeriodSelectState extends State<ServicesPeriodSelect>{
                         size: 30,
                     ),
                     onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => ServicesScreen.buildByMounth(selectedDate)));
+                      if(widget.serviceType == 'Service'){
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => ServicesScreen.buildByMonth(selectedDate)));
+                      }else{
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => RehearsalsScreen.buildByMonth(selectedDate)));
+                      }
                     },
                   ),
                 ],

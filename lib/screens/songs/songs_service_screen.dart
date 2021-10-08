@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:louvor_app/common/custom_drawer/custom_drawer.dart';
+import 'package:louvor_app/helpers/app_list_pool.dart';
 import 'package:louvor_app/helpers/date_utils.dart';
+import 'package:louvor_app/models/Rehearsal.dart';
 import 'package:louvor_app/models/Song.dart';
+import 'package:louvor_app/models/rehearsal_manager.dart';
+import 'package:louvor_app/models/service_manager.dart';
 import 'package:louvor_app/models/song_manager.dart';
+import 'package:louvor_app/screens/rehearsals/rehearsal_screen.dart';
 import 'package:louvor_app/screens/services/service_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:louvor_app/models/Service.dart';
@@ -14,6 +19,9 @@ class SongsServiceScreen extends StatefulWidget {
   List<Song> _lstSongSelecionadas = new List<Song>();
   Service service;
   Service serviceWithoutChanges;
+
+  //POG
+  String rehearsalType = null;
 
   SongsServiceScreen.buildSongsServiceScreen(Service s) {
      service = s;
@@ -29,6 +37,20 @@ class SongsServiceScreen extends StatefulWidget {
      //which compare original and changes
      // to enable or not the save button
      serviceWithoutChanges = Service.specialClone(s);
+
+  }
+
+  SongsServiceScreen.buildSongsRehearsalScreen(Rehearsal r) {
+    service = r;
+
+    if(service.lstSongs != null){
+      _lstSongSelecionadas.addAll(service.lstSongs);
+    } else {
+      service.lstSongs = new List();
+    }
+
+    serviceWithoutChanges = Service.specialClone(r);
+    rehearsalType = r.type;
 
   }
 
@@ -332,9 +354,18 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
                 //fillSongsNameIntoService(widget.service);
                 Navigator.of(context).pop();
                 Navigator.of(context).pop();
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => ServiceScreen.modify(widget.service, widget.serviceWithoutChanges))
-                );
+                if(widget.service is Rehearsal){
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => RehearsalScreen.modify(Rehearsal.serviceCastToRehearsal(widget.service, widget.rehearsalType),
+                            Rehearsal.serviceCastToRehearsal(widget.serviceWithoutChanges, widget.rehearsalType)
+                        )
+                        )
+                    );
+                }else{
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => ServiceScreen.modify(widget.service, widget.serviceWithoutChanges))
+                  );
+                }
               },
               icon: Icon(Icons.add, size: 10),
               label: Text("Confirmar"),

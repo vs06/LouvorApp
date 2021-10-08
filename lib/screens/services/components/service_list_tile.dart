@@ -36,7 +36,7 @@ class ServiceListTile extends StatelessWidget {
 
                 Navigator.pop(context);
                 Navigator.pop(context);
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => ServicesScreen.buildByMounth(s.data)));
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => ServicesScreen.buildByMonth(s.data)));
               },
             )
           ],

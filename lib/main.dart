@@ -114,11 +114,11 @@ class MyApp extends StatelessWidget {
               );
             case '/servicesperiod':
               return MaterialPageRoute(
-                  builder: (_) => ServicesPeriodSelect()
+                  builder: (_) => ServicesPeriodSelect("Service")
               );
             case '/rehearsalsperiod':
               return MaterialPageRoute(
-                  builder: (_) => RehearsalsPeriodSelect()
+                  builder: (_) => ServicesPeriodSelect("Rehearsal")
               );
             case '/rehearsal':
               return MaterialPageRoute(

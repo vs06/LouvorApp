@@ -31,7 +31,8 @@ class DrawerTile extends StatelessWidget {
             Navigator.of(context).pushNamed('/users');
             return;
           case 'Ensaios':
-            Navigator.of(context).pushNamed('/rehearsalsperiod');
+            Navigator.of(context).pushNamed('/rehearsalsperiod'
+            );
             return;
           default:
             Navigator.of(context).pushNamed('base');

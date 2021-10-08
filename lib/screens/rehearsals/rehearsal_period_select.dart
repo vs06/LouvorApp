@@ -167,7 +167,7 @@ class RehearsalsPeriodSelectState extends State<RehearsalsPeriodSelect>{
                         size: 30,
                     ),
                     onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => RehearsalsScreen.buildByMounth(selectedDate)));
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => RehearsalsScreen.buildByMonth(selectedDate)));
                     },
                   ),
                 ],

@@ -16,8 +16,8 @@ import 'components/service_list_tile.dart';
 class ServicesScreen extends StatelessWidget {
 
   ServicesScreen();
-  DateTime filterByMounth;
-  ServicesScreen.buildByMounth(this.filterByMounth);
+  DateTime filterByMonth;
+  ServicesScreen.buildByMonth(this.filterByMonth);
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +106,7 @@ class ServicesScreen extends StatelessWidget {
       ),
       body: Consumer<ServiceManager>(
         builder: (_, serviceManager, __) {
-          var filteredServices = serviceManager.filteredServicesByMounth(filterByMounth);
+          var filteredServices = serviceManager.filteredServicesByMounth(filterByMonth);
           orderTeamRoles(filteredServices);
           lstServicesUsedAsResume = [];
           filteredServices.forEach((service) => lstServicesUsedAsResume.add(service));
