@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:louvor_app/common/custom_drawer/custom_drawer.dart';
-import 'package:louvor_app/helpers/app_list_pool.dart';
 import 'package:louvor_app/helpers/date_utils.dart';
 import 'package:louvor_app/models/Rehearsal.dart';
+import 'package:louvor_app/models/Service.dart';
 import 'package:louvor_app/models/Song.dart';
-import 'package:louvor_app/models/rehearsal_manager.dart';
-import 'package:louvor_app/models/service_manager.dart';
 import 'package:louvor_app/models/song_manager.dart';
 import 'package:louvor_app/screens/rehearsals/rehearsal_screen.dart';
 import 'package:louvor_app/screens/services/service_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:louvor_app/models/Service.dart';
 
 import 'components/search_dialog.dart';
 

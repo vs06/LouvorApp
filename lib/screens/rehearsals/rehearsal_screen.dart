@@ -137,12 +137,20 @@ class RehearsalScreenState extends State<RehearsalScreen> {
                                                widget.rehearsal.type = valueRehearsalTypeDropDownSelected;
                                              });
                                            },
-                                           items: AppListPool.rehearsalTypes.map<DropdownMenuItem<String>>((String value) {
+                                           items: UserManager.isUserAdmin ? AppListPool.rehearsalTypes.map<DropdownMenuItem<String>>((String value) {
+                                             return DropdownMenuItem<String>(
+                                               value: value,
+                                               child: Text(value),
+                                             );
+                                           }).toList() :
+
+                                           [widget.rehearsal.type].map<DropdownMenuItem<String>>((String value) {
                                              return DropdownMenuItem<String>(
                                                value: value,
                                                child: Text(value),
                                              );
                                            }).toList(),
+
                                          )
                               ),
                         ),
@@ -230,26 +238,26 @@ class RehearsalScreenState extends State<RehearsalScreen> {
                             return
                                 Column(
                                     children: [
-                                      Card(
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(4)),
-                                          child: Container(
-                                              height: 40,
-                                              padding: const EdgeInsets.all(8),
-                                              child:
-                                              Row(
-                                                  children: <Widget>[
-                                                    const SizedBox( width: 16,),
-                                                          Expanded(
-                                                              flex: 5,
-                                                              child: Column(
-                                                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                                  children: <Widget>[
-                                                                    Row(
-                                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                        children: [
-                                                                          Flexible(child:
+                                              Card(
+                                                    shape: RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.circular(4)),
+                                                    child: Container(
+                                                        height: 55,
+                                                        padding: const EdgeInsets.all(8),
+                                                        child:
+                                                        Row(
+                                                            children: <Widget>[
+                                                              const SizedBox( width: 16,),
+                                                              Expanded(
+                                                                  flex: 5,
+                                                                  child: Column(
+                                                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                                      children: <Widget>[
+                                                                        Row(
+                                                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                            children: [
+                                                                              Flexible(child:
                                                                               Text(
                                                                                 widget.rehearsal.lstSongs[index].nome,
                                                                                 overflow: TextOverflow.ellipsis,
@@ -259,57 +267,57 @@ class RehearsalScreenState extends State<RehearsalScreen> {
                                                                                   FontWeight.w800,
                                                                                 ),
                                                                               ),
-                                                                          )
-                                                                        ]
-                                                                    )
-                                                                  ]
-                                                              )
-                                                          ),
-                                                          //  SizedBox(width: 5),
-                                                          Expanded(
-                                                              flex: 3, // 20%
-                                                              child:
-                                                                      Column(
-                                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                        //crossAxisAlignment: CrossAxisAlignment.start,
+                                                                              )
+                                                                            ]
+                                                                        )
+                                                                      ]
+                                                                  )
+                                                              ),
+                                                              //  SizedBox(width: 5),
+                                                              Expanded(
+                                                                  flex: 3, // 20%
+                                                                  child:
+                                                                  Column(
+                                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                    //crossAxisAlignment: CrossAxisAlignment.start,
+                                                                    children: [
+                                                                      Row(
                                                                         children: [
-                                                                          Row(
-                                                                            children: [
-                                                                              Visibility(
-                                                                                visible: StringUtils.isNotNUllNotEmpty(widget.rehearsal.lstSongs[index].cifra),
-                                                                                child:
-                                                                                Align(
-                                                                                  alignment: Alignment.topRight,
-                                                                                  child: GestureDetector(
-                                                                                    onTap: () => _launchChordsURL(widget.rehearsal.lstSongs[index]),
-                                                                                    child: Icon(
-                                                                                      Icons.straighten_rounded,
-                                                                                      color: Colors.blueGrey,
-                                                                                    ),
-                                                                                  ),
-                                                                                ),
-                                                                              ),
-                                                                              SizedBox(width: 15),
-                                                                              Text('Tom: ' + widget.rehearsal.lstSongs[index].tom,
-                                                                                overflow: TextOverflow.ellipsis,
-                                                                                style: TextStyle(
+                                                                          Visibility(
+                                                                            visible: StringUtils.isNotNUllNotEmpty(widget.rehearsal.lstSongs[index].cifra),
+                                                                            child:
+                                                                            Align(
+                                                                              alignment: Alignment.topRight,
+                                                                              child: GestureDetector(
+                                                                                onTap: () => _launchChordsURL(widget.rehearsal.lstSongs[index]),
+                                                                                child: Icon(
+                                                                                  Icons.straighten_rounded,
                                                                                   color: Colors.blueGrey,
-                                                                                  fontSize: 13,
-                                                                                  fontWeight:
-                                                                                  FontWeight.w800,
                                                                                 ),
                                                                               ),
-                                                                            ],
-                                                                          )
+                                                                            ),
+                                                                          ),
+                                                                          SizedBox(width: 15),
+                                                                          Text('Tom: ' + widget.rehearsal.lstSongs[index].tom,
+                                                                            overflow: TextOverflow.ellipsis,
+                                                                            style: TextStyle(
+                                                                              color: Colors.blueGrey,
+                                                                              fontSize: 13,
+                                                                              fontWeight:
+                                                                              FontWeight.w800,
+                                                                            ),
+                                                                          ),
                                                                         ],
-                                                                    )
-                                                          ),
-                                                   //     ]
-                                                 //   )
-                                                  ]
-                                              )
-                                          )
-                                      )
+                                                                      )
+                                                                    ],
+                                                                  )
+                                                              ),
+                                                              //     ]
+                                                              //   )
+                                                            ]
+                                                        )
+                                                    )
+                                                )
                                  ]
                               );
                           }),

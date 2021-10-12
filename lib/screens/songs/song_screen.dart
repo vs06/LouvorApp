@@ -7,6 +7,7 @@ import 'package:louvor_app/models/song_manager.dart';
 import 'package:louvor_app/models/user_manager.dart';
 import 'package:louvor_app/screens/loading_screen.dart';
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 
 class SongScreen extends StatefulWidget {
@@ -443,6 +444,12 @@ class SongScreenState extends State<SongScreen> {
                         initialValue: widget.song.cifra,
                         onSaved: (texto) => widget.song.cifra = texto,
                         decoration: InputDecoration(
+                          prefixIcon: GestureDetector( onTap: _launchChordsURL,
+                                                       child:
+                                                       Icon(Icons.straighten_rounded,
+                                                         color: (widget.song.cifra != null && widget.song.cifra != '') ? primaryColor : Colors.blueGrey,
+                                                       )
+                                                     ) ,
                           border: const OutlineInputBorder(),
                           filled: true,
                           hintText: 'Link cifra',
@@ -451,9 +458,34 @@ class SongScreenState extends State<SongScreen> {
                         onChanged: (value) {
                           widget.song.cifra = value;
                         },
-                        maxLines: 3,
+                        maxLines: 2,
                       ),
                     ),
+
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8, bottom: 8),
+                      child: TextFormField(
+                        initialValue: widget.song.videoUrl,
+                        onSaved: (texto) => widget.song.videoUrl = texto,
+                        decoration: InputDecoration(
+                          prefixIcon: GestureDetector( onTap:_launchVideoURL,
+                                                        child:
+                                                          Icon(Icons.ondemand_video,
+                                                              color: (widget.song.videoUrl != null && widget.song.videoUrl != '') ?  primaryColor : Colors.blueGrey
+                                                          ),
+                                                     ) ,
+                          border: const OutlineInputBorder(),
+                          filled: true,
+                          hintText: 'Link vídeo',
+                          labelText: 'Link vídeo',
+                        ),
+                        onChanged: (value) {
+                          widget.song.videoUrl = value;
+                        },
+                        maxLines: 2,
+                      ),
+                    ),
+
                     Consumer<Song>(
                       builder: (_, song, __) {
                         return Visibility(
@@ -599,4 +631,10 @@ class SongScreenState extends State<SongScreen> {
   bool isValidateDinamicaFill() {
     return !(!semPalmas && !comPalmas);
   }
+
+  void _launchVideoURL() async =>
+      await canLaunch(widget.song.videoUrl) ? await launch(widget.song.videoUrl) : throw 'Could not launch $widget.song.videoUrl';
+
+  void _launchChordsURL() async =>
+      await canLaunch(widget.song.cifra) ? await launch(widget.song.cifra) : throw 'Could not launch $widget.song.cifra';
 }
