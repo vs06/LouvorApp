@@ -67,6 +67,8 @@ class ServiceScreenState extends State<ServiceScreen> {
 
   }
 
+  ScrollController _scrollVolunteersController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
 
@@ -215,18 +217,21 @@ class ServiceScreenState extends State<ServiceScreen> {
                     ),
                   ),
 
-
-                       Expanded(
-                         flex: 2,
+                   Expanded(
+                     flex: 2,
+                      child:
+                        Scrollbar(
+                          isAlwaysShown: true,
+                          controller: _scrollVolunteersController,
                           child: ListView.builder(
-                                    padding: const EdgeInsets.all(8),
-                                    itemCount: widget.service.team != null ? widget.service.team.length: 0,
-                                    shrinkWrap: true,
-                                    itemBuilder: (BuildContext context, int index) {
-                                      String role =  widget.service.team.keys.elementAt(index);
-                                      return Column(
-                                          children:[
-                                               Card(
+                                      padding: const EdgeInsets.all(8),
+                                      itemCount: widget.service.team != null ? widget.service.team.length: 0,
+                                      shrinkWrap: true,
+                                      itemBuilder: (BuildContext context, int index) {
+                                        String role =  widget.service.team.keys.elementAt(index);
+                                        return Column(
+                                            children:[
+                                              Card(
                                                 shape: RoundedRectangleBorder(
                                                     borderRadius: BorderRadius.circular(4)
                                                 ),
@@ -236,82 +241,59 @@ class ServiceScreenState extends State<ServiceScreen> {
                                                   child: Row(
                                                     children: <Widget>[
                                                       const SizedBox(width: 16,),
-                                                           Column(
-                                                               children:<Widget>[
-                                                                  Expanded(
-                                                                    flex: 5,
-                                                                    child: Column(
-                                                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                                      children: <Widget>[
-                                                                        Row(
-                                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                          children: [
-                                                                              Center(
-                                                                                child: Column( children: [
-                                                                                          Text( role +':  ',
-                                                                                            overflow: TextOverflow.ellipsis,
-                                                                                            style: TextStyle(
-                                                                                              fontSize: 16,
-                                                                                              fontWeight: FontWeight.w800,
-                                                                                              color: Colors.lightBlue,
-                                                                                            ),
-                                                                                          ),
-                                                                                        ],
-                                                                                        ),
-                                                                              ),
-                                                                             Column(
-                                                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                                                children: [
-                                                                                        Text( StringUtils.splitVolunteersToTile((widget.service.team[role])),
-                                                                                          overflow: TextOverflow.ellipsis,
-                                                                                          style: TextStyle(
-                                                                                            fontSize: 16,
-                                                                                            fontWeight: FontWeight.w800,
-                                                                                          ),
-                                                                                        ),
-                                                                                   ]
-                                                                             ),
-                                                                          ],
+                                                      Column(
+                                                          children:<Widget>[
+                                                            Expanded(
+                                                              flex: 5,
+                                                              child: Column(
+                                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                                children: <Widget>[
+                                                                  Row(
+                                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                    children: [
+                                                                      Center(
+                                                                        child: Column( children: [
+                                                                          Text( role +':  ',
+                                                                            overflow: TextOverflow.ellipsis,
+                                                                            style: TextStyle(
+                                                                              fontSize: 16,
+                                                                              fontWeight: FontWeight.w800,
+                                                                              color: Colors.lightBlue,
+                                                                            ),
+                                                                          ),
+                                                                        ],
                                                                         ),
-                                                                        // tentativa de listar os volunteers por role, para edicao em separado
-                                                                        // Column(
-                                                                        //   children: [
-                                                                        //                   Row(
-                                                                        //                             children: [
-                                                                        //                                       ListView.builder(
-                                                                        //                                       padding: const EdgeInsets.all(8),
-                                                                        //                                       itemCount: widget.service.team[role].length,
-                                                                        //                                       shrinkWrap: true,
-                                                                        //                                       itemBuilder: (BuildContext context, int index) {
-                                                                        //                                             String users =  widget.service.team[role].elementAt(index);
-                                                                        //                                             return Expanded(child: Card(shape:
-                                                                        //                                                             RoundedRectangleBorder(
-                                                                        //                                                             borderRadius: BorderRadius.circular(4)
-                                                                        //                                                             )
-                                                                        //                                                             )
-                                                                        //                                                     );}
-                                                                        //                                       )
-                                                                        //
-                                                                        //                             ],
-                                                                        //                   )
-                                                                        //   ],
-                                                                        // ),
-
-                                                                      ],
-                                                                    ),
+                                                                      ),
+                                                                      Column(
+                                                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                                          children: [
+                                                                            Text( StringUtils.splitVolunteersToTile((widget.service.team[role])),
+                                                                              overflow: TextOverflow.ellipsis,
+                                                                              style: TextStyle(
+                                                                                fontSize: 16,
+                                                                                fontWeight: FontWeight.w800,
+                                                                              ),
+                                                                            ),
+                                                                          ]
+                                                                      ),
+                                                                    ],
                                                                   ),
+                                                                ],
+                                                              ),
+                                                            ),
                                                           ]
-                                                        )
+                                                      )
                                                     ],
                                                   ),
                                                 ),
                                               ),
-                                          ]
-                                      );
-                                    }
-                                ),
-                       ),
+                                            ]
+                                        );
+                                      }
+                                  ),
+                        ),
+                   ),
 
                   Padding(
                     padding: const EdgeInsets.only(top: 6),
