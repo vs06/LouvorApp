@@ -6,6 +6,7 @@ import 'package:louvor_app/models/service_manager.dart';
 import 'package:louvor_app/models/user_manager.dart';
 import 'package:louvor_app/screens/services/services_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ServiceListTile extends StatelessWidget {
 
@@ -84,11 +85,16 @@ class ServiceListTile extends StatelessWidget {
                           ),
                           Visibility(
                            visible: !service.data.isBefore(DateTime.now()),
-                                 child: Icon(
-                                           Icons.check_circle,
-                                           color: songsSelectedColorStatus(service),
-                                           size: 20,
-                                         ),
+                                 child: GestureDetector(
+                                          onTap: (){
+                                                      sendMessageWhatNotification();
+                                                    },
+                                            child: Icon(
+                                               Icons.check_circle,
+                                               color: songsSelectedColorStatus(service),
+                                               size: 20,
+                                             ),
+                                 )
                           ),
                           Text(
                             ' ${service.dirigente}',
@@ -208,6 +214,27 @@ class ServiceListTile extends StatelessWidget {
     }
 
     return Colors.blueGrey;
+  }
+
+  sendMessageWhatNotification() {
+    if(songsSelectedColorStatus(service) == Colors.red){
+      final strWhatsMessage = service.dirigente + ', você fara a abertura do culto de: ${DateUtils.convertDatePtBr(service.data)}.\nFaltam: ${(DateTime.now().day - service.data.day)*-1} dias para o culto.'
+                                                + '\nO culto ainda não teve as músicas cadastradas.\nPoderia verificar?';
+      sendNotificationWhatsUp(strWhatsMessage);
+    }
+  }
+
+  void sendNotificationWhatsUp(String msg) async {
+    try{
+      //Abre o whats, pergunta pra quem enviar, e salva a msg
+      var whatsappURl_android = "whatsapp://send?phone=&text=${msg}";
+
+      if(await canLaunch(whatsappURl_android)){
+        await launch(whatsappURl_android);
+      }
+    }catch(e){
+      //TODO
+    }
   }
 
 }
