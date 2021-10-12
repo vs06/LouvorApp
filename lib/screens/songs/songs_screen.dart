@@ -26,24 +26,25 @@ class SongsScreen extends StatelessWidget {
         ),
         title: Consumer<SongManager>(
           builder: (_, songManager, __) {
-            if (songManager.search.isEmpty) {
+            if (songManager.searchDTO.isfiltersEmpty()) {
               return const Text('Músicas');
             } else {
               return LayoutBuilder(
                 builder: (_, constraints) {
                   return GestureDetector(
                     onTap: () async {
-                      final search = await showDialog<String>(
+                      await showDialog<String>(
                           context: context,
-                          builder: (_) => SearchDialog(songManager.search));
-                      if (search != null) {
-                        songManager.search = search;
+                          builder: (_) => SearchDialog(songManager.searchDTO)
+                      );
+                      if (!songManager.searchDTO.isfiltersEmpty()) {
+                        songManager.notifyListenersCurrentState();
                       }
                     },
                     child: Container(
                         width: constraints.biggest.width,
                         child: Text(
-                          'Músicas: ${songManager.search}',
+                          'Músicas: ${songManager.searchDTO.filterResume()}',
                           textAlign: TextAlign.center,
                         )),
                   );
@@ -56,15 +57,15 @@ class SongsScreen extends StatelessWidget {
         actions: <Widget>[
           Consumer<SongManager>(
             builder: (_, songManager, __) {
-              if (songManager.search.isEmpty) {
+              if (songManager.searchDTO.isfiltersEmpty()) {
                 return IconButton(
                   icon: Icon(Icons.search),
                   onPressed: () async {
-                    final search = await showDialog<String>(
+                    await showDialog<String>(
                         context: context,
-                        builder: (_) => SearchDialog(songManager.search));
-                    if (search != null) {
-                      songManager.search = search;
+                        builder: (_) => SearchDialog(songManager.searchDTO));
+                    if (!songManager.searchDTO.isfiltersEmpty()) {
+                      songManager.notifyListenersCurrentState();
                     }
                   },
                 );
@@ -72,7 +73,8 @@ class SongsScreen extends StatelessWidget {
                 return IconButton(
                   icon: Icon(Icons.close),
                   onPressed: () async {
-                    songManager.search = '';
+                    songManager.searchDTO.cleanfiltersSongSearchDTO();
+                    songManager.notifyListenersCurrentState();
                   },
                 );
               }

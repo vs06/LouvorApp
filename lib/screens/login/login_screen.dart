@@ -3,9 +3,6 @@ import 'package:louvor_app/helpers/validators.dart';
 import 'package:louvor_app/models/user.dart';
 import 'package:louvor_app/models/user_manager.dart';
 import 'package:provider/provider.dart';
-import 'package:louvor_app/screens/song_list.dart';
-
-import '../song_item.dart';
 
 class LoginScreen extends StatelessWidget {
 

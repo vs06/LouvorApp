@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:louvor_app/models/Tag.dart';
+import 'package:louvor_app/models/tag_manager.dart';
 import 'package:louvor_app/screens/User/users_screen.dart';
 import 'package:louvor_app/screens/rehearsals/rehearsal_period_select.dart';
 import 'package:louvor_app/screens/rehearsals/rehearsal_screen.dart';
@@ -9,7 +11,6 @@ import 'package:provider/provider.dart';
 import 'package:louvor_app/models/user_manager.dart';
 import 'package:louvor_app/screens/base/base_screen.dart';
 import 'package:louvor_app/screens/login/login_screen.dart';
-import 'package:louvor_app/screens/song_list.dart';
 import 'package:louvor_app/screens/songs/song_screen.dart';
 import 'package:louvor_app/screens/songs/songs_screen.dart';
 import 'package:louvor_app/screens/services/services_screen.dart';
@@ -68,6 +69,12 @@ class MyApp extends StatelessWidget {
           lazy: false,
           update: (_, userManager, rehearsalManager) =>
           rehearsalManager..updateUser(userManager),
+        ),
+        ChangeNotifierProxyProvider<UserManager, TagManager>(
+          create: (_) => TagManager(),
+          lazy: false,
+          update: (_, userManager, tagManager) =>
+          tagManager..updateUser(userManager),
         )
       ],
       child: MaterialApp(

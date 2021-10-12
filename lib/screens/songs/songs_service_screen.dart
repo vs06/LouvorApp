@@ -82,7 +82,7 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
           ),
           title: Consumer<SongManager>(
             builder: (_, songManager, __) {
-              if (songManager.search.isEmpty) {
+              if (songManager.searchDTO.isfiltersEmpty()) {
                 return Text('Músicas:  ${widget.service.data != null ? DateUtils.convertDatePtBr(widget.service.data) : ''} ',
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -94,17 +94,18 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
                   builder: (_, constraints) {
                     return GestureDetector(
                       onTap: () async {
-                        final search = await showDialog<String>(
+                        await showDialog<String>(
                             context: context,
-                            builder: (_) => SearchDialog(songManager.search));
-                        if (search != null) {
-                          songManager.search = search;
+                            builder: (_) => SearchDialog(songManager.searchDTO)
+                        );
+                        if (!songManager.searchDTO.isfiltersEmpty()) {
+                          songManager.notifyListenersCurrentState();
                         }
                       },
                       child: Container(
                           width: constraints.biggest.width,
                           child: Text(
-                            'Músicas: ${songManager.search}',
+                            'Músicas: ${songManager.searchDTO.filterResume()}',
                             textAlign: TextAlign.center,
                           )),
                     );
@@ -117,15 +118,15 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
           actions: <Widget>[
             Consumer<SongManager>(
               builder: (_, songManager, __) {
-                if (songManager.search.isEmpty) {
+                if (songManager.searchDTO.isfiltersEmpty()) {
                   return IconButton(
                     icon: Icon(Icons.search),
                     onPressed: () async {
-                      final search = await showDialog<String>(
+                      await showDialog<String>(
                           context: context,
-                          builder: (_) => SearchDialog(songManager.search));
-                      if (search != null) {
-                        songManager.search = search;
+                          builder: (_) => SearchDialog(songManager.searchDTO));
+                      if (!songManager.searchDTO.isfiltersEmpty()) {
+                        songManager.notifyListenersCurrentState();
                       }
                     },
                   );
@@ -133,7 +134,8 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
                   return IconButton(
                     icon: Icon(Icons.close),
                     onPressed: () async {
-                      songManager.search = '';
+                      songManager.searchDTO.cleanfiltersSongSearchDTO();
+                      songManager.notifyListenersCurrentState();
                     },
                   );
                 }
@@ -307,29 +309,27 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
                                                       crossAxisAlignment: CrossAxisAlignment.start,
                                                       children: <Widget>[
                                                         Row(
-                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                           children: [
-                                                          //  Flexible( child:
-                                                              Text(
-                                                                widget._lstSongSelecionadas[index].nome,
-                                                                overflow: TextOverflow.ellipsis,
-                                                                style: TextStyle(
-                                                                  fontSize: 16,
-                                                                  fontWeight: FontWeight.w800,
-                                                                ),
-                                                              ),
-                                                          //  ),
-                                                            Align(
-                                                                alignment: Alignment.center,
-                                                                child:
-                                                                  GestureDetector(
-                                                                    onTap: () {
-                                                                                setState(() {
-                                                                                  widget._lstSongSelecionadas.removeWhere((element) => element.nome == widget._lstSongSelecionadas[index].nome);
-                                                                                });
-                                                                              },
-                                                                    child:Icon(Icons.delete , color: Colors.blueGrey,),
-                                                                  ),
+                                                            Container(
+                                                              width: 260,
+                                                              child:  Text(
+                                                                        widget._lstSongSelecionadas[index].nome,
+                                                                        overflow: TextOverflow.ellipsis,
+                                                                        style: TextStyle(
+                                                                          fontSize: 16,
+                                                                          fontWeight: FontWeight.w800,
+                                                                        ),
+                                                                      ),
+                                                            ),
+                                                            Container(
+                                                                child: GestureDetector(
+                                                                          onTap: () {
+                                                                            setState(() {
+                                                                              widget._lstSongSelecionadas.removeWhere((element) => element.nome == widget._lstSongSelecionadas[index].nome);
+                                                                            });
+                                                                          },
+                                                                          child:Icon(Icons.delete , color: Colors.blueGrey,),
+                                                                        ),
                                                             ),
                                                           ],
                                                         ),
