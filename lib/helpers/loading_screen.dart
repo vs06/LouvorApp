@@ -1,8 +1,8 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:loading_animations/loading_animations.dart';
 import 'package:louvor_app/helpers/notification_utils.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class LoadingScreen extends StatefulWidget {
 
