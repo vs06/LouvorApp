@@ -61,7 +61,7 @@ class SongSearchDTO{
     }
 
     if(this.palmasFilter.length > 0){
-      resumeFilters += '\nDinâmica';
+      resumeFilters += '\nDinâmica: ';
       this.palmasFilter.forEach((element) {
         var str = element == 'semPalma' ? 'Sem Palmas' : 'Com Palmas';
         resumeFilters += str + ',';
