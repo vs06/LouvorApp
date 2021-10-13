@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:louvor_app/helpers/dialog_utils.dart';
+import 'package:louvor_app/helpers/multi_utils.dart';
 import 'package:louvor_app/models/Song.dart';
 import 'package:louvor_app/models/Tag.dart';
 import 'package:louvor_app/models/tag_manager.dart';
@@ -25,7 +27,7 @@ class SongScreen extends StatefulWidget {
 }
 class SongScreenState extends State<SongScreen> {
 
-  List<String> added = [];
+  //List<String> added = [];
   String currentText = "";
   GlobalKey<AutoCompleteTextFieldState<String>> key = new GlobalKey();
 
@@ -44,14 +46,22 @@ class SongScreenState extends State<SongScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (added.length == 0) {
-      added = widget.song != null ? tagsToListString(widget.song.tags) : [];
+
+    if(widget.song.palmas == null){
+      widget.song.palmas = '';
     }
+
+    if(widget.song.tags == null){
+      widget.song.tags = '';
+    }
+
 
     comPalmas = widget.song.palmas.contains('comPalmas');
     semPalmas = widget.song.palmas.contains('semPalmas');
 
     final primaryColor = Theme.of(context).primaryColor;
+    
+    List<String> tagsLst = tagsToListString(widget.song.tags);
 
     _FirstPageState();
 
@@ -198,14 +208,14 @@ class SongScreenState extends State<SongScreen> {
                                 Row(
                                   children: [
                                     Container(
-                                        height: added.length > 0 ? 70 : 5,
+                                        height: tagsLst.length > 0 ? 70 : 5,
                                         width: 320,
                                         child:
                                         Scrollbar(
                                           isAlwaysShown: true,
                                           controller: _scrollTagsController,
                                           child: GridView.builder(
-                                            itemCount: added.length,
+                                            itemCount: tagsToListString(widget.song.tags).length,
                                             gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
                                               crossAxisCount: 3,
                                               childAspectRatio: 2,
@@ -217,7 +227,7 @@ class SongScreenState extends State<SongScreen> {
                                                   InputChip(
                                                     padding: EdgeInsets.all(
                                                         2.0),
-                                                    label: Text(added[index],
+                                                    label: Text(tagsLst[index],
                                                       style: TextStyle(
                                                           color: Colors.white),
                                                     ),
@@ -225,8 +235,7 @@ class SongScreenState extends State<SongScreen> {
                                                     deleteIconColor: Colors.white,
                                                     onDeleted: () {
                                                       setState(() {
-                                                        added.removeWhere((e) =>
-                                                        e == added[index]);
+                                                        widget.song.tags = widget.song.tags.replaceAll(tagsLst[index]+';', '');
                                                       });
                                                     },
                                                   )
@@ -493,18 +502,17 @@ class SongScreenState extends State<SongScreen> {
                             child: RaisedButton(
                               onPressed: () async {
                                 if (isValidateDinamicaFill()) {
-                                  applyTags(song);
+                                  saveNewTags(song);
                                   if (widget.formKey.currentState.validate()) {
                                     widget.formKey.currentState.save();
-                                    await song.save();
                                     context.read<SongManager>().update(song);
                                     Navigator.of(context).pop();
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(builder: (context) =>
-                                            LoadingScreen()));
+                                    //Navigator.of(context).pop();
+                                    Navigator.of(context).push(MaterialPageRoute(builder: (context) =>LoadingScreen()));
                                   }
                                 } else {
-                                  _PalmasDialog();
+                                  DialogUtils.alert(context, 'Campo obrigatório.', 'É necessário informar a dinâmica da música.', 'Ok');
+                                  //_AlertFillPalmas();
                                 }
                               },
                               textColor: Colors.white,
@@ -562,28 +570,22 @@ class SongScreenState extends State<SongScreen> {
       textSubmitted: (text) =>
           setState(() {
             if (text != "") {
-              print(text);
-              added.add(text);
+              if(!widget.song.tags.contains(text)){
+                widget.song.tags += text + ';';
+              }
             }
           }),
     );
   }
 
-  void applyTags(Song song) {
-    //persiste novas tags
-    added.forEach((addedItem) {
-      if (!TagManager.allTagsAsStrings().contains(addedItem)) {
-        context.read<TagManager>().update(Tag.newTag(addedItem));
-      }
-    });
-
-    if (song.tags == null) {
-      song.tags = '';
+  void saveNewTags(Song song) {
+    if(song.tags.isEmpty && song.tags.length > 0){
+      tagsToListString(song.tags).forEach((tagAdded) {
+        if (!TagManager.allTagsAsStrings().contains(tagAdded)) {
+          context.read<TagManager>().update(Tag.newTag(tagAdded));
+        }
+      });
     }
-
-    added.forEach((tag) {
-      song.tags += tag + ';';
-    });
   }
 
   List<String> tagsToListString(String tags) {
@@ -601,32 +603,32 @@ class SongScreenState extends State<SongScreen> {
     return tagList;
   }
 
-  Future<void> _PalmasDialog() async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Campo obirgatório.'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: const <Widget>[
-                Text('É necessário informar a dinâmica da música.'),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Ok'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+  // Future<void> _AlertFillPalmas() async {
+  //   return showDialog<void>(
+  //     context: context,
+  //     barrierDismissible: false, // user must tap button!
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         title: const Text('Campo obirgatório.'),
+  //         content: SingleChildScrollView(
+  //           child: ListBody(
+  //             children: const <Widget>[
+  //               Text('É necessário informar a dinâmica da música.'),
+  //             ],
+  //           ),
+  //         ),
+  //         actions: <Widget>[
+  //           TextButton(
+  //             child: const Text('Ok'),
+  //             onPressed: () {
+  //               Navigator.of(context).pop();
+  //             },
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 
   bool isValidateDinamicaFill() {
     return !(!semPalmas && !comPalmas);

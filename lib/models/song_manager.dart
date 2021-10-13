@@ -31,21 +31,6 @@ class SongManager extends ChangeNotifier{
     notifyListeners();
   }
 
-  // set setSearchDTO(String value){
-  //   _searchDTO.search = value;
-  //   notifyListeners();
-  // }
-  //
-  // set setTagsDTO(List<String> value){
-  //   _searchDTO.tagsFilter = value;
-  //   notifyListeners();
-  // }
-  //
-  // set setPalmasDTO(List<String> value){
-  //   _searchDTO.palmasFilter = value;
-  //   notifyListeners();
-  // }
-
   List<Song> get filteredSongs {
     final List<Song> filteredSongs = [];
 
@@ -236,7 +221,6 @@ class SongManager extends ChangeNotifier{
     'Vou_deixar_na_cruz':'S'
   };
 
-
   Future<void> _loadAllSong(UserManager userManager) async {
     final QuerySnapshot snapSongs =
     await firestore.collection('songs').where('ativo', isEqualTo: 'TRUE').getDocuments();
@@ -261,9 +245,15 @@ class SongManager extends ChangeNotifier{
   }
 
   void update(Song song){
-    allSongs.removeWhere((s) => s.id == song.id);
     song.uid = user.id;
-    allSongs.add(song);
+
+    if(song.ativo.toUpperCase() != 'TRUE'){
+      allSongs.removeWhere((s) => s.id == song.id);
+    }else{
+      int indexToBeUpdated = allSongs.indexWhere((s) => s.id == song.id);
+      allSongs[indexToBeUpdated] = song;
+    }
+
     song.save();
   notifyListeners();
 }
@@ -276,6 +266,6 @@ class SongManager extends ChangeNotifier{
     }
   }
 
-
+  void insert(Song song) {}
 
 }

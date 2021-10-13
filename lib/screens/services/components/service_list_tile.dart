@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:louvor_app/helpers/date_utils.dart';
+import 'package:louvor_app/helpers/notification_utils.dart';
 import 'package:louvor_app/models/Service.dart';
 import 'package:louvor_app/models/service_manager.dart';
 import 'package:louvor_app/models/user_manager.dart';
@@ -87,7 +88,7 @@ class ServiceListTile extends StatelessWidget {
                            visible: !service.data.isBefore(DateTime.now()),
                                  child: GestureDetector(
                                           onTap: (){
-                                                      sendMessageWhatNotification();
+                                                      sendMessageWhatsAppNotification();
                                                     },
                                             child: Icon(
                                                Icons.check_circle,
@@ -196,8 +197,12 @@ class ServiceListTile extends StatelessWidget {
     String songs = 'Músicas: ';
 
     service.lstSongs.forEach((element) {
-      songs += element.nome + ' ,';
+      songs += element.nome + ', ';
     });
+
+    if(service.lstSongs.length > 0){
+      songs = songs.substring(0, songs.length -2);
+    }
 
     return songs;
   }
@@ -216,24 +221,11 @@ class ServiceListTile extends StatelessWidget {
     return Colors.blueGrey;
   }
 
-  sendMessageWhatNotification() {
+  sendMessageWhatsAppNotification() {
     if(songsSelectedColorStatus(service) == Colors.red){
       final strWhatsMessage = service.dirigente + ', você fara a abertura do culto de: ${DateUtils.convertDatePtBr(service.data)}.\nFaltam: ${(DateTime.now().day - service.data.day)*-1} dias para o culto.'
                                                 + '\nO culto ainda não teve as músicas cadastradas.\nPoderia verificar?';
-      sendNotificationWhatsUp(strWhatsMessage);
-    }
-  }
-
-  void sendNotificationWhatsUp(String msg) async {
-    try{
-      //Abre o whats, pergunta pra quem enviar, e salva a msg
-      var whatsappURl_android = "whatsapp://send?phone=&text=${msg}";
-
-      if(await canLaunch(whatsappURl_android)){
-        await launch(whatsappURl_android);
-      }
-    }catch(e){
-      //TODO
+      NotificationUtils.sendNotificationWhatsUp(strWhatsMessage);
     }
   }
 
