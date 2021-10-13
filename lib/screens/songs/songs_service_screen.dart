@@ -81,9 +81,8 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
             builder: (_, songManager, __) {
               if (songManager.searchDTO.isfiltersEmpty()) {
                 return Text('Músicas:  ${widget.service.data != null ? DateUtils.convertDatePtBr(widget.service.data) : ''} ',
-                          textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 15,
                           )
                       );
               } else {
@@ -102,9 +101,13 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
                       child: Container(
                           width: constraints.biggest.width,
                           child: Text(
-                            'Músicas: ${songManager.searchDTO.filterResume()}',
-                            textAlign: TextAlign.center,
-                          )),
+                            'Musícas busca: ${songManager.searchDTO.filterResume()}',
+                            style: TextStyle(fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            //textAlign: TextAlign.center,
+                          )
+                      ),
                     );
                   },
                 );

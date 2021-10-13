@@ -185,70 +185,73 @@ class SearchDialogState extends State<SearchDialog>{
                           ],
                         ),
 
-                        Container(
-                            width: 320,
-                            child: Row(
-                              children: [
-                                Container(
-                                    width: 160,
-                                    child:
-                                    Column(
-                                      children: [
-                                        SwitchListTile(
-                                            title: const Text('Sem Palma',
-                                              style: TextStyle(fontSize: 15,),),
-                                            value: semPalmas,
-                                            onChanged: (bool value) {
-                                              setState(() {
-                                                semPalmas = value;
-                                                if (semPalmas) {
-                                                  if (!widget.songSearchDTO.palmasFilter.contains('semPalmas')) {
-                                                    widget.songSearchDTO.palmasFilter.add('semPalmas');
-                                                  }
-                                                } else {
-                                                  if (widget.songSearchDTO.palmasFilter.contains('semPalmas')) {
-                                                    widget.songSearchDTO.palmasFilter.removeWhere((element) => element == 'semPalmas');
-                                                  }
-                                                }
-                                              });
-                                            }
-                                          //,secondary: const Icon(Icons.timelapse),
-                                        ),
-                                      ],
-                                    )
-                                ),
-                                Container(
-                                    width: 160,
-                                    child:
-                                    Column(
+                        Padding(
+                        padding: EdgeInsets.only(left: 10, bottom: 10),
+                          child: Container(
+                                      width: 320,
+                                      child: Row(
                                         children: [
-                                          SwitchListTile(
-                                              title: const Text('Com Palmas',
-                                                style: TextStyle(fontSize: 15,),),
-                                              value: comPalmas,
-                                              onChanged: (bool value) {
-                                                setState(() {
-                                                  comPalmas = value;
-                                                  if (comPalmas) {
-                                                    if (!widget.songSearchDTO.palmasFilter.contains('comPalmas')) {
-                                                      widget.songSearchDTO.palmasFilter.add('comPalmas');
-                                                    }
-                                                  } else {
-                                                    if (widget.songSearchDTO.palmasFilter.contains('comPalmas')) {
-                                                      widget.songSearchDTO.palmasFilter.removeWhere((element) => element == 'comPalmas');
-                                                    }
-                                                  }
-
-                                                });
-                                              }
-                                            //,secondary: const Icon(Icons.timelapse),
+                                          Container(
+                                              width: 160,
+                                              child:
+                                              Column(
+                                                children: [
+                                                  SwitchListTile(
+                                                      title: const Text('Sem Palma',
+                                                        style: TextStyle(fontSize: 15,),),
+                                                      value: semPalmas,
+                                                      onChanged: (bool value) {
+                                                        setState(() {
+                                                          semPalmas = value;
+                                                          if (semPalmas) {
+                                                            if (!widget.songSearchDTO.palmasFilter.contains('semPalmas')) {
+                                                              widget.songSearchDTO.palmasFilter.add('semPalmas');
+                                                            }
+                                                          } else {
+                                                            if (widget.songSearchDTO.palmasFilter.contains('semPalmas')) {
+                                                              widget.songSearchDTO.palmasFilter.removeWhere((element) => element == 'semPalmas');
+                                                            }
+                                                          }
+                                                        });
+                                                      }
+                                                    //,secondary: const Icon(Icons.timelapse),
+                                                  ),
+                                                ],
+                                              )
                                           ),
-                                        ]
-                                    )
-                                ),
-                              ],
-                            )
-                        ),
+                                          Container(
+                                              width: 160,
+                                              child:
+                                              Column(
+                                                  children: [
+                                                    SwitchListTile(
+                                                        title: const Text('Com Palmas',
+                                                          style: TextStyle(fontSize: 15,),),
+                                                        value: comPalmas,
+                                                        onChanged: (bool value) {
+                                                          setState(() {
+                                                            comPalmas = value;
+                                                            if (comPalmas) {
+                                                              if (!widget.songSearchDTO.palmasFilter.contains('comPalmas')) {
+                                                                widget.songSearchDTO.palmasFilter.add('comPalmas');
+                                                              }
+                                                            } else {
+                                                              if (widget.songSearchDTO.palmasFilter.contains('comPalmas')) {
+                                                                widget.songSearchDTO.palmasFilter.removeWhere((element) => element == 'comPalmas');
+                                                              }
+                                                            }
+
+                                                          });
+                                                        }
+                                                      //,secondary: const Icon(Icons.timelapse),
+                                                    ),
+                                                  ]
+                                              )
+                                          ),
+                                        ],
+                                      )
+                                  ),
+                        )
 
                       ],
                     ),
@@ -261,7 +264,7 @@ class SearchDialogState extends State<SearchDialog>{
   _FirstPageState() {
     simpleAutoCompleteTags = SimpleAutoCompleteTextField(
       key: key,
-      style: TextStyle(color: Colors.black, fontSize: 16),
+      style: TextStyle(color: Colors.blueGrey, fontSize: 16),
       decoration: InputDecoration(
         border: const OutlineInputBorder(),
         contentPadding: const EdgeInsets.symmetric(vertical: 12),

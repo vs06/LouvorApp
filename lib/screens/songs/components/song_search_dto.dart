@@ -53,17 +53,20 @@ class SongSearchDTO{
     resumeFilters += this.search;
 
     if(this.tagsFilter.length > 0){
-      resumeFilters += ' ';
+      resumeFilters += '\n';
       this.tagsFilter.forEach((element) {
         resumeFilters += ' ,' + element;
       });
+      resumeFilters = resumeFilters.substring(0, resumeFilters.length-1);
     }
 
     if(this.palmasFilter.length > 0){
-      resumeFilters += ' ';
+      resumeFilters += '\n';
       this.palmasFilter.forEach((element) {
-        resumeFilters += '/' + element;
+        var str = element == 'semPalma' ? 'Sem Palmas' : 'Com Palmas';
+        resumeFilters += str + ',';
       });
+      resumeFilters = resumeFilters.substring(0, resumeFilters.length-1);
     }
 
     return resumeFilters;

@@ -434,6 +434,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                                         onPressed: () async {
                                           widget.service.data = _getHourByToggle(widget.service.data, toggleNight);
                                           if (widget.formKey.currentState.validate()) {
+
                                             widget.formKey.currentState.save();
                                             context.read<ServiceManager>().update(service);
                                             Navigator.of(context).pop();

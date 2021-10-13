@@ -57,7 +57,7 @@ class RehearsalListTile extends StatelessWidget {
               borderRadius: BorderRadius.circular(4)
           ),
           child: Container(
-            height: 110,
+            height: 90,
             padding: const EdgeInsets.all(6),
             decoration: BoxDecoration(
                 border: (rehearsal.data.day == DateTime.now().day && rehearsal.data.month == DateTime.now().month ) ?  Border.all(color: Colors.blueAccent, width: 5): Border(),

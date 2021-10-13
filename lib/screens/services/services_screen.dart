@@ -172,6 +172,14 @@ class ServicesScreen extends StatelessWidget {
     lstServicesOfMonth.forEach((service) {
                                             if(service.team != null){
                                                 service.team.forEach((role, listVolunteer) {
+
+                                                      //Considerar Dirigente no vocal
+                                                      if(role.toUpperCase().contains('VOCAL')){
+                                                        if(!listVolunteer.contains(service.dirigente)){
+                                                          listVolunteer.add(service.dirigente);
+                                                        }
+                                                      }
+
                                                       addToMap(mapRoleVolunteerQuantity, role, listVolunteer);
                                                 });
                                             }

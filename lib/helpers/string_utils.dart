@@ -6,20 +6,19 @@ class StringUtils {
 
   static String splitVolunteersToTile(List<String> lstVolunteers) {
     String volunteers = "";
-    int pairCounter = 0;
+    var lengthVolunteers = lstVolunteers.length;
 
     lstVolunteers.forEach((element) {
+      lengthVolunteers--;
+      volunteers += element;
 
-      if(pairCounter == 2){
-        volunteers += '\n' + element + ', ';
-        pairCounter = 1;
-      }else{
-        volunteers += element + ', ';
-        pairCounter++;
+      if(lengthVolunteers > 0){
+        volunteers += '\n';
       }
+
     });
 
-    return volunteers.substring(0, volunteers.length-2);
+    return volunteers;
 
   }
 

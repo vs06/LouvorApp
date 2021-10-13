@@ -44,9 +44,14 @@ class SongsScreen extends StatelessWidget {
                     child: Container(
                         width: constraints.biggest.width,
                         child: Text(
-                          'Músicas: ${songManager.searchDTO.filterResume()}',
-                          textAlign: TextAlign.center,
-                        )),
+                          'Musícas busca: ${songManager.searchDTO.filterResume()}',
+                          style: TextStyle(fontSize: 15,
+                                            fontWeight: FontWeight.bold,
+                                          //  color: Colors.lightBlue,
+                                          ),
+                          //textAlign: TextAlign.center,
+                        )
+                    ),
                   );
                 },
               );
