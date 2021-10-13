@@ -43,106 +43,138 @@ class SearchDialogState extends State<SearchDialog>{
                   Card(
                     child: Column(
                       children: <Widget>[
-                        TextFormField(
-                          initialValue: widget.songSearchDTO.search,
-                          textInputAction: TextInputAction.search,
-                          autofocus: true,
-                          decoration: InputDecoration(
-                              border: InputBorder.none,
-                              contentPadding: const EdgeInsets.symmetric(vertical: 15),
-                              prefixIcon: IconButton(
-                                icon: Icon(Icons.arrow_back),
-                                color: Colors.grey[700],
-                                onPressed: (){
-                                  Navigator.of(context).pop();
-                                },
-                              )
-                          ),
-                          onFieldSubmitted: (text){
-                            widget.songSearchDTO.search = text;
-                            Navigator.of(context).pop(text);
-                          },
-                        ),
 
                         Row(
                           children: [
-                            Padding(
-                              padding: EdgeInsets.only(top: 1, left: 10, bottom: 6),
-                              child:
-                              Text('Tag\'s',
-                                style: TextStyle(fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.lightBlue,),
-                              ),
+                             IconButton(
+                              icon: Icon(Icons.arrow_back),
+                              color: Colors.grey[700],
+                              onPressed: (){
+                                Navigator.of(context).pop();
+                              },
                             ),
+
+                            Padding(
+                              padding: EdgeInsets.only(top: 8, left: 35, bottom: 6),
+                              child:
+                                      Text('Musícas busca refinada',
+                                        style: TextStyle(fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.lightBlue,),
+                                      ),
+                            ),
+
+                            Padding(
+                              padding: EdgeInsets.only(top: 8, left: 15, bottom: 6),
+                              child: IconButton(
+                                        icon: Icon(Icons.filter_alt),
+                                        color: Colors.grey[700],
+                                        onPressed: (){
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                            )
                           ],
+                        ),
+
+                        Padding(
+                            padding: EdgeInsets.only(top: 5, left: 12, bottom: 6),
+                            child:
+                                    Row(
+                                        children: [
+                                              Container(
+                                                  width: 60,
+                                                  child:Text('Nome\n  ou\nLetra',
+                                                    style: TextStyle(fontSize: 16,
+                                                      fontWeight: FontWeight.bold,
+                                                      color: Colors.lightBlue,),
+                                                  ),
+                                              ),
+                                              Container(
+                                                width: 240,
+                                                child: TextFormField(
+                                                          initialValue: widget.songSearchDTO.search,
+                                                          textInputAction: TextInputAction.search,
+                                                          autofocus: true,
+                                                          decoration: InputDecoration(
+                                                            //border: InputBorder.none,
+                                                            border: const OutlineInputBorder(),
+                                                            contentPadding: const EdgeInsets.symmetric(vertical: 15),
+                                                            hintText: ' busca',
+                                                            //labelText: 'digite',
+                                                          ),
+                                                          onFieldSubmitted: (text){
+                                                            widget.songSearchDTO.search = text;
+                                                            Navigator.of(context).pop(text);
+                                                          },
+                                                        ),
+                                              )
+                                          ]
+                                        )
+                        ),
+
+                        Padding(
+                            padding: EdgeInsets.only(top: 5, left: 12, bottom: 6),
+                            child:
+                            Row(
+                                children: [
+                                  Container(
+                                    width: 60,
+                                    child:Text('Tag\'s',
+                                      style: TextStyle(fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.lightBlue,),
+                                    ),
+                                  ),
+                                  Container(
+                                    width: 240,
+                                    child: simpleAutoCompleteTags
+                                  )
+                                ]
+                            )
                         ),
 
                         Row(
                           children: [
                             Container(
+                                height: tagsFiltered.length > 0 ? 70 : 5,
                                 width: 320,
-                                child:
-                                Column(
-                                  children: [
-                                      Container(
-                                        height: 30,
-                                        child: simpleAutoCompleteTags,
-                                      ),
-                                    Row(
-                                      children: [
-                                        Container(
-                                            height: tagsFiltered.length > 0 ? 70 : 5,
-                                            width: 320,
-                                            // child:
-                                            // Scrollbar(
-                                            //   isAlwaysShown: true,
-                                            //   controller: _scrollTagsController,
-                                              child: GridView.builder(
-                                                itemCount: tagsFiltered.length,
-                                                gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
-                                                  crossAxisCount: 3,
-                                                  childAspectRatio: 2,
-                                                ),
-                                                itemBuilder: (BuildContext context,
-                                                    int index) {
-                                                  return Center(
-                                                      child:
-                                                      InputChip(
-                                                        padding: EdgeInsets.all(
-                                                            2.0),
-                                                        label: Text(tagsFiltered[index],
-                                                          style: TextStyle(
-                                                              color: Colors.white),
-                                                        ),
-                                                        backgroundColor: Colors.lightBlue,
-                                                        deleteIconColor: Colors.white,
-                                                        onDeleted: () {
-                                                          setState(() {
-                                                            tagsFiltered.removeWhere((e) =>
-                                                            e == tagsFiltered[index]);
-                                                          });
-                                                        },
-                                                      )
+                                  child: GridView.builder(
+                                    itemCount: tagsFiltered.length,
+                                    gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 3,
+                                      childAspectRatio: 2,
+                                    ),
+                                    itemBuilder: (BuildContext context,
+                                        int index) {
+                                      return Center(
+                                          child:
+                                          InputChip(
+                                            padding: EdgeInsets.only(top: 1, left: 10),
+                                            label: Text(tagsFiltered[index],
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                            backgroundColor: Colors.lightBlue,
+                                            deleteIconColor: Colors.white,
+                                            onDeleted: () {
+                                              setState(() {
+                                                tagsFiltered.removeWhere((e) => e == tagsFiltered[index]);
+                                              });
+                                            },
+                                          )
 
-                                                  );
-                                                },
-                                              ),
-                                            //)
-                                        )
-                                      ],
-                                    )
-                                  ],
-                                )
-                            ),
+                                      );
+                                    },
+                                  ),
+                            )
                           ],
                         ),
-
 
                         Row(
                           children: [
                             Padding(
-                              padding: EdgeInsets.only(top: 1, left: 10),
+                              padding: EdgeInsets.only(top: 10, left: 10, bottom: 5),
                               child:
                               Text('Dinâmica',
                                 style: TextStyle(fontSize: 18,
@@ -229,10 +261,12 @@ class SearchDialogState extends State<SearchDialog>{
   _FirstPageState() {
     simpleAutoCompleteTags = SimpleAutoCompleteTextField(
       key: key,
-      style: TextStyle(color: Colors.black, fontSize: 16.0),
+      style: TextStyle(color: Colors.black, fontSize: 16),
       decoration: InputDecoration(
-        hintText: "  filtro por tag",
-        hintStyle: TextStyle(color: Colors.black),
+        border: const OutlineInputBorder(),
+        contentPadding: const EdgeInsets.symmetric(vertical: 12),
+        hintText: ' busca',
+        //labelText: 'digite',
       ),
       suggestions: suggestions,
       textChanged: (text) => currentText = text,
@@ -246,4 +280,5 @@ class SearchDialogState extends State<SearchDialog>{
           }),
     );
   }
+
 }
