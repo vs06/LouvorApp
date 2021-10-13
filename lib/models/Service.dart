@@ -131,8 +131,34 @@ class Service extends ChangeNotifier {
     serviceClone.lstSongs.addAll(serviceOrigin.lstSongs);
 
     serviceClone.team = new Map();
-    serviceClone.team.addAll(serviceOrigin.team == null ? new Map() : serviceOrigin.team);
+    
+    if(serviceOrigin.team != null){
+     serviceOrigin.team.forEach((role, volunteers) {
 
+       var listNewReference = new List<String>();
+       volunteers.forEach((volunteer) {
+         listNewReference.add(volunteer)  ;
+       });
+
+       serviceClone.team.putIfAbsent(role, ()=> listNewReference);
+     });
+    }
+
+    // if(widget.service.team.containsKey(valueRoleDropDownSelected)){
+    //   if(!widget.service.team[valueRoleDropDownSelected].contains(valueUserDropDownSelected)){
+    //     setState(() {
+    //       widget.service.team[valueRoleDropDownSelected].add(valueUserDropDownSelected);
+    //     });
+    //   }else{
+    //     setState(() {
+    //       widget.service.team.putIfAbsent(valueRoleDropDownSelected, () => [valueUserDropDownSelected]);
+    //     });
+    //   }
+    // } else {
+    //   setState(() {
+    //     widget.service.team.putIfAbsent(valueRoleDropDownSelected, () => [valueUserDropDownSelected]);
+    //   });
+    // }
 
     serviceClone.ativo = serviceOrigin.ativo;
     serviceClone.dirigente = serviceOrigin.dirigente;

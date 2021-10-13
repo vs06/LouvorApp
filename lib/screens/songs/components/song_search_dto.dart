@@ -53,15 +53,15 @@ class SongSearchDTO{
     resumeFilters += this.search;
 
     if(this.tagsFilter.length > 0){
-      resumeFilters += '\n';
+      resumeFilters += '\nTags: ';
       this.tagsFilter.forEach((element) {
-        resumeFilters += ' ,' + element;
+        resumeFilters += element +',';
       });
       resumeFilters = resumeFilters.substring(0, resumeFilters.length-1);
     }
 
     if(this.palmasFilter.length > 0){
-      resumeFilters += '\n';
+      resumeFilters += '\nDinâmica';
       this.palmasFilter.forEach((element) {
         var str = element == 'semPalma' ? 'Sem Palmas' : 'Com Palmas';
         resumeFilters += str + ',';

@@ -18,7 +18,7 @@ class SearchDialog extends StatefulWidget {
 
 class SearchDialogState extends State<SearchDialog>{
 
-  var tagsFiltered = [];
+  //var tagsFiltered = [];
   GlobalKey<AutoCompleteTextFieldState<String>> key = new GlobalKey();
   String currentText = "";
   List<String> suggestions = TagManager.allTagsAsStrings();
@@ -137,21 +137,20 @@ class SearchDialogState extends State<SearchDialog>{
                         Row(
                           children: [
                             Container(
-                                height: tagsFiltered.length > 0 ? 70 : 5,
+                                height: widget.songSearchDTO.tagsFilter.length > 0 ? 70 : 5,
                                 width: 320,
                                   child: GridView.builder(
-                                    itemCount: tagsFiltered.length,
+                                    itemCount: widget.songSearchDTO.tagsFilter.length,
                                     gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
                                       crossAxisCount: 3,
                                       childAspectRatio: 2,
                                     ),
-                                    itemBuilder: (BuildContext context,
-                                        int index) {
+                                    itemBuilder: (BuildContext context, int index) {
                                       return Center(
                                           child:
                                           InputChip(
                                             padding: EdgeInsets.only(top: 1, left: 10),
-                                            label: Text(tagsFiltered[index],
+                                            label: Text(widget.songSearchDTO.tagsFilter[index],
                                               style: TextStyle(
                                                   color: Colors.white),
                                             ),
@@ -159,7 +158,7 @@ class SearchDialogState extends State<SearchDialog>{
                                             deleteIconColor: Colors.white,
                                             onDeleted: () {
                                               setState(() {
-                                                tagsFiltered.removeWhere((e) => e == tagsFiltered[index]);
+                                                widget.songSearchDTO.tagsFilter.removeWhere((e) => e == widget.songSearchDTO.tagsFilter[index]);
                                               });
                                             },
                                           )
@@ -277,8 +276,9 @@ class SearchDialogState extends State<SearchDialog>{
       textSubmitted: (text) =>
           setState(() {
             if (text != "") {
-              print(text);
-              tagsFiltered.add(text);
+              if(!widget.songSearchDTO.tagsFilter.contains(text)){
+                 widget.songSearchDTO.tagsFilter.add(text);
+              }
             }
           }),
     );

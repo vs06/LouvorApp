@@ -214,8 +214,8 @@ class SongScreenState extends State<SongScreen> {
                                           child: GridView.builder(
                                             itemCount: tagsToListString(widget.song.tags).length,
                                             gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
-                                              crossAxisCount: 3,
-                                              childAspectRatio: 2,
+                                              crossAxisCount: 2,
+                                              childAspectRatio: 4,
                                             ),
                                             itemBuilder: (BuildContext context,
                                                 int index) {
@@ -437,12 +437,10 @@ class SongScreenState extends State<SongScreen> {
   _FirstPageState() {
     simpleAutoCompleteTags = SimpleAutoCompleteTextField(
       key: key,
-      //decoration: new InputDecoration( border: const OutlineInputBorder(), ),
-      //controller: TextEditingController(text: "Palavras chave"),
-      style: TextStyle(color: Colors.black, fontSize: 16.0),
+      style: TextStyle(color: Colors.blueGrey, fontSize: 16.0),
       decoration: InputDecoration(
         hintText: "  adicione uma tag",
-        hintStyle: TextStyle(color: Colors.black),
+        hintStyle: TextStyle(color: Colors.blueGrey),
       ),
       suggestions: suggestions,
       textChanged: (text) => currentText = text,
@@ -459,7 +457,7 @@ class SongScreenState extends State<SongScreen> {
   }
 
   void saveNewTags(Song song) {
-    if(song.tags.isEmpty && song.tags.length > 0){
+    if(!song.tags.isEmpty && song.tags.length > 0){
       tagsToListString(song.tags).forEach((tagAdded) {
         if (!TagManager.allTagsAsStrings().contains(tagAdded)) {
           context.read<TagManager>().update(Tag.newTag(tagAdded));
@@ -482,33 +480,6 @@ class SongScreenState extends State<SongScreen> {
 
     return tagList;
   }
-
-  // Future<void> _AlertFillPalmas() async {
-  //   return showDialog<void>(
-  //     context: context,
-  //     barrierDismissible: false, // user must tap button!
-  //     builder: (BuildContext context) {
-  //       return AlertDialog(
-  //         title: const Text('Campo obirgatório.'),
-  //         content: SingleChildScrollView(
-  //           child: ListBody(
-  //             children: const <Widget>[
-  //               Text('É necessário informar a dinâmica da música.'),
-  //             ],
-  //           ),
-  //         ),
-  //         actions: <Widget>[
-  //           TextButton(
-  //             child: const Text('Ok'),
-  //             onPressed: () {
-  //               Navigator.of(context).pop();
-  //             },
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
 
   bool isValidateDinamicaFill() {
     return !(!semPalmas && !comPalmas);

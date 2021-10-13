@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:louvor_app/helpers/app_list_pool.dart';
 import 'package:louvor_app/helpers/date_utils.dart';
 import 'package:louvor_app/helpers/notification_utils.dart';
 import 'package:louvor_app/models/Service.dart';
@@ -7,7 +8,6 @@ import 'package:louvor_app/models/service_manager.dart';
 import 'package:louvor_app/models/user_manager.dart';
 import 'package:louvor_app/screens/services/services_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class ServiceListTile extends StatelessWidget {
 
@@ -61,7 +61,7 @@ class ServiceListTile extends StatelessWidget {
             height: 110,
             padding: const EdgeInsets.all(6),
             decoration: BoxDecoration(
-                border: (service.data.day == DateTime.now().day && service.data.month == DateTime.now().month ) ?  Border.all(color: Colors.blueAccent, width: 5): Border(),
+                border: isHighlightService() ?  Border.all(color: Colors.blueAccent, width: 5): Border(),
                 color: service.data.isBefore(DateTime.now()) ? CupertinoColors.systemGrey3 : Colors.white,
                 borderRadius: BorderRadius.circular(4)
             ),
@@ -98,7 +98,7 @@ class ServiceListTile extends StatelessWidget {
                                  )
                           ),
                           Text(
-                            ' ${service.dirigente}',
+                            ' '+ dirigenteNameToTile(service.dirigente),
                             style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w800,
@@ -207,6 +207,33 @@ class ServiceListTile extends StatelessWidget {
     return songs;
   }
 
+  ///Se primeiro nome não se repetir nos usuários, retorna somente primeiro nome
+  ///Se repetir, retorna o primeiro nome mais a primeira letra do primeiro sobre nome
+  String dirigenteNameToTile(String dirigenteName){
+    if(dirigenteName == null || dirigenteName == ''){
+      return '';
+    }
+
+    var firstSpace = service.dirigente.indexOf(' ');
+
+    if(firstSpace == -1){
+      if(dirigenteName.length > 10){
+        return dirigenteName.substring(0,9);  
+      }
+      return dirigenteName;
+    }
+
+    var firstName = service.dirigente.substring(0, firstSpace);
+
+    //Se precisar de sobrenome
+    if(AppListPool.usersName.where((element) => element.contains(firstName)).length > 1) {
+      return firstName + dirigenteName.substring(firstSpace, firstSpace+2);
+    } else {
+      return firstName;
+    }
+
+  }
+
   Color songsSelectedColorStatus(Service service){
 
     if(service.lstSongs.length > 0){
@@ -229,4 +256,11 @@ class ServiceListTile extends StatelessWidget {
     }
   }
 
+  isHighlightService(){
+    return service.data.day == DateTime.now().day &&
+           service.data.month == DateTime.now().month &&
+           service.data.year == DateTime.now().year &&
+           (service.data.hour + 2) > DateTime.now().hour;//após 2 horas no inicio do culta, retorna false;
+
+  }
 }

@@ -102,12 +102,18 @@ class SongsScreen extends StatelessWidget {
       body: Consumer<SongManager>(
         builder: (_, songManager, __) {
           final filteredSongs = songManager.filteredSongs;
-          return ListView.builder(
-              padding: const EdgeInsets.all(4),
-              itemCount: filteredSongs.length,
-              itemBuilder: (_, index) {
-                return SongListTile(filteredSongs[index]);
-              });
+          ScrollController _scrollTagsController = ScrollController();
+          return Scrollbar(
+                    isAlwaysShown: true,
+                    controller: _scrollTagsController,
+                    child: ListView.builder(
+                                padding: const EdgeInsets.all(4),
+                                itemCount: filteredSongs.length,
+                                itemBuilder: (_, index) {
+                                  return SongListTile(filteredSongs[index]);
+                                }
+                            )
+                  );
         },
       ),
     );

@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:louvor_app/helpers/app_list_pool.dart';
 import 'package:louvor_app/helpers/date_utils.dart';
 import 'package:louvor_app/helpers/loading_screen.dart';
 import 'package:louvor_app/helpers/multi_utils.dart';
@@ -69,8 +71,13 @@ class ServiceScreenState extends State<ServiceScreen> {
 
   ScrollController _scrollVolunteersController = ScrollController();
 
+  GlobalKey<AutoCompleteTextFieldState<String>> key = new GlobalKey();
+  TextEditingController _controllerdirigente = TextEditingController();
+  //String currentText = '';
+
   @override
   Widget build(BuildContext context) {
+    _controllerdirigente.text = (widget.service.dirigente != null || widget.service.dirigente != '') ? widget.service.dirigente : '';
 
     final primaryColor = Theme.of(context).primaryColor;
     bool toggleNight = true;
@@ -96,34 +103,44 @@ class ServiceScreenState extends State<ServiceScreen> {
               child:
               Column(
                 children: <Widget>[
+
                   Row(
                       children: <Widget>[
+
                         Container(
-                          width: 135,
+                          width: 155,
                           child:
                           Padding(
-                            padding: const EdgeInsets.only(top: 2),
-                            child: TextFormField(
-                              initialValue: widget.service.dirigente,
-                              enabled:  UserManager.isUserAdmin,
-                              onSaved: (dr) => widget.service.dirigente = dr,
-                              decoration: const InputDecoration(
-                                hintText: 'Dirigente',
-                                border: InputBorder.none,
-                                labelText: 'Dirigente',
-                                labelStyle: TextStyle(fontSize: 15),
-                                icon: Icon(Icons.person_pin_sharp, size: 30,),
-                              ),
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: primaryColor,
-                              ),
-                            ),
+                              padding: const EdgeInsets.only(top: 2),
+                              child:
+                              SimpleAutoCompleteTextField(
+                                key: key,
+                                controller: _controllerdirigente,
+                                style: TextStyle(color: primaryColor, fontSize: 16, fontWeight: FontWeight.bold,),
+                                decoration: InputDecoration(
+                                  labelText: "Dirigente",
+                                  border: InputBorder.none,
+                                  contentPadding: const EdgeInsets.symmetric(vertical: 15),
+                                  hintText: 'Dirigente',
+                                  icon: Icon(Icons.person_pin_sharp, size: 25,),
+                                  //labelText: 'digite',
+                                ),
+                                suggestions: AppListPool.usersName,
+                                //textChanged: (text) => _controllerdirigente.text = text,
+                                clearOnSubmit: true,
+                                textSubmitted: (text) =>
+                                    setState(() {
+                                      if (text != "") {
+                                        widget.service.dirigente = text;
+                                      }
+                                    }),
+                              )
+
                           ),
                         ),
+
                         Container(
-                          width: 140,
+                          width: 125,
                           child:
                               GestureDetector(
                                       onTap: () {
@@ -139,7 +156,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                                     decoration: InputDecoration(
                                                     labelText: "Data",
                                                     border: InputBorder.none,
-                                                    icon: Icon(Icons.calendar_today),
+                                                    icon: Icon(Icons.calendar_today, size: 20,),
                                                   ),
                                     style: TextStyle(
                                       fontSize: 17,
@@ -157,14 +174,14 @@ class ServiceScreenState extends State<ServiceScreen> {
                         ),
 
                         Container(
-                          width: 50,
+                          width: 45,
                           child:
                               Column(
                                 children: [
                                   IconButton(
                                       icon: toggleNight
-                                          ? Icon(Icons.nights_stay)
-                                          : Icon(Icons.wb_sunny_sharp),
+                                          ? Icon(Icons.nights_stay, size: 20,)
+                                          : Icon(Icons.wb_sunny_sharp, size: 20,),
                                       color: Colors.blueGrey,
                                       onPressed: () {
                                             if(UserManager.isUserAdmin){
@@ -497,6 +514,65 @@ class ServiceScreenState extends State<ServiceScreen> {
       return true;
     }
 
+    //Ambas vazios
+    if(widget.serviceWithoutChanges.team.keys.length + widget.service.team.keys.length == 0){
+      return false;
+    }
+
+    //Quantidade de roles diferentes
+    if(widget.serviceWithoutChanges.team.keys.length != widget.service.team.keys.length){
+      return true;
+    }
+
+    //valido se todas as roles são iguais
+    var qtdRoles = widget.service.team.keys.length;
+    widget.service.team.keys.forEach((roleChange) {
+      if(widget.serviceWithoutChanges.team.keys.contains(roleChange)){
+        qtdRoles--;
+      }
+    });
+
+    if(qtdRoles != 0){
+      return true;
+    }
+
+    //Se passou nas condições acima
+    //siginifica que os maps possuem as mesmas roles.
+    //Então validarei os valores das chaves
+    bool hasNewVolunteer = false;
+    widget.service.team.forEach((role, volunteersWithChange) {
+
+      //Adição de um volunteer
+      volunteersWithChange.forEach((volunteerWithChange) {
+        if(!widget.serviceWithoutChanges.team[role].contains(volunteerWithChange)){
+          hasNewVolunteer = true;
+          return;
+        }
+      });
+
+    });
+
+    if(hasNewVolunteer){
+      return hasNewVolunteer;
+    }
+
+    bool hasRemoveVolunteer = false;
+    widget.serviceWithoutChanges.team.forEach((role, volunteersWithoutChange) {
+
+      //remoção de um volunteer
+      volunteersWithoutChange.forEach((volunteerWithoutChange) {
+        if(!widget.service.team[role].contains(volunteerWithoutChange)){
+          hasRemoveVolunteer = true;
+          return;
+        }
+      });
+
+    });
+
+    if(hasRemoveVolunteer){
+      return hasRemoveVolunteer;
+    }
+
     return false;
   }
 
@@ -535,6 +611,60 @@ class ServiceScreenState extends State<ServiceScreen> {
         });
       }
     }
+  }
+
+  bool isTeamMapsHasChanges(Service teamWithoutChanges, Service teamWithChanges){
+
+    //Ambas vazios
+    if(teamWithoutChanges.team.keys.length + teamWithChanges.team.keys.length == 0){
+      return false;
+    }
+
+    //Quantidade de roles diferentes
+    if(teamWithoutChanges.team.keys.length != teamWithChanges.team.keys.length){
+      return true;
+    }
+
+    //valido se todas as roles são iguais
+    var qtdRoles = teamWithChanges.team.keys.length;
+    teamWithChanges.team.keys.forEach((roleChange) {
+      if(teamWithoutChanges.team.keys.contains(roleChange)){
+        qtdRoles--;
+      }
+    });
+
+    if(qtdRoles != 0){
+      return true;
+    }
+
+    //Se passou nas condições acima
+    //siginifica que os maps possuem as mesmas roles.
+    //Então validarei os valores das chaves
+    teamWithChanges.team.forEach((role, volunteersWithChange) {
+
+      //Adição de um volunteer
+      volunteersWithChange.forEach((volunteerWithChange) {
+        if(!teamWithoutChanges.team[role].contains(volunteerWithChange)){
+          return true;
+        }
+      });
+
+    });
+
+    teamWithoutChanges.team.forEach((role, volunteersWithoutChange) {
+
+      //remoção de um volunteer
+      volunteersWithoutChange.forEach((volunteerWithoutChange) {
+        if(!teamWithChanges.team[role].contains(volunteerWithoutChange)){
+          return true;
+        }
+      });
+
+    });
+
+
+    return false;
+
   }
 
   String getPredifiniedWhatsAppMessage(Service service) {
