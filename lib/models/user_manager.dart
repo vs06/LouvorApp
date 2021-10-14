@@ -76,6 +76,12 @@ class UserManager extends ChangeNotifier {
     notifyListeners();
   }
 
+  static Future<void> resetPassword(String email) async {
+    var auth = FirebaseAuth.instance;
+    await auth.sendPasswordResetEmail(email: email);
+    auth = null;
+  }
+
   Future<void> _loadCurrentUser({FirebaseUser firebaseUser}) async {
     final FirebaseUser currentUser = firebaseUser ?? await auth.currentUser();
     if(currentUser != null){

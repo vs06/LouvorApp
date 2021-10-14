@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:louvor_app/helpers/dialog_utils.dart';
 import 'package:louvor_app/helpers/validators.dart';
 import 'package:louvor_app/models/user.dart';
 import 'package:louvor_app/models/user_manager.dart';
@@ -105,7 +106,12 @@ class LoginScreen extends StatelessWidget {
                 alignment: Alignment.centerRight,
                 child: FlatButton(
                   onPressed: (){
-
+                    if(!emailValid(emailController.text)){
+                      DialogUtils.alert(context, 'Email inválido.', 'O email: ${emailController.text}, não é válido', 'Ok');
+                    }else {
+                        UserManager.resetPassword(emailController.text);
+                        DialogUtils.alert(context, 'Recuperação de senha', 'Foi enviado um link, para o email: ${emailController.text}.\nLá você poderá alterar sua senha, para acessar Louvor App', 'Ok');
+                    }
                   },
                   padding: EdgeInsets.zero,
                   child: const Text(
