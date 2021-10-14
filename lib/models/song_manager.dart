@@ -17,6 +17,7 @@ class SongManager extends ChangeNotifier{
   User user;
 
   List<Song> allSongs = [];
+  List<Song> allInactiveSongs = [];
 
   SongSearchDTO _searchDTO = new SongSearchDTO();
 
@@ -37,9 +38,33 @@ class SongManager extends ChangeNotifier{
     if(searchDTO.isfiltersEmpty()){
       filteredSongs.addAll(allSongs);
     } else {
+      if(searchDTO.inactiveFilter){
+        filteredSongs.addAll(
+            allInactiveSongs.where(
+                    (song) => (searchDTO.hasMatchWithSong(song))
+            )
+        );
+      }else{
+        filteredSongs.addAll(
+            allSongs.where(
+                    (song) => (searchDTO.hasMatchWithSong(song))
+            )
+        );
+      }
+    }
+
+    return filteredSongs;
+  }
+
+  List<Song> get filteredInactiveSongs {
+    final List<Song> filteredSongs = [];
+
+    if(searchDTO.isfiltersEmpty()){
+      filteredSongs.addAll(allSongs);
+    } else {
       filteredSongs.addAll(
           allSongs.where(
-                          (song) => (searchDTO.hasMatchWithSong(song))
+                  (song) => (searchDTO.hasMatchWithSong(song))
           )
       );
     }
@@ -244,19 +269,37 @@ class SongManager extends ChangeNotifier{
     notifyListeners();
   }
 
+  Future<void> loadAllSongInactive() async {
+    final QuerySnapshot snapSongs = await firestore.collection('songs').where('ativo', isEqualTo: 'FALSE').getDocuments();
+
+    allInactiveSongs = snapSongs.documents.map((d) => Song.fromDocument(d)).toList();
+
+    notifyListeners();
+  }
+
   void update(Song song){
     song.uid = user.id;
 
     if(song.ativo.toUpperCase() != 'TRUE'){
       allSongs.removeWhere((s) => s.id == song.id);
+
+      int indexToBeUpdated = allInactiveSongs.indexWhere((s) => s.id == song.id);
+      if( indexToBeUpdated != -1){
+        allInactiveSongs.add(song);
+      }
+
     }else{
       int indexToBeUpdated = allSongs.indexWhere((s) => s.id == song.id);
-      allSongs[indexToBeUpdated] = song;
+      if( indexToBeUpdated == -1){
+        allSongs.add(song);
+      }else{
+        allSongs[indexToBeUpdated] = song;
+      }
     }
 
     song.save();
-  notifyListeners();
-}
+    notifyListeners();
+  }
 
   updateUser(UserManager userManager) {
     user = userManager.user;
@@ -265,7 +308,5 @@ class SongManager extends ChangeNotifier{
       _loadAllSong(userManager);
     }
   }
-
-  void insert(Song song) {}
 
 }

@@ -44,6 +44,8 @@ class SongScreenState extends State<SongScreen> {
   @override
   Widget build(BuildContext context) {
 
+    bool toggleActive = widget.song.ativo.toUpperCase() == 'TRUE';
+
     if(widget.song.palmas == null){
       widget.song.palmas = '';
     }
@@ -51,7 +53,6 @@ class SongScreenState extends State<SongScreen> {
     if(widget.song.tags == null){
       widget.song.tags = '';
     }
-
 
     comPalmas = widget.song.palmas.contains('comPalmas');
     semPalmas = widget.song.palmas.contains('semPalmas');
@@ -93,7 +94,7 @@ class SongScreenState extends State<SongScreen> {
                               ),
                             ),
                             Container(
-                              width: 260,
+                              width: 220,
                               child:
                               TextFormField(
                                 initialValue: widget.song.nome,
@@ -107,6 +108,24 @@ class SongScreenState extends State<SongScreen> {
                                   fontWeight: FontWeight.bold,
                                   color: Colors.blueGrey,),
                               ),
+                            ),
+                            Container(
+                              width: 40,
+                              child:
+                              IconButton(
+                                  icon: toggleActive
+                                      ? Icon(Icons.check_circle, size: 25
+                                      , color: Colors.blueAccent )
+                                      : Icon(Icons.check_circle, size: 25, color:  Colors.blueGrey,),
+                                  color: Colors.blueGrey,
+                                  onPressed: () {
+                                    if(UserManager.isUserAdmin){
+                                      setState(() {
+                                        toggleActive = !toggleActive;
+                                      });
+                                      widget.song.ativo = toggleActive ? 'TRUE' : 'FALSE';
+                                    }
+                                  }),
                             )
                           ],
                         )

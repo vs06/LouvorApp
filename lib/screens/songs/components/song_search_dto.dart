@@ -5,9 +5,10 @@ class SongSearchDTO{
   String search = '';
   List<String> tagsFilter = [];
   List<String> palmasFilter = [];
+  bool inactiveFilter = false;
 
   bool isfiltersEmpty(){
-    return search == '' && tagsFilter.length == 0 && palmasFilter.length == 0;
+    return search == '' && tagsFilter.length == 0 && palmasFilter.length == 0 && inactiveFilter == false;
   }
 
   bool hasMatchWithSong(Song song){
@@ -15,6 +16,7 @@ class SongSearchDTO{
       bool isFilterNomeAndLetra = search != '';
       bool isFilterTags = tagsFilter.length != 0;
       bool isFilterClaps = palmasFilter.length != 0;
+      bool isFilterInactive = inactiveFilter;
 
       int qtdFilters = 0;
       int qtdMathFilters = 0;
@@ -42,7 +44,14 @@ class SongSearchDTO{
             qtdMathFilters++;
           }
         });
+
       }
+
+      if(isFilterInactive){
+        qtdFilters++;
+        qtdMathFilters++;
+      }
+
       return qtdMathFilters >= qtdFilters;
 
   }
@@ -69,6 +78,10 @@ class SongSearchDTO{
       resumeFilters = resumeFilters.substring(0, resumeFilters.length-1);
     }
 
+    if(this.inactiveFilter){
+      resumeFilters += '\nMúsicas inativas';
+    }
+
     return resumeFilters;
   }
 
@@ -76,6 +89,7 @@ class SongSearchDTO{
       this.search = '';
       this.tagsFilter = [];
       this.palmasFilter = [];
+      this.inactiveFilter = false;
   }
 
 }

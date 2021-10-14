@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:louvor_app/models/tag_manager.dart';
 import 'package:louvor_app/screens/songs/components/song_search_dto.dart';
 
+import '../songs_screen.dart';
+
 class SearchDialog extends StatefulWidget {
 
-  const SearchDialog(this.songSearchDTO);
+  const SearchDialog(this.songSearchDTO, this.screenType);
 
   final SongSearchDTO songSearchDTO;
+  final Type screenType;
 
   @override
   State<StatefulWidget> createState() {
@@ -18,7 +21,6 @@ class SearchDialog extends StatefulWidget {
 
 class SearchDialogState extends State<SearchDialog>{
 
-  //var tagsFiltered = [];
   GlobalKey<AutoCompleteTextFieldState<String>> key = new GlobalKey();
   String currentText = "";
   List<String> suggestions = TagManager.allTagsAsStrings();
@@ -27,6 +29,8 @@ class SearchDialogState extends State<SearchDialog>{
   //Controle inicial filters: Dinâmica
   bool semPalmas = false;
   bool comPalmas = false;
+
+  bool repertorioInativo = false;
 
   @override
   Widget build(BuildContext context) {
@@ -197,7 +201,8 @@ class SearchDialogState extends State<SearchDialog>{
                                                 children: [
                                                   SwitchListTile(
                                                       title: const Text('Sem Palma',
-                                                        style: TextStyle(fontSize: 15,),),
+                                                        style: TextStyle(fontSize: 15,color: Colors.blueGrey),
+                                                      ),
                                                       value: semPalmas,
                                                       onChanged: (bool value) {
                                                         setState(() {
@@ -225,7 +230,8 @@ class SearchDialogState extends State<SearchDialog>{
                                                   children: [
                                                     SwitchListTile(
                                                         title: const Text('Com Palmas',
-                                                          style: TextStyle(fontSize: 15,),),
+                                                          style: TextStyle(fontSize: 15,color: Colors.blueGrey),
+                                                        ),
                                                         value: comPalmas,
                                                         onChanged: (bool value) {
                                                           setState(() {
@@ -250,7 +256,63 @@ class SearchDialogState extends State<SearchDialog>{
                                         ],
                                       )
                                   ),
-                        )
+                        ),
+
+                        Visibility(
+                            visible: widget.screenType == SongsScreen,
+                            child: Column(
+                                          children: [
+                                                      Row(
+                                                        children: [
+                                                          Padding(
+                                                            padding: EdgeInsets.only(top: 10, left: 10, bottom: 5),
+                                                            child:
+                                                            Text('Repertorio',
+                                                              style: TextStyle(fontSize: 18,
+                                                                fontWeight: FontWeight.bold,
+                                                                color: Colors.lightBlue,),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+
+                                                      Padding(
+                                                        padding: EdgeInsets.only(left: 10, bottom: 10),
+                                                        child: Container(
+                                                            width: 320,
+                                                            child: Row(
+                                                              children: [
+                                                                Container(
+                                                                    width: 165,
+                                                                    child:
+                                                                    Column(
+                                                                        children: [
+                                                                          SwitchListTile(
+                                                                              title: repertorioInativo
+                                                                                  ? const Text( 'Músicas inativas',
+                                                                                style: TextStyle(fontSize: 15, color: Colors.blueGrey),
+                                                                              )
+                                                                                  : const Text( 'Músicas ativas',
+                                                                                style: TextStyle(fontSize: 15, color: Colors.blueGrey),
+                                                                              ),
+                                                                              value: repertorioInativo,
+                                                                              onChanged: (bool value) {
+                                                                                setState(() {
+                                                                                  repertorioInativo = value;
+                                                                                  widget.songSearchDTO.inactiveFilter = repertorioInativo;
+                                                                                });
+                                                                              }
+                                                                          ),
+                                                                        ]
+                                                                    )
+                                                                ),
+                                                              ],
+                                                            )
+                                                        ),
+                                                      )
+                                          ],
+                            )
+                        ),
 
                       ],
                     ),

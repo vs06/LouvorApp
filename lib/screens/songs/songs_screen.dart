@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:louvor_app/common/custom_drawer/custom_drawer.dart';
 import 'package:louvor_app/models/song_manager.dart';
@@ -35,9 +37,12 @@ class SongsScreen extends StatelessWidget {
                     onTap: () async {
                       await showDialog<String>(
                           context: context,
-                          builder: (_) => SearchDialog(songManager.searchDTO)
+                          builder: (_) => SearchDialog(songManager.searchDTO, SongsScreen)
                       );
                       if (!songManager.searchDTO.isfiltersEmpty()) {
+                        if(songManager.searchDTO.inactiveFilter){
+                           songManager.loadAllSongInactive();
+                        }
                         songManager.notifyListenersCurrentState();
                       }
                     },
@@ -68,9 +73,9 @@ class SongsScreen extends StatelessWidget {
                   onPressed: () async {
                     await showDialog<String>(
                         context: context,
-                        builder: (_) => SearchDialog(songManager.searchDTO));
+                        builder: (_) => SearchDialog(songManager.searchDTO, SongsScreen));
                     if (!songManager.searchDTO.isfiltersEmpty()) {
-                      songManager.notifyListenersCurrentState();
+                      songManager.loadAllSongInactive();
                     }
                   },
                 );
@@ -118,4 +123,9 @@ class SongsScreen extends StatelessWidget {
       ),
     );
   }
+
+  // void teste(){
+  //   inactiveFilter for true ==         filteredSongs[index].ativo.toUpperCase() == 'FALSE'
+  //   inactiveFilter for false ==        filteredSongs[index].ativo.toUpperCase() == 'TRUE'
+  // }
 }

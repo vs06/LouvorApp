@@ -92,7 +92,7 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
                       onTap: () async {
                         await showDialog<String>(
                             context: context,
-                            builder: (_) => SearchDialog(songManager.searchDTO)
+                            builder: (_) => SearchDialog(songManager.searchDTO, SongsServiceScreen)
                         );
                         if (!songManager.searchDTO.isfiltersEmpty()) {
                           songManager.notifyListenersCurrentState();
@@ -124,7 +124,7 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
                     onPressed: () async {
                       await showDialog<String>(
                           context: context,
-                          builder: (_) => SearchDialog(songManager.searchDTO));
+                          builder: (_) => SearchDialog(songManager.searchDTO, SongsServiceScreen));
                       if (!songManager.searchDTO.isfiltersEmpty()) {
                         songManager.notifyListenersCurrentState();
                       }

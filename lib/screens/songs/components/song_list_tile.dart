@@ -46,7 +46,8 @@ class SongListTile extends StatelessWidget {
         Navigator.of(context).pushNamed('/song', arguments: song);
       },
       child: Visibility(
-        visible: song.ativo.toLowerCase() == 'true',
+        //visible: song.ativo.toLowerCase() == 'true',
+        visible: true,
         child: Card(
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(4)
