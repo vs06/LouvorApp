@@ -101,7 +101,7 @@ class RehearsalsScreen extends StatelessWidget {
       body: Consumer<RehearsalManager>(
         builder: (_, rehearsalManager, __) {
           final filteredRehearsals = rehearsalManager.filteredRehearsalsByMounth(filterByMonth);
-          return filteredRehearsals.length > 1 ?
+          return filteredRehearsals.length > 0 ?
             ListView.builder(
               padding: const EdgeInsets.all(4),
               itemCount: filteredRehearsals.length,

@@ -112,7 +112,7 @@ class ServicesScreen extends StatelessWidget {
           lstServicesUsedAsResume = [];
           filteredServices.forEach((service) => lstServicesUsedAsResume.add(service));
           return
-            filteredServices.length > 1 ?
+            filteredServices.length > 0 ?
                       ListView.builder(
                         padding: const EdgeInsets.all(4),
                         itemCount: filteredServices.length,

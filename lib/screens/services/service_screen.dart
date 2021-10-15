@@ -471,7 +471,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                                             widget.formKey.currentState.save();
                                             context.read<ServiceManager>().update(service);
                                             Navigator.of(context).pop();
-                                            String predifiniedWhatsAppMessage = getPredifiniedWhatsAppMessage(widget.service);
+                                            String predifiniedWhatsAppMessage = ( widget.service.lstSongs != null && widget.service.lstSongs.length > 0 )  ? getPredifiniedWhatsAppMessage(widget.service) : null;
                                             Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoadingScreen.whatsAppMessage(predifiniedWhatsAppMessage)));
 
                                           }
