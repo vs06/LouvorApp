@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:louvor_app/common/custom_drawer/custom_drawer.dart';
+import 'package:louvor_app/helpers/date_utils.dart';
 import 'package:louvor_app/models/Rehearsal.dart';
 import 'package:louvor_app/models/rehearsal_manager.dart';
 import 'package:louvor_app/models/user_manager.dart';
@@ -100,12 +101,23 @@ class RehearsalsScreen extends StatelessWidget {
       body: Consumer<RehearsalManager>(
         builder: (_, rehearsalManager, __) {
           final filteredRehearsals = rehearsalManager.filteredRehearsalsByMounth(filterByMonth);
-          return ListView.builder(
+          return filteredRehearsals.length > 1 ?
+            ListView.builder(
               padding: const EdgeInsets.all(4),
               itemCount: filteredRehearsals.length,
               itemBuilder: (_, index) {
                 return RehearsalListTile(filteredRehearsals[index]);
-              });
+              })
+          : Center(
+              child:
+                  Text('Sem ensaios\nCadastrados em: ${DateUtils.mounthBr(filterByMonth)}',
+                  style: TextStyle(
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.w800,
+                                    color: Theme.of(context).primaryColor
+                                   ),
+                  )
+          );
         },
       )
     );

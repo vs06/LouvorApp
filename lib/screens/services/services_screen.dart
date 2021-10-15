@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:louvor_app/common/custom_drawer/custom_drawer.dart';
 import 'package:louvor_app/helpers/app_list_pool.dart';
+import 'package:louvor_app/helpers/date_utils.dart';
 import 'package:louvor_app/helpers/multi_utils.dart';
 import 'package:louvor_app/models/Service.dart';
 import 'package:louvor_app/models/service_manager.dart';
@@ -110,12 +111,24 @@ class ServicesScreen extends StatelessWidget {
           orderTeamRoles(filteredServices);
           lstServicesUsedAsResume = [];
           filteredServices.forEach((service) => lstServicesUsedAsResume.add(service));
-          return ListView.builder(
-              padding: const EdgeInsets.all(4),
-              itemCount: filteredServices.length,
-              itemBuilder: (_, index) {
-                return ServiceListTile(filteredServices[index]);
-              });
+          return
+            filteredServices.length > 1 ?
+                      ListView.builder(
+                        padding: const EdgeInsets.all(4),
+                        itemCount: filteredServices.length,
+                        itemBuilder: (_, index) {
+                          return ServiceListTile(filteredServices[index]);
+                        })
+          : Center(
+              child:
+              Text('Sem Cultos\nCadastrados em: ${DateUtils.mounthBr(filterByMonth)}',
+                  style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.w800,
+                  color: Theme.of(context).primaryColor
+              ),
+              )
+            );
         },
       ),
         floatingActionButton:
