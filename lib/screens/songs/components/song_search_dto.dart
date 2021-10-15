@@ -39,11 +39,17 @@ class SongSearchDTO{
 
       if(isFilterClaps){
         qtdFilters++;
-        this.palmasFilter.forEach((filter) {
-          if(song.palmas.toLowerCase().contains(filter.toLowerCase())){
-            qtdMathFilters++;
-          }
-        });
+        if(this.palmasFilter.length == 2){
+            if(song.palmas.toLowerCase().contains(this.palmasFilter[0].toLowerCase()) && song.palmas.toLowerCase().contains(this.palmasFilter[1].toLowerCase())){
+              qtdMathFilters++;
+            }
+        }else{
+          this.palmasFilter.forEach((filter) {
+            if(song.palmas.toLowerCase().contains(filter.toLowerCase())){
+              qtdMathFilters++;
+            }
+          });
+        }
 
       }
 
