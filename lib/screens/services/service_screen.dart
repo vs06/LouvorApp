@@ -16,7 +16,7 @@ import 'package:louvor_app/screens/songs/songs_service_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'TeamServiceScreen.dart';
+import 'team_service_screen.dart';
 
 class ServiceScreen extends StatefulWidget {
 
