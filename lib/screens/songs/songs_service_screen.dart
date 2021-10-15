@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:louvor_app/common/custom_drawer/custom_drawer.dart';
 import 'package:louvor_app/helpers/date_utils.dart';
@@ -174,7 +176,7 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
                                   children: <Widget>[
                                     const SizedBox(width: 16,),
                                     Expanded(
-                                      flex: 5,
+                                      flex: 8,
                                       child: Column(
                                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -220,7 +222,6 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
                                         flex: 2, // 20%
                                         child: Column(
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            //crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               Row(
                                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -236,7 +237,7 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
                                                       child: Icon(
                                                         Icons.add_circle_sharp,
                                                         color: Colors.lightBlue,
-                                                        size: 30,
+                                                        size: 35,
                                                       ),
                                                     ),
                                                   ]
@@ -273,80 +274,92 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
                     );
                   }),
             ),
-            Text('Músicas Selecionadas',
-              style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w800,
-                  color: Theme.of(context).primaryColor
-              ),
-            ),
-            // Column(
-            //     children:<Widget>[
-                    Expanded(
-                      flex: 4, // 40%
-                      child:
-                            ListView.builder(
-                                  padding: const EdgeInsets.all(8),
-                                  itemCount: widget._lstSongSelecionadas.length,
-                                  shrinkWrap: true,
-                                  itemBuilder: (BuildContext context, int index) {
-                                  return Card(
-                                              shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(4)
-                                        ),
-                                      child: Container(
-                                        height: 40,
-                                        padding: const EdgeInsets.all(8),
-                                        child: Row(
-                                          children: <Widget>[
-                                            const SizedBox(width: 16,),
-                                            Column(
-                                                children: [
-                                                  Expanded(
-                                                    flex: 5,
-                                                    child: Column(
-                                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                      children: <Widget>[
-                                                        Row(
-                                                          children: [
-                                                            Container(
-                                                              width: 260,
-                                                              child:  Text(
-                                                                        widget._lstSongSelecionadas[index].nome,
-                                                                        overflow: TextOverflow.ellipsis,
-                                                                        style: TextStyle(
-                                                                          fontSize: 16,
-                                                                          fontWeight: FontWeight.w800,
-                                                                        ),
-                                                                      ),
-                                                            ),
-                                                            Container(
-                                                                child: GestureDetector(
-                                                                          onTap: () {
-                                                                            setState(() {
-                                                                              widget._lstSongSelecionadas.removeWhere((element) => element.nome == widget._lstSongSelecionadas[index].nome);
-                                                                            });
-                                                                          },
-                                                                          child:Icon(Icons.delete , color: Colors.blueGrey,),
-                                                                        ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ]
-                                              )
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                               }
-                     ),
+
+            Row(
+              children: [
+                  const SizedBox(width: 75),
+                  Text('Músicas Selecionadas',
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w800,
+                        color: Theme.of(context).primaryColor
                     ),
-             //     ]
-             // ),
+                  ),
+
+                Transform.rotate(
+                  angle: 60 * pi / 40,
+                  child: IconButton(
+                    icon: Icon(Icons.subdirectory_arrow_left , color: Colors.blue, size: 30, ),
+                    onPressed: null,
+                  ),
+                ),
+              ],
+
+            ),
+
+            Expanded(
+              flex: 4, // 40%
+              child:
+                    ListView.builder(
+                          padding: const EdgeInsets.all(8),
+                          itemCount: widget._lstSongSelecionadas.length,
+                          shrinkWrap: true,
+                          itemBuilder: (BuildContext context, int index) {
+                          return Card(
+                                      shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(4)
+                                ),
+                              child: Container(
+                                height: 40,
+                                padding: const EdgeInsets.all(8),
+                                child: Row(
+                                  children: <Widget>[
+                                    const SizedBox(width: 16,),
+                                    Column(
+                                        children: [
+                                          Expanded(
+                                            flex: 5,
+                                            child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                Row(
+                                                  children: [
+                                                    Container(
+                                                      width: 260,
+                                                      child:  Text(
+                                                                widget._lstSongSelecionadas[index].nome,
+                                                                overflow: TextOverflow.ellipsis,
+                                                                style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  fontWeight: FontWeight.w800,
+                                                                ),
+                                                              ),
+                                                    ),
+                                                    Container(
+                                                        child: GestureDetector(
+                                                                  onTap: () {
+                                                                    setState(() {
+                                                                      widget._lstSongSelecionadas.removeWhere((element) => element.nome == widget._lstSongSelecionadas[index].nome);
+                                                                    });
+                                                                  },
+                                                                  child:Icon(Icons.delete , color: Colors.blueGrey,),
+                                                                ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ]
+                                      )
+                                  ],
+                                ),
+                              ),
+                            );
+                       }
+             ),
+            ),
             ElevatedButton.icon(
               onPressed: () {
                 widget.service.lstSongs.clear();

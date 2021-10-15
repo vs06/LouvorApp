@@ -97,6 +97,7 @@ class SongScreenState extends State<SongScreen> {
                               width: 220,
                               child:
                               TextFormField(
+                                enabled: UserManager.isUserAdmin,
                                 initialValue: widget.song.nome,
                                 onSaved: (titulo) => widget.song.nome = titulo,
                                 decoration: const InputDecoration(
@@ -145,6 +146,7 @@ class SongScreenState extends State<SongScreen> {
                             width: 260,
                             child:
                             TextFormField(
+                              enabled: UserManager.isUserAdmin,
                               initialValue: widget.song.artista,
                               onSaved: (tb) => widget.song.artista = tb,
                               decoration: const InputDecoration(
@@ -167,6 +169,7 @@ class SongScreenState extends State<SongScreen> {
                             padding: const EdgeInsets.only(
                                 top: 0, bottom: 4, left: 2),
                             child: TextFormField(
+                              enabled: UserManager.isUserAdmin,
                               initialValue: widget.song.tom,
                               onSaved: (tema) => widget.song.tom = tema,
                               decoration: const InputDecoration(
@@ -185,6 +188,7 @@ class SongScreenState extends State<SongScreen> {
                           child: Padding(
                             padding: const EdgeInsets.only(top: 0, bottom: 2),
                             child: TextFormField(
+                              enabled: UserManager.isUserAdmin,
                               initialValue: widget.song.letra,
                               onSaved: (tags) => widget.song.letra = tags,
                               decoration: const InputDecoration(
@@ -201,71 +205,93 @@ class SongScreenState extends State<SongScreen> {
                       ],
                     ),
 
-                    Text('Tag\'s',
-                      style: TextStyle(fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: primaryColor,),
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                            width: 320,
-                            child:
-                            Column(
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 25),
+                    child: Row(
                               children: [
-                                Visibility(
-                                  visible: UserManager.isUserAdmin,
-                                  child: Container(
-                                    height: 35,
-                                    child: Center(
-                                      child: simpleAutoCompleteTags,),
-                                  ),
+                                Text('Tag\'s:',
+                                  style: TextStyle(fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: primaryColor,),
                                 ),
-                                Row(
-                                  children: [
-                                    Container(
-                                        height: tagsLst.length > 0 ? 70 : 5,
-                                        width: 320,
-                                        child:
-                                        Scrollbar(
-                                          isAlwaysShown: true,
-                                          controller: _scrollTagsController,
-                                          child: GridView.builder(
-                                            itemCount: tagsToListString(widget.song.tags).length,
-                                            gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
-                                              crossAxisCount: 2,
-                                              childAspectRatio: 4,
-                                            ),
-                                            itemBuilder: (BuildContext context,
-                                                int index) {
-                                              return Center(
-                                                  child:
-                                                  InputChip(
-                                                    padding: EdgeInsets.all(
-                                                        2.0),
-                                                    label: Text(tagsLst[index],
-                                                      style: TextStyle(
-                                                          color: Colors.white),
-                                                    ),
-                                                    backgroundColor: primaryColor,
-                                                    deleteIconColor: Colors.white,
-                                                    onDeleted: () {
-                                                      setState(() {
-                                                        widget.song.tags = widget.song.tags.replaceAll(tagsLst[index]+';', '');
-                                                      });
-                                                    },
-                                                  )
 
-                                              );
-                                            },
-                                          ),
+                                Padding(padding: EdgeInsets.only(top: 5),
+                                    child:  UserManager.isUserAdmin ?
+                                    Container(
+                                      height: 35,
+                                      width: 200,
+                                      child: Center(
+                                        child: simpleAutoCompleteTags,),
+                                    )
+                                        :
+                                    Visibility(
+                                        child: Text(' Sem tag cadastrada',
+                                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color: Colors.blueGrey,),
                                         )
                                     )
-                                  ],
                                 )
                               ],
+                            ),
+                  ),
+
+
+                    Row(
+                      children: [
+                        tagsLst.length > 0 ?
+                                Container(
+                                    height: tagsLst.length > 0 ? 70 : 5,
+                                    width: 320,
+                                    child:
+                                    Scrollbar(
+                                      isAlwaysShown: true,
+                                      controller: _scrollTagsController,
+                                      child: GridView.builder(
+                                        itemCount: tagsToListString(widget.song.tags).length,
+                                        gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 2,
+                                          childAspectRatio: 4,
+                                        ),
+                                        itemBuilder: (BuildContext context, int index) {
+                                          return Center(
+                                              child:
+                                              InputChip(
+                                                isEnabled: UserManager.isUserAdmin,
+                                                padding: EdgeInsets.all(2.0),
+                                                label: Text(tagsLst[index],
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                ),
+                                                backgroundColor: primaryColor,
+                                                deleteIconColor: Colors.white,
+                                                onDeleted: () {
+                                                  setState(() {
+                                                    widget.song.tags = widget.song.tags.replaceAll(tagsLst[index]+';', '');
+                                                  });
+                                                },
+                                              )
+
+                                          );
+                                        },
+                                      ),
+                                    )
+                                )
+                           : Visibility(
+                              visible: UserManager.isUserAdmin,
+                              child:
+                              Padding(
+                                padding: EdgeInsets.only(left:70, bottom: 1),
+                                child: InputChip(
+                                        label: Text('Sem tags cadastradas.',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        disabledColor: Colors.white,
+                                        selected: true,
+                                        selectedColor: primaryColor,
+                                        showCheckmark: false,
+
+                                      )
+                              )
                             )
-                        ),
                       ],
                     ),
 
@@ -294,23 +320,25 @@ class SongScreenState extends State<SongScreen> {
                                 Column(
                                   children: [
                                     SwitchListTile(
-                                        title: const Text('Sem Palma',
-                                          style: TextStyle(fontSize: 15,),),
+                                        title: const Text('Sem Palmas',
+                                                          style: TextStyle(fontSize: 15, color: Colors.blueGrey),
+                                                         ),
                                         value: semPalmas,
                                         onChanged: (bool value) {
-                                          setState(() {
-                                            semPalmas = value;
-                                            if (semPalmas) {
-                                              if (!widget.song.palmas.contains('semPalmas')) {
-                                                widget.song.palmas += 'semPalmas';
-                                              }
-                                            } else {
-                                              if (widget.song.palmas.contains('semPalmas')) {widget.song.palmas = widget.song.palmas.replaceAll('semPalmas', '');
-                                              }
-                                            }
-                                          });
+                                          if(UserManager.isUserAdmin){
+                                              setState(() {
+                                                semPalmas = value;
+                                                if (semPalmas) {
+                                                  if (!widget.song.palmas.contains('semPalmas')) {
+                                                    widget.song.palmas += 'semPalmas';
+                                                  }
+                                                } else {
+                                                  if (widget.song.palmas.contains('semPalmas')) {widget.song.palmas = widget.song.palmas.replaceAll('semPalmas', '');
+                                                  }
+                                                }
+                                              });
+                                          }
                                         }
-                                      //,secondary: const Icon(Icons.timelapse),
                                     ),
                                   ],
                                 )
@@ -322,22 +350,24 @@ class SongScreenState extends State<SongScreen> {
                                     children: [
                                       SwitchListTile(
                                           title: const Text('Com Palmas',
-                                            style: TextStyle(fontSize: 15,),),
+                                            style: TextStyle(fontSize: 15,color: Colors.blueGrey),),
                                           value: comPalmas,
                                           onChanged: (bool value) {
-                                            setState(() {
-                                              comPalmas = value;
-                                              if (comPalmas) {
-                                                if (!widget.song.palmas.contains('comPalmas')) {
-                                                  widget.song.palmas += 'comPalmas';
-                                                }
-                                              } else {
-                                                if (widget.song.palmas.contains(
-                                                    'comPalmas')) {
-                                                  widget.song.palmas = widget.song.palmas.replaceAll('comPalmas', '');
-                                                }
-                                              }
-                                            });
+                                            if(UserManager.isUserAdmin){
+                                                setState(() {
+                                                  comPalmas = value;
+                                                  if (comPalmas) {
+                                                    if (!widget.song.palmas.contains('comPalmas')) {
+                                                      widget.song.palmas += 'comPalmas';
+                                                    }
+                                                  } else {
+                                                    if (widget.song.palmas.contains(
+                                                        'comPalmas')) {
+                                                      widget.song.palmas = widget.song.palmas.replaceAll('comPalmas', '');
+                                                    }
+                                                  }
+                                                });
+                                            }
                                           }
                                         //,secondary: const Icon(Icons.timelapse),
                                       ),
@@ -353,6 +383,7 @@ class SongScreenState extends State<SongScreen> {
                       child: TextFormField(
                         initialValue: widget.song.cifra,
                         onSaved: (texto) => widget.song.cifra = texto,
+                        readOnly: true,
                         decoration: InputDecoration(
                           prefixIcon: GestureDetector( onTap: _launchChordsURL,
                                                        child:
@@ -377,6 +408,7 @@ class SongScreenState extends State<SongScreen> {
                       child: TextFormField(
                         initialValue: widget.song.videoUrl,
                         onSaved: (texto) => widget.song.videoUrl = texto,
+                        readOnly: true,
                         decoration: InputDecoration(
                           prefixIcon: GestureDetector( onTap: _launchVideoURL,
                                                        child:
@@ -456,9 +488,11 @@ class SongScreenState extends State<SongScreen> {
   _FirstPageState() {
     simpleAutoCompleteTags = SimpleAutoCompleteTextField(
       key: key,
-      style: TextStyle(color: Colors.blueGrey, fontSize: 16.0),
+      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color: Colors.blueGrey,),
       decoration: InputDecoration(
-        hintText: "  adicione uma tag",
+        border: InputBorder.none,
+        contentPadding: const EdgeInsets.symmetric(vertical: 12),
+        hintText: " Adicione uma tag",
         hintStyle: TextStyle(color: Colors.blueGrey),
       ),
       suggestions: suggestions,
@@ -476,7 +510,7 @@ class SongScreenState extends State<SongScreen> {
   }
 
   void saveNewTags(Song song) {
-    if(!song.tags.isEmpty && song.tags.length > 0){
+    if(song.tags.isNotEmpty && song.tags.length > 0){
       tagsToListString(song.tags).forEach((tagAdded) {
         if (!TagManager.allTagsAsStrings().contains(tagAdded)) {
           context.read<TagManager>().update(Tag.newTag(tagAdded));

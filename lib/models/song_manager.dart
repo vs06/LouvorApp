@@ -280,7 +280,7 @@ class SongManager extends ChangeNotifier{
   void update(Song song){
     song.uid = user.id;
 
-    if(song.ativo.toUpperCase() != 'TRUE'){
+    if(song.ativo.toUpperCase() == 'FALSE'){
       allSongs.removeWhere((s) => s.id == song.id);
 
       int indexToBeUpdated = allInactiveSongs.indexWhere((s) => s.id == song.id);

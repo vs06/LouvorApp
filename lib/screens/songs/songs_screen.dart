@@ -124,8 +124,4 @@ class SongsScreen extends StatelessWidget {
     );
   }
 
-  // void teste(){
-  //   inactiveFilter for true ==         filteredSongs[index].ativo.toUpperCase() == 'FALSE'
-  //   inactiveFilter for false ==        filteredSongs[index].ativo.toUpperCase() == 'TRUE'
-  // }
 }

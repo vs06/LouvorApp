@@ -70,10 +70,10 @@ class ServiceScreenState extends State<ServiceScreen> {
   }
 
   ScrollController _scrollVolunteersController = ScrollController();
+  ScrollController _scrollSongsController = ScrollController();
 
   GlobalKey<AutoCompleteTextFieldState<String>> key = new GlobalKey();
   TextEditingController _controllerdirigente = TextEditingController();
-  //String currentText = '';
 
   @override
   Widget build(BuildContext context) {
@@ -112,29 +112,40 @@ class ServiceScreenState extends State<ServiceScreen> {
                           child:
                           Padding(
                               padding: const EdgeInsets.only(top: 2),
-                              child:
-                              SimpleAutoCompleteTextField(
-                                key: key,
-                                controller: _controllerdirigente,
-                                style: TextStyle(color: primaryColor, fontSize: 16, fontWeight: FontWeight.bold,),
-                                decoration: InputDecoration(
-                                  labelText: "Dirigente",
-                                  border: InputBorder.none,
-                                  contentPadding: const EdgeInsets.symmetric(vertical: 15),
-                                  hintText: 'Dirigente',
-                                  icon: Icon(Icons.person_pin_sharp, size: 25,),
-                                  //labelText: 'digite',
-                                ),
-                                suggestions: AppListPool.usersName,
-                                //textChanged: (text) => _controllerdirigente.text = text,
-                                clearOnSubmit: true,
-                                textSubmitted: (text) =>
-                                    setState(() {
-                                      if (text != "") {
-                                        widget.service.dirigente = text;
-                                      }
-                                    }),
-                              )
+                              child: UserManager.isUserAdmin ?
+                                    SimpleAutoCompleteTextField(
+                                      key: key,
+                                      controller: _controllerdirigente,
+                                      style: TextStyle(color: primaryColor, fontSize: 16, fontWeight: FontWeight.bold,),
+                                      decoration: InputDecoration(
+                                        labelText: "Dirigente",
+                                        border: InputBorder.none,
+                                        contentPadding: const EdgeInsets.symmetric(vertical: 15),
+                                        hintText: 'Dirigente',
+                                        icon: Icon(Icons.person_pin_sharp, size: 25,),
+                                      ),
+                                      suggestions: AppListPool.usersName,
+                                      //textChanged: (text) => _controllerdirigente.text = text,
+                                      clearOnSubmit: true,
+                                      textSubmitted: (text) =>
+                                          setState(() {
+                                            if (text != "") {
+                                              widget.service.dirigente = text;
+                                            }
+                                          }),
+                                    ) :
+                                   TextFormField(
+                                         controller: _controllerdirigente,
+                                         readOnly: true,
+                                         style: TextStyle(color: primaryColor, fontSize: 16, fontWeight: FontWeight.bold,),
+                                         decoration: InputDecoration(
+                                           labelText: "Dirigente",
+                                           border: InputBorder.none,
+                                           contentPadding: const EdgeInsets.symmetric(vertical: 15),
+                                           hintText: 'Dirigente',
+                                           icon: Icon(Icons.person_pin_sharp, size: 25,),
+                                         ),
+                                   ),
 
                           ),
                         ),
@@ -156,7 +167,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                                     decoration: InputDecoration(
                                                     labelText: "Data",
                                                     border: InputBorder.none,
-                                                    icon: Icon(Icons.calendar_today, size: 20,),
+                                                    icon: Icon(Icons.calendar_today, size: 20, color: Colors.blueGrey,),
                                                   ),
                                     style: TextStyle(
                                       fontSize: 17,
@@ -349,97 +360,102 @@ class ServiceScreenState extends State<ServiceScreen> {
                   Expanded(
                     flex: 2,
                     child:
-                        ListView.builder(
-                          padding: const EdgeInsets.all(8),
-                          itemCount: widget.service.lstSongs == null ? 0 : widget.service.lstSongs.length,
-                          shrinkWrap: true,
-                          itemBuilder: (BuildContext context, int index) {
-                            return
-                                Column(
-                                    children: [
-                                      Card(
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(4)),
-                                          child: Container(
-                                              height: 40,
-                                              padding: const EdgeInsets.all(8),
-                                              child:
-                                              Row(
-                                                  children: <Widget>[
-                                                    const SizedBox( width: 16,),
-                                                          Expanded(
-                                                              flex: 5,
-                                                              child: Column(
-                                                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                                  children: <Widget>[
+                    Scrollbar(
+                      isAlwaysShown: true,
+                      controller: _scrollSongsController,
+                      child:
+                                ListView.builder(
+                                    padding: const EdgeInsets.all(8),
+                                    itemCount: widget.service.lstSongs == null ? 0 : widget.service.lstSongs.length,
+                                    shrinkWrap: true,
+                                    itemBuilder: (BuildContext context, int index) {
+                                      return
+                                        Column(
+                                            children: [
+                                              Card(
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(4)),
+                                                  child: Container(
+                                                      height: 45,
+                                                      padding: const EdgeInsets.all(8),
+                                                      child:
+                                                      Row(
+                                                          children: <Widget>[
+                                                            const SizedBox( width: 5),
+                                                            Expanded(
+                                                                flex: 5,
+                                                                child: Column(
+                                                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                                    children: <Widget>[
+                                                                      Row(
+                                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                          children: [
+                                                                            Flexible(child:
+                                                                            Text(
+                                                                              widget.service.lstSongs[index].nome,
+                                                                              overflow: TextOverflow.ellipsis,
+                                                                              style: TextStyle(
+                                                                                fontSize: 16,
+                                                                                fontWeight:
+                                                                                FontWeight.w800,
+                                                                              ),
+                                                                            ),
+                                                                            )
+                                                                          ]
+                                                                      )
+                                                                    ]
+                                                                )
+                                                            ),
+                                                            //  SizedBox(width: 5),
+                                                            Expanded(
+                                                                flex: 3, // 20%
+                                                                child:
+                                                                Column(
+                                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                  children: [
                                                                     Row(
-                                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                        children: [
-                                                                          Flexible(child:
-                                                                              Text(
-                                                                                widget.service.lstSongs[index].nome,
-                                                                                overflow: TextOverflow.ellipsis,
-                                                                                style: TextStyle(
-                                                                                  fontSize: 16,
-                                                                                  fontWeight:
-                                                                                  FontWeight.w800,
-                                                                                ),
+                                                                      children: [
+                                                                        Visibility(
+                                                                          visible: StringUtils.isNotNUllNotEmpty(widget.service.lstSongs[index].cifra),
+                                                                          child:
+                                                                          Align(
+                                                                            alignment: Alignment.topRight,
+                                                                            child: GestureDetector(
+                                                                              onTap: () => _launchChordsURL(widget.service.lstSongs[index]),
+                                                                              child: Icon(
+                                                                                Icons.straighten_rounded,
+                                                                                color: Colors.blueGrey,
+                                                                                size: 29,
                                                                               ),
-                                                                          )
-                                                                        ]
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        SizedBox(width: 10),
+                                                                        Text('Tom: ' + widget.service.lstSongs[index].tom,
+                                                                          overflow: TextOverflow.ellipsis,
+                                                                          style: TextStyle(
+                                                                            color: Colors.blueGrey,
+                                                                            fontSize: (widget.service.lstSongs[index].tom.length > 3 ) ? 11 : 13,
+                                                                            fontWeight:
+                                                                            FontWeight.w800,
+                                                                          ),
+                                                                        ),
+                                                                      ],
                                                                     )
-                                                                  ]
-                                                              )
-                                                          ),
-                                                          //  SizedBox(width: 5),
-                                                          Expanded(
-                                                              flex: 3, // 20%
-                                                              child:
-                                                                      Column(
-                                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                        //crossAxisAlignment: CrossAxisAlignment.start,
-                                                                        children: [
-                                                                          Row(
-                                                                            children: [
-                                                                              Visibility(
-                                                                                visible: StringUtils.isNotNUllNotEmpty(widget.service.lstSongs[index].cifra),
-                                                                                child:
-                                                                                Align(
-                                                                                  alignment: Alignment.topRight,
-                                                                                  child: GestureDetector(
-                                                                                    onTap: () => _launchChordsURL(widget.service.lstSongs[index]),
-                                                                                    child: Icon(
-                                                                                      Icons.straighten_rounded,
-                                                                                      color: Colors.blueGrey,
-                                                                                    ),
-                                                                                  ),
-                                                                                ),
-                                                                              ),
-                                                                              SizedBox(width: 15),
-                                                                              Text('Tom: ' + widget.service.lstSongs[index].tom,
-                                                                                overflow: TextOverflow.ellipsis,
-                                                                                style: TextStyle(
-                                                                                  color: Colors.blueGrey,
-                                                                                  fontSize: 13,
-                                                                                  fontWeight:
-                                                                                  FontWeight.w800,
-                                                                                ),
-                                                                              ),
-                                                                            ],
-                                                                          )
-                                                                        ],
-                                                                    )
-                                                          ),
-                                                   //     ]
-                                                 //   )
-                                                  ]
+                                                                  ],
+                                                                )
+                                                            ),
+                                                            //     ]
+                                                            //   )
+                                                          ]
+                                                      )
+                                                  )
                                               )
-                                          )
-                                      )
-                                 ]
-                              );
-                          }),
+                                            ]
+                                        );
+                                    }),
+                    )
                   ),
 
 //----------------------------------------------bto salvar------------------
@@ -661,7 +677,6 @@ class ServiceScreenState extends State<ServiceScreen> {
       });
 
     });
-
 
     return false;
 

@@ -46,7 +46,6 @@ class SongListTile extends StatelessWidget {
         Navigator.of(context).pushNamed('/song', arguments: song);
       },
       child: Visibility(
-        //visible: song.ativo.toLowerCase() == 'true',
         visible: true,
         child: Card(
           shape: RoundedRectangleBorder(
@@ -105,7 +104,6 @@ class SongListTile extends StatelessWidget {
                     flex: 2, // 20%
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                         Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -128,7 +126,7 @@ class SongListTile extends StatelessWidget {
                                   alignment: Alignment.topRight,
                                   child: GestureDetector(
                                     onTap: _launchChordsURL,
-                                    child: Icon(Icons.straighten_rounded, color: Colors.blueGrey,),
+                                    child: Icon(Icons.straighten_rounded, color: Colors.blueGrey, size: 29,),
                                     //child: IconData(0xe457, fontFamily: 'MaterialIcons'),
                                   ),
                                 ),
@@ -159,7 +157,6 @@ class SongListTile extends StatelessWidget {
                                 ),
                                 visible: UserManager.isUserAdmin,
                               ),
-
                             ]
                         ),
                         ]

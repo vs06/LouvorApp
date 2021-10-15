@@ -58,7 +58,7 @@ class ServiceListTile extends StatelessWidget {
               borderRadius: BorderRadius.circular(4)
           ),
           child: Container(
-            height: 110,
+            height: getSongsOfService().length > 45 ? 130: 110,
             padding: const EdgeInsets.all(6),
             decoration: BoxDecoration(
                 border: isHighlightService() ?  Border.all(color: Colors.blueAccent, width: 5): Border(),
@@ -145,8 +145,9 @@ class ServiceListTile extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
                           style: TextStyle(
-                            color: Colors.grey[800],
+                            color: (getSongsOfService() == 'Músicas: ' && service.data.difference(DateTime.now()).inDays < 7) ? Colors.red : Colors.grey[800],
                             fontSize: 12,
+                            fontWeight: (getSongsOfService() == 'Músicas: ' && service.data.difference(DateTime.now()).inDays < 7) ? FontWeight.bold : FontWeight.normal,
                           ),
                         ),
                       )

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:louvor_app/common/custom_drawer/custom_drawer.dart';
 import 'package:louvor_app/helpers/app_list_pool.dart';
@@ -45,6 +47,8 @@ class TeamServiceScreenState extends State<TeamServiceScreen> {
 
   String valueRoleDropDownSelected = AppListPool.serviceRoles[0];
   String valueUserDropDownSelected = AppListPool.usersName[0];
+
+  ScrollController _scrollVolunteersController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -239,116 +243,134 @@ class TeamServiceScreenState extends State<TeamServiceScreen> {
               )
 
           ),
-          Text('Selecionados',
-            style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w800,
-                color: Theme.of(context).primaryColor
-            ),
+
+          Row(
+            children: [
+              const SizedBox(width: 100),
+              Text('Selecionados',
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w800,
+                    color: Theme.of(context).primaryColor
+                ),
+              ),
+
+              Transform.rotate(
+                angle: 60 * pi / 40,
+                child: IconButton(
+                  icon: Icon(Icons.subdirectory_arrow_left , color: Colors.blue, size: 30, ),
+                  onPressed: null,
+                ),
+              ),
+            ],
+
           ),
+
           Expanded(
             flex: 4, // 40%
             child:
-                Column( children: <Widget>[
-                                            ListView.builder(
-                                                padding: const EdgeInsets.all(8),
-                                                itemCount: widget.service.team != null ? widget.service.team.length : 0,
-                                                shrinkWrap: true,
-                                                itemBuilder: (BuildContext context, int index) {
-                                                  String role =  widget.service.team.keys.elementAt(index);
-                                                  return
-                                                    Column(
+              Scrollbar(
+                isAlwaysShown: true,
+                controller: _scrollVolunteersController,
+                         child:
+                                  ListView.builder(
+                                      padding: const EdgeInsets.all(8),
+                                      itemCount: widget.service.team != null ? widget.service.team.length : 0,
+                                      shrinkWrap: true,
+                                      itemBuilder: (BuildContext context, int index) {
+                                        String role =  widget.service.team.keys.elementAt(index);
+                                        return
+                                          Column(
+                                              children: <Widget>[
+                                                   Card(
+                                                    shape: RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.circular(4)
+                                                    ),
+                                                    child: Container(
+                                                      height: MultiUtils.calculaHeightTile(widget.service.team[role].length),
+                                                      padding: const EdgeInsets.all(8),
+                                                      child: Row(
                                                         children: <Widget>[
-                                                             Card(
-                                                              shape: RoundedRectangleBorder(
-                                                                  borderRadius: BorderRadius.circular(4)
-                                                              ),
-                                                              child: Container(
-                                                                height: MultiUtils.calculaHeightTile(widget.service.team[role].length),
-                                                                padding: const EdgeInsets.all(8),
-                                                                child: Row(
-                                                                  children: <Widget>[
-                                                                    const SizedBox(width: 16,),
-                                                                        Column( children: <Widget>[
-                                                                          Expanded(
-                                                                            flex: 5,
-                                                                            child: Column(
-                                                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                                                              children: <Widget>[
-                                                                                Row(
-                                                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                                  children: [
+                                                          const SizedBox(width: 16,),
+                                                              Column( children: <Widget>[
+                                                                Expanded(
+                                                                  flex: 5,
+                                                                  child: Column(
+                                                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                                    children: <Widget>[
+                                                                      Row(
+                                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                        children: [
 
-                                                                                    Text( role +':  ',
-                                                                                      overflow: TextOverflow.ellipsis,
-                                                                                      style: TextStyle(
-                                                                                        fontSize: 16,
-                                                                                        fontWeight: FontWeight.w800,
-                                                                                        color: Colors.lightBlue,
-                                                                                      ),
-                                                                                    ),
-
-                                                                                    Text( StringUtils.splitVolunteersToTile(widget.service.team[role]),
-                                                                                      overflow: TextOverflow.ellipsis,
-                                                                                      style: TextStyle(
-                                                                                        fontSize: 16,
-                                                                                        fontWeight: FontWeight.w800,
-                                                                                      ),
-                                                                                    ),
-
-                                                                                    Align(
-                                                                                      alignment: Alignment.center,
-                                                                                      child:
-                                                                                      GestureDetector(
-                                                                                        onTap: () {
-                                                                                          setState(() {
-                                                                                            widget.service.team.remove(widget.service.team.keys.elementAt(index));
-                                                                                          });
-                                                                                        },
-                                                                                        child:Icon(Icons.delete , color: Colors.blueGrey,),
-                                                                                      ),
-                                                                                    ),
-                                                                                  ],
-                                                                                ),
-                                                                                // tentativa de listar os volunteers por role, para edicao em separado
-                                                                                // Column(
-                                                                                //   children: [
-                                                                                //                   Row(
-                                                                                //                             children: [
-                                                                                //                                       ListView.builder(
-                                                                                //                                       padding: const EdgeInsets.all(8),
-                                                                                //                                       itemCount: widget.service.team[role].length,
-                                                                                //                                       shrinkWrap: true,
-                                                                                //                                       itemBuilder: (BuildContext context, int index) {
-                                                                                //                                             String users =  widget.service.team[role].elementAt(index);
-                                                                                //                                             return Expanded(child: Card(shape:
-                                                                                //                                                             RoundedRectangleBorder(
-                                                                                //                                                             borderRadius: BorderRadius.circular(4)
-                                                                                //                                                             )
-                                                                                //                                                             )
-                                                                                //                                                     );}
-                                                                                //                                       )
-                                                                                //
-                                                                                //                             ],
-                                                                                //                   )
-                                                                                //   ],
-                                                                                // ),
-
-                                                                              ],
+                                                                          Text( role +':  ',
+                                                                            overflow: TextOverflow.ellipsis,
+                                                                            style: TextStyle(
+                                                                              fontSize: 16,
+                                                                              fontWeight: FontWeight.w800,
+                                                                              color: Colors.lightBlue,
                                                                             ),
                                                                           ),
-                                                                       ]
-                                                                     )
-                                                                  ],
+
+                                                                          Text( StringUtils.splitVolunteersToTile(widget.service.team[role]),
+                                                                            overflow: TextOverflow.ellipsis,
+                                                                            style: TextStyle(
+                                                                              fontSize: 16,
+                                                                              fontWeight: FontWeight.w800,
+                                                                            ),
+                                                                          ),
+
+                                                                          Align(
+                                                                            alignment: Alignment.center,
+                                                                            child:
+                                                                            GestureDetector(
+                                                                              onTap: () {
+                                                                                setState(() {
+                                                                                  widget.service.team.remove(widget.service.team.keys.elementAt(index));
+                                                                                });
+                                                                              },
+                                                                              child:Icon(Icons.delete , color: Colors.blueGrey,),
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                      // tentativa de listar os volunteers por role, para edicao em separado
+                                                                      // Column(
+                                                                      //   children: [
+                                                                      //                   Row(
+                                                                      //                             children: [
+                                                                      //                                       ListView.builder(
+                                                                      //                                       padding: const EdgeInsets.all(8),
+                                                                      //                                       itemCount: widget.service.team[role].length,
+                                                                      //                                       shrinkWrap: true,
+                                                                      //                                       itemBuilder: (BuildContext context, int index) {
+                                                                      //                                             String users =  widget.service.team[role].elementAt(index);
+                                                                      //                                             return Expanded(child: Card(shape:
+                                                                      //                                                             RoundedRectangleBorder(
+                                                                      //                                                             borderRadius: BorderRadius.circular(4)
+                                                                      //                                                             )
+                                                                      //                                                             )
+                                                                      //                                                     );}
+                                                                      //                                       )
+                                                                      //
+                                                                      //                             ],
+                                                                      //                   )
+                                                                      //   ],
+                                                                      // ),
+
+                                                                    ],
+                                                                  ),
                                                                 ),
-                                                              ),
-                                                            ),
-                                                      ]
-                                                  );
-                                                }
-                                            ),
-                        ]
+                                                             ]
+                                                           )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                            ]
+                                        );
+                                      }
+                                  ),
                       )
 
           ),
@@ -356,7 +378,6 @@ class TeamServiceScreenState extends State<TeamServiceScreen> {
             onPressed: () {
               widget.service.lstSongs.clear();
               widget.service.lstSongs.addAll(widget._lstSongSelecionadas);
-              //fillSongsNameIntoService(widget.service);
               Navigator.of(context).pop();
               Navigator.of(context).pop();
               Navigator.of(context).push(

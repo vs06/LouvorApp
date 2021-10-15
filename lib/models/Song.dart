@@ -81,15 +81,6 @@ class Song extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Song.fromTituloDescricao(String titulo, String descricao, String livro, String tom, String data) {
-  //   this.nome = titulo;
-  //   this.artista = descricao;
-  //   this.tom = tom;
-  //   this.livro = livro;
-  //   this.cifra = cifra;
-  //   this.data = data;
-  // }
-
   Song.fromJson(Map<String, dynamic> json)
       : nome = json['titulo'],
         artista = json['artista'],
