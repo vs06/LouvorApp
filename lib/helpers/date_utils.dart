@@ -38,6 +38,37 @@ class DateUtils {
 
   }
 
+  static int figureOutDayOfWeekAsNumber(DateTime datetime){
+
+    var dayOfWeekAsNumber = 0;
+    switch (DateFormat('EEEE').format(datetime).toUpperCase()) {
+      case "SUNDAY":
+        dayOfWeekAsNumber = 7;
+        break;
+      case "MONDAY":
+        dayOfWeekAsNumber = 1;
+        break;
+      case "TUESDAY":
+        dayOfWeekAsNumber = 2;
+        break;
+      case "WEDNESDAY":
+        dayOfWeekAsNumber = 3;
+        break;
+      case "THURSDAY":
+        dayOfWeekAsNumber = 4;
+        break;
+      case "FRIDAY":
+        dayOfWeekAsNumber = 5;
+        break;
+      case "SATURDAY":
+        dayOfWeekAsNumber = 6;
+        break;
+    }
+
+    return dayOfWeekAsNumber;
+
+  }
+
   static String mounthBr(DateTime datetime){
 
     var monthShort = "";

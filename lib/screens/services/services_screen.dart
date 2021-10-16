@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'package:louvor_app/helpers/multi_utils.dart';
 import 'package:louvor_app/models/Service.dart';
 import 'package:louvor_app/models/service_manager.dart';
 import 'package:louvor_app/screens/services/components/service_list_tile.dart';
+import 'package:louvor_app/screens/services/services_month_creator_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:louvor_app/models/user_manager.dart';
 
@@ -23,114 +25,116 @@ class ServicesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+    List<Service> _filteredServices = [];
+
     List<Service> lstServicesUsedAsResume = [];
 
     return Scaffold(
-      drawer: CustomDrawer(),
-      appBar: AppBar(
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            );
-          },
-        ),
-        title: Consumer<ServiceManager>(
-          builder: (_, serviceManager, __) {
-            if (serviceManager.search.isEmpty) {
-              return const Text('Cultos');
-            } else {
-              return LayoutBuilder(
-                builder: (_, constraints) {
-                  return GestureDetector(
-                    onTap: () async {
-                      final search = await showDialog<String>(
-                          context: context,
-                          builder: (_) => SearchDialog(serviceManager.search));
-                      if (search != null) {
-                        serviceManager.search = search;
-                      }
-                    },
-                    child: Container(
-                        width: constraints.biggest.width,
-                        child: Text(
-                          'Cultos: ${serviceManager.search}',
-                          textAlign: TextAlign.center,
-                        )),
-                  );
+        drawer: CustomDrawer(),
+        appBar: AppBar(
+          leading: Builder(
+            builder: (BuildContext context) {
+              return IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.of(context).pop();
                 },
               );
-            }
-          },
-        ),
-        centerTitle: true,
-        actions: <Widget>[
-          Consumer<ServiceManager>(
+            },
+          ),
+          title: Consumer<ServiceManager>(
             builder: (_, serviceManager, __) {
               if (serviceManager.search.isEmpty) {
-                return IconButton(
-                  icon: Icon(Icons.search),
-                  onPressed: () async {
-                    final search = await showDialog<String>(
-                                              context: context,
-                                              builder: (_) => SearchDialog(serviceManager.search)
-                                          );
-                    if (search != null) {
-                      serviceManager.search = search;
-                    }
-                  },
-                );
+                return const Text('Cultos');
               } else {
-                return IconButton(
-                  icon: Icon(Icons.close),
-                  onPressed: () async {
-                    serviceManager.search = '';
+                return LayoutBuilder(
+                  builder: (_, constraints) {
+                    return GestureDetector(
+                      onTap: () async {
+                        final search = await showDialog<String>(
+                            context: context,
+                            builder: (_) => SearchDialog(serviceManager.search));
+                        if (search != null) {
+                          serviceManager.search = search;
+                        }
+                      },
+                      child: Container(
+                          width: constraints.biggest.width,
+                          child: Text(
+                            'Cultos: ${serviceManager.search}',
+                            textAlign: TextAlign.center,
+                          )),
+                    );
                   },
                 );
               }
             },
           ),
-          Visibility(
-              visible: UserManager.isUserAdmin,
-              child:
+          centerTitle: true,
+          actions: <Widget>[
+            Consumer<ServiceManager>(
+              builder: (_, serviceManager, __) {
+                if (serviceManager.search.isEmpty) {
+                  return IconButton(
+                    icon: Icon(Icons.search),
+                    onPressed: () async {
+                      final search = await showDialog<String>(
+                          context: context,
+                          builder: (_) => SearchDialog(serviceManager.search)
+                      );
+                      if (search != null) {
+                        serviceManager.search = search;
+                      }
+                    },
+                  );
+                } else {
+                  return IconButton(
+                    icon: Icon(Icons.close),
+                    onPressed: () async {
+                      serviceManager.search = '';
+                    },
+                  );
+                }
+              },
+            ),
+            Visibility(
+                visible: UserManager.isUserAdmin,
+                child:
                 IconButton(
                   icon: Icon(Icons.add),
                   onPressed: () {
                     Navigator.of(context).pushNamed('/service',);
                   },
                 )
-          )
-        ],
-      ),
-      body: Consumer<ServiceManager>(
-        builder: (_, serviceManager, __) {
-          var filteredServices = serviceManager.filteredServicesByMounth(filterByMonth);
-          orderTeamRoles(filteredServices);
-          lstServicesUsedAsResume = [];
-          filteredServices.forEach((service) => lstServicesUsedAsResume.add(service));
-          return
-            filteredServices.length > 0 ?
-                      ListView.builder(
-                        padding: const EdgeInsets.all(4),
-                        itemCount: filteredServices.length,
-                        itemBuilder: (_, index) {
-                          return ServiceListTile(filteredServices[index]);
-                        })
-          : Center(
-              child:
-              Text('Sem Cultos\nCadastrados em: ${DateUtils.mounthBr(filterByMonth)}',
-                  style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.w800,
-                  color: Theme.of(context).primaryColor
-              ),
-              )
-            );
-        },
-      ),
+            )
+          ],
+        ),
+        body: Consumer<ServiceManager>(
+          builder: (_, serviceManager, __) {
+            _filteredServices = serviceManager.filteredServicesByMounth(filterByMonth);
+            orderTeamRoles(_filteredServices);
+            lstServicesUsedAsResume = [];
+            _filteredServices.forEach((service) => lstServicesUsedAsResume.add(service));
+            return
+              _filteredServices.length > 0 ?
+              ListView.builder(
+                  padding: const EdgeInsets.all(4),
+                  itemCount: _filteredServices.length,
+                  itemBuilder: (_, index) {
+                    return ServiceListTile(_filteredServices[index]);
+                  })
+                  : Center(
+                  child:
+                  Text('Sem Cultos\nCadastrados em: ${DateUtils.mounthBr(filterByMonth)}',
+                    style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.w800,
+                        color: Theme.of(context).primaryColor
+                    ),
+                  )
+              );
+          },
+        ),
         floatingActionButton:
         Visibility(
           visible: UserManager.isUserAdmin,
@@ -143,7 +147,13 @@ class ServicesScreen extends StatelessWidget {
                   size: 30,
                 ),
                 onPressed: () {
-                  showAlertDialog1(context, lstServicesUsedAsResume);
+                  if(_filteredServices.length > 0){
+                    showAlertDialog1(context, lstServicesUsedAsResume);
+                  }else{
+                    //rederizar para criação automatica
+                    Navigator.of(context).pop();
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => ServicesMonthCreatorScreen(filterByMonth)));
+                  }
                 },
               ),
             ],
@@ -183,33 +193,44 @@ class ServicesScreen extends StatelessWidget {
     Map<String, Map<String, int>> mapRoleVolunteerQuantity = new Map();
 
     lstServicesOfMonth.forEach((service) {
-                                            if(service.team != null){
-                                                service.team.forEach((role, listVolunteer) {
 
-                                                      //Considerar Dirigente no vocal
-                                                      if(role.toUpperCase().contains('VOCAL')){
-                                                        if(!listVolunteer.contains(service.dirigente)){
-                                                          listVolunteer.add(service.dirigente);
-                                                        }
-                                                      }
+      //Considerar Dirigente no vocal
+      if(service.dirigente != null && service.dirigente != ''){
+        if(service.team == null){
+          service.team = new Map();
+          service.team.putIfAbsent('Vocal', () => [service.dirigente]);
+        }else{
+          if(!service.team.containsKey('Vocal')){
+            service.team.putIfAbsent('Vocal', () => [service.dirigente]);
+          }else{
+            service.team['Vocal'].add(service.dirigente);
+          }
+        }
+      }
 
-                                                      addToMap(mapRoleVolunteerQuantity, role, listVolunteer);
-                                                });
-                                            }
-                                         }
-                               );
+      if(service.team != null){
+        service.team.forEach((role, listVolunteer) {
+          addToMap(mapRoleVolunteerQuantity, role, listVolunteer);
+        });
+      }
+    }
+    );
 
     mapRoleVolunteerQuantity.forEach((role, volunteers) {
-                                                          stringResume += role+'\n';
-                                                          volunteers.forEach((volunteer, quantity) {
-                                                            stringResume += '\t\t- ${volunteer} : ${quantity}\n';
-                                                          });
+      stringResume += role+'\n';
+      volunteers.forEach((volunteer, quantity) {
+        stringResume += '\t\t- ${volunteer} : ${quantity}\n';
+      });
 
-                                    });
-  return stringResume+'\n';
+    });
+
+    if(stringResume == '')
+      return stringResume+'Sem alocações cadastradas.\n';
+
+    return stringResume+'\n';
 
   }
-  
+
   void addToMap(Map<String, Map<String, int>> mapRoleVolunteerQuantity, String role, List<String> listVolunteer){
 
     listVolunteer.forEach((volunteer) {
@@ -228,20 +249,20 @@ class ServicesScreen extends StatelessWidget {
 
   void orderTeamRoles(List<Service> filteredServices) {
     filteredServices.forEach((service) {
-                                          if(MultiUtils.isMapNotNullNotEmpty(service.team)){
-                                            Map<String, List<String>> teamSorted = new Map();
+      if(MultiUtils.isMapNotNullNotEmpty(service.team)){
+        Map<String, List<String>> teamSorted = new Map();
 
-                                            AppListPool.serviceRoles.forEach((role) {
-                                              if(service.team.keys.contains(role)){
-                                                teamSorted.putIfAbsent(role, () => service.team[role]); 
-                                              }
-                                            });
+        AppListPool.serviceRoles.forEach((role) {
+          if(service.team.keys.contains(role)){
+            teamSorted.putIfAbsent(role, () => service.team[role]);
+          }
+        });
 
-                                            service.team = teamSorted;
+        service.team = teamSorted;
 
-                                          }
-                                       }
-                            );
+      }
+    }
+    );
   }
 
 }

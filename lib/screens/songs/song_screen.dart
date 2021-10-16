@@ -61,7 +61,7 @@ class SongScreenState extends State<SongScreen> {
 
     List<String> tagsLst = tagsToListString(widget.song.tags);
 
-    _FirstPageState();
+    _firstPageState();
 
     return ChangeNotifierProvider.value(
       value: widget.song,
@@ -485,7 +485,7 @@ class SongScreenState extends State<SongScreen> {
     return retKeyWords;
   }
 
-  _FirstPageState() {
+  _firstPageState() {
     simpleAutoCompleteTags = SimpleAutoCompleteTextField(
       key: key,
       style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color: Colors.blueGrey,),

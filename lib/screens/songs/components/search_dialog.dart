@@ -35,7 +35,7 @@ class SearchDialogState extends State<SearchDialog>{
   @override
   Widget build(BuildContext context) {
 
-    _FirstPageState();
+    _firstPageState();
 
     return Stack(
       children: <Widget>[
@@ -322,7 +322,7 @@ class SearchDialogState extends State<SearchDialog>{
     );
   }
 
-  _FirstPageState() {
+  _firstPageState() {
     simpleAutoCompleteTags = SimpleAutoCompleteTextField(
       key: key,
       style: TextStyle(color: Colors.blueGrey, fontSize: 16),

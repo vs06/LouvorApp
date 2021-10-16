@@ -1,5 +1,4 @@
 import 'package:louvor_app/models/user.dart';
-import 'package:louvor_app/models/user_manager.dart';
 
 class AppListPool {
 
@@ -8,6 +7,8 @@ class AppListPool {
    static final List<String> servicesPeriod= ['Período','Manhã','Noite'];
 
    static final List<String> mounths = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+
+   static final List<String> daysOfWeek = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'];
 
    static final List<String> rehearsalTypes = ['Geral', 'Instrumental', 'Vocal'];
 
