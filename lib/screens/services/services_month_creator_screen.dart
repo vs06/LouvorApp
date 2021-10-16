@@ -46,7 +46,7 @@ class ServicesMonthCreatorScreenState extends State<ServicesMonthCreatorScreen> 
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
-              icon: const Icon(Icons.subdirectory_arrow_left),
+              icon: const Icon(Icons.arrow_back),
               onPressed: () {
                 Navigator.of(context).pop();
                 MaterialPageRoute(builder: (context) => ServicesScreen.buildByMonth(widget._dateTime));
