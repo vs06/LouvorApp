@@ -110,7 +110,7 @@ class RehearsalsScreen extends StatelessWidget {
               })
           : Center(
               child:
-                  Text('Sem ensaios\nCadastrados em: ${DateUtils.mounthBr(filterByMonth)}',
+                  Text('Sem ensaios\nCadastrados em: ${DateUtilsCustomized.mounthBr(filterByMonth)}',
                   style: TextStyle(
                                     fontSize: 25,
                                     fontWeight: FontWeight.w800,

@@ -66,7 +66,7 @@ class TeamServiceScreenState extends State<TeamServiceScreen> {
                 );
               },
             ),
-        title: Text('Culto ${widget.service.data != null ? DateUtils.convertDatePtBr(widget.service.data) : ''} ',
+        title: Text('Culto ${widget.service.data != null ? DateUtilsCustomized.convertDatePtBr(widget.service.data) : ''} ',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                             fontSize: 18,

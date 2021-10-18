@@ -82,7 +82,7 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
           title: Consumer<SongManager>(
             builder: (_, songManager, __) {
               if (songManager.searchDTO.isfiltersEmpty()) {
-                return Text('Músicas:  ${widget.service.data != null ? DateUtils.convertDatePtBr(widget.service.data) : ''} ',
+                return Text('Músicas:  ${widget.service.data != null ? DateUtilsCustomized.convertDatePtBr(widget.service.data) : ''} ',
                           style: TextStyle(
                             fontSize: 15,
                           )

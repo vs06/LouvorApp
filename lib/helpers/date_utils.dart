@@ -2,7 +2,7 @@ import 'dart:core';
 
 import 'package:intl/intl.dart';
 
-class DateUtils {
+class DateUtilsCustomized {
 
   ///Retorna day Of Week name, Day and Mounth (As number) and HourMinute 24hs
   static String convertDatePtBr(DateTime datetime){

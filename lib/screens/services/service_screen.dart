@@ -683,7 +683,7 @@ class ServiceScreenState extends State<ServiceScreen> {
   }
 
   String getPredifiniedWhatsAppMessage(Service service) {
-    return 'Músicas culto ' + DateUtils.convertDatePtBr(service.data) + ', dirigente: ${service.dirigente},foram cadastradas.\nConsulte o App do Louvor para mais detalhes.' ;
+    return 'Músicas culto ' + DateUtilsCustomized.convertDatePtBr(service.data) + ', dirigente: ${service.dirigente},foram cadastradas.\nConsulte o App do Louvor para mais detalhes.' ;
   }
 
 }

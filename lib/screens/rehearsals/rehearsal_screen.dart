@@ -27,7 +27,7 @@ class RehearsalScreen extends StatefulWidget {
   RehearsalScreen(Rehearsal r){
     rehearsal = r != null ? r.clone() : Rehearsal();
     if(rehearsal.data != null){
-      dateController.text = DateUtils.dataComplentaFormatada(r.data);
+      dateController.text = DateUtilsCustomized.dataComplentaFormatada(r.data);
     }
 
     rehearsalWithoutChanges = rehearsal.clone();
@@ -37,7 +37,7 @@ class RehearsalScreen extends StatefulWidget {
   RehearsalScreen.modify(Rehearsal rehearsalWithChanges, Rehearsal rehearsalWithoutChanges){
     rehearsal = rehearsalWithChanges != null ? rehearsalWithChanges.clone() : Rehearsal();
     if(rehearsal.data != null){
-      dateController.text = DateUtils.dataComplentaFormatada(rehearsalWithChanges.data);
+      dateController.text = DateUtilsCustomized.dataComplentaFormatada(rehearsalWithChanges.data);
     }
 
     this.rehearsalWithoutChanges = rehearsalWithoutChanges != null ? rehearsalWithoutChanges : null;
@@ -364,7 +364,7 @@ class RehearsalScreenState extends State<RehearsalScreen> {
       : throw 'Could not launch $song.cifra';
 
   String getPredifiniedWhatsAppMessage(Rehearsal rehearsal) {
-    return 'Ensaio em: ' + DateUtils.convertDatePtBr(rehearsal.data) + ', Tipo ensaio: ${rehearsal.type }.\nConsulte o App do Louvor para mais detalhes.' ;
+    return 'Ensaio em: ' + DateUtilsCustomized.convertDatePtBr(rehearsal.data) + ', Tipo ensaio: ${rehearsal.type }.\nConsulte o App do Louvor para mais detalhes.' ;
   }
 
 }

@@ -41,7 +41,7 @@ class ServicesMonthCreatorScreenState extends State<ServicesMonthCreatorScreen> 
     return Scaffold(
       drawer: CustomDrawer(),
       appBar: AppBar(
-        title: Text('Criação cultos mês: ${DateUtils.mounthBr(widget._dateTime)}'),
+        title: Text('Criação cultos mês: ${DateUtilsCustomized.mounthBr(widget._dateTime)}'),
         centerTitle: true,
         leading: Builder(
           builder: (BuildContext context) {
@@ -390,7 +390,7 @@ class ServiceDTO{
 
       try {
         DateTime day = DateTime(year, month, daysCounter);
-        var dayOfWeekAsNumber = DateUtils.figureOutDayOfWeekAsNumber(day);
+        var dayOfWeekAsNumber = DateUtilsCustomized.figureOutDayOfWeekAsNumber(day);
         if(daysOfWeek.contains(dayOfWeekAsNumber)){
           lstDayServices.add(day);
         }
@@ -406,7 +406,7 @@ class ServiceDTO{
 
     lstDayServices.forEach((day) {
       lstServiceDTO.forEach((serviceDTO) {
-        if(serviceDTO.dayOfWeekAsNumber == DateUtils.figureOutDayOfWeekAsNumber(day)){
+        if(serviceDTO.dayOfWeekAsNumber == DateUtilsCustomized.figureOutDayOfWeekAsNumber(day)){
                     Service service = new Service();
 
                     int hour =  int. parse(serviceDTO.timeOfDay.substring(0,2)) ;

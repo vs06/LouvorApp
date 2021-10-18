@@ -77,7 +77,7 @@ class RehearsalListTile extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            DateUtils.convertDatePtBr(rehearsal.data),
+                            DateUtilsCustomized.convertDatePtBr(rehearsal.data),
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w800,

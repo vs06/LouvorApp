@@ -78,7 +78,7 @@ class ServiceListTile extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            DateUtils.convertDatePtBr(service.data),
+                            DateUtilsCustomized.convertDatePtBr(service.data),
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w800,
@@ -251,7 +251,7 @@ class ServiceListTile extends StatelessWidget {
 
   sendMessageWhatsAppNotification() {
     if(songsSelectedColorStatus(service) == Colors.red){
-      final strWhatsMessage = service.dirigente + ', você fara a abertura do culto de: ${DateUtils.convertDatePtBr(service.data)}.\nFaltam: ${(DateTime.now().day - service.data.day)*-1} dias para o culto.'
+      final strWhatsMessage = service.dirigente + ', você fara a abertura do culto de: ${DateUtilsCustomized.convertDatePtBr(service.data)}.\nFaltam: ${(DateTime.now().day - service.data.day)*-1} dias para o culto.'
                                                 + '\nO culto ainda não teve as músicas cadastradas.\nPoderia verificar?';
       NotificationUtils.sendNotificationWhatsUp(strWhatsMessage);
     }

@@ -146,7 +146,7 @@ class ServicesPeriodSelectState extends State<ServicesPeriodSelect>{
                                                                                         style: Theme.of(context).textTheme.headline4,
                                                                                         textAlign: TextAlign.center,
                                                                                       ),
-                                                                                      Text( DateUtils.mounthBr(selectedDate),
+                                                                                      Text( DateUtilsCustomized.mounthBr(selectedDate),
                                                                                         style: TextStyle(fontSize: 40, color: Colors.lightBlue, fontWeight: FontWeight.bold),
                                                                                         textAlign: TextAlign.center,
                                                                                       ),

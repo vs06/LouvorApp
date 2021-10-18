@@ -125,7 +125,7 @@ class ServicesScreen extends StatelessWidget {
                   })
                   : Center(
                   child:
-                  Text('Sem Cultos\nCadastrados em: ${DateUtils.mounthBr(filterByMonth)}',
+                  Text('Sem Cultos\nCadastrados em: ${DateUtilsCustomized.mounthBr(filterByMonth)}',
                     style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.w800,
