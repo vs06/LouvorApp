@@ -15,6 +15,8 @@ import 'package:louvor_app/screens/songs/song_screen.dart';
 import 'package:louvor_app/screens/songs/songs_screen.dart';
 import 'package:louvor_app/screens/services/services_screen.dart';
 import 'package:louvor_app/screens/signup/signup_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+
 
 import 'models/Rehearsal.dart';
 import 'models/Song.dart';
@@ -24,23 +26,10 @@ import 'models/Service.dart';
 import 'models/service_manager.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
-//Future<void> main() async {
-//
-//  WidgetsFlutterBinding.ensureInitialized();
-//  await Firebase.initializeApp();
-//
-//  runApp(MaterialApp(
-//    home: LoginScreen(),
-//    localizationsDelegates: [
-//      GlobalMaterialLocalizations.delegate,
-//      GlobalWidgetsLocalizations.delegate
-//    ],
-//    supportedLocales: [const Locale('pt', 'BR')],
-//  ));
-//}
-
 
 class MyApp extends StatelessWidget {
 
@@ -56,25 +45,25 @@ class MyApp extends StatelessWidget {
           create: (_) => SongManager(),
           lazy: false,
           update: (_, userManager, songManager) =>
-              songManager..updateUser(userManager),
+              songManager!..updateUser(userManager),
         ),
         ChangeNotifierProxyProvider<UserManager, ServiceManager>(
            create: (_) => ServiceManager(),
            lazy: false,
            update: (_, userManager, serviceManager) =>
-           serviceManager..updateUser(userManager),
+           serviceManager!..updateUser(userManager),
          ),
         ChangeNotifierProxyProvider<UserManager, RehearsalManager>(
           create: (_) => RehearsalManager(),
           lazy: false,
           update: (_, userManager, rehearsalManager) =>
-          rehearsalManager..updateUser(userManager),
+          rehearsalManager!..updateUser(userManager),
         ),
         ChangeNotifierProxyProvider<UserManager, TagManager>(
           create: (_) => TagManager(),
           lazy: false,
           update: (_, userManager, tagManager) =>
-          tagManager..updateUser(userManager),
+          tagManager!..updateUser(userManager),
         )
       ],
       child: MaterialApp(
@@ -129,9 +118,7 @@ class MyApp extends StatelessWidget {
               );
             case '/rehearsal':
               return MaterialPageRoute(
-                  builder: (_) => RehearsalScreen(
-                      settings.arguments
-                  )
+                  builder: (_) => RehearsalScreen(null)
               );
             case '/users':
               return MaterialPageRoute(

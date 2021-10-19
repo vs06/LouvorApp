@@ -14,10 +14,10 @@ import 'package:provider/provider.dart';
 
 class ServicesMonthCreatorScreen extends StatefulWidget {
 
-  DateTime _dateTime;
+  late DateTime _dateTime;
 
-  ServicesMonthCreatorScreen(DateTime dateTime){
-    this._dateTime = dateTime;
+  ServicesMonthCreatorScreen(DateTime? dateTime){
+    this._dateTime = dateTime!;
   }
 
   @override
@@ -41,7 +41,7 @@ class ServicesMonthCreatorScreenState extends State<ServicesMonthCreatorScreen> 
     return Scaffold(
       drawer: CustomDrawer(),
       appBar: AppBar(
-        title: Text('Criação cultos mês: ${DateUtilsCustomized.mounthBr(widget._dateTime)}'),
+        title: Text('Criação cultos mês: ${DateUtilsCustomized.monthBr(widget._dateTime)}'),
         centerTitle: true,
         leading: Builder(
           builder: (BuildContext context) {
@@ -108,9 +108,9 @@ class ServicesMonthCreatorScreenState extends State<ServicesMonthCreatorScreen> 
                                                     height: 2,
                                                     color: Colors.lightBlue,
                                                   ),
-                                                  onChanged: (String newValue) {
+                                                  onChanged: (String?newValue) {
                                                     setState(() {
-                                                      valueDaysOfWeekDropDownSelected = newValue;
+                                                      valueDaysOfWeekDropDownSelected = newValue!;
                                                     });
                                                   },
                                                   items: AppListPool.daysOfWeek.map<DropdownMenuItem<String>>((String value) {
@@ -132,7 +132,7 @@ class ServicesMonthCreatorScreenState extends State<ServicesMonthCreatorScreen> 
                                               child:
                                               TextFormField(
                                                 onTap: () {
-                                                  _selectTime(context);
+                                                  //_selectTime(context);
                                                 },
                                                 readOnly: true,
                                                 controller: timeController,
@@ -327,32 +327,32 @@ class ServicesMonthCreatorScreenState extends State<ServicesMonthCreatorScreen> 
 
   }
 
-  Future<Null> _selectTime(BuildContext context) async {
-    final TimeOfDay picked = await showTimePicker(
-      context: context,
-      initialTime: selectedTime,
-    );
-    if (picked != null){
-      selectedTime = picked;
-
-      String minute = picked.minute < 10 ? '0' + picked.minute.toString() : picked.minute.toString();
-      String hour = picked.hour < 10 ? '0' + picked.hour.toString() : picked.hour.toString();
-
-      setState(() => timeController.text = "${hour}:${minute}");
-
-    }
-
-  }
+  // Future<Null> _selectTime(BuildContext context) async {
+  //   final TimeOfDay picked = await showTimePicker(
+  //     context: context,
+  //     initialTime: selectedTime,
+  //   );
+  //   if (picked != null){
+  //     selectedTime = picked;
+  //
+  //     String minute = picked.minute < 10 ? '0' + picked.minute.toString() : picked.minute.toString();
+  //     String hour = picked.hour < 10 ? '0' + picked.hour.toString() : picked.hour.toString();
+  //
+  //     setState(() => timeController.text = "${hour}:${minute}");
+  //
+  //   }
+  //
+  // }
 
 }
 
 class ServiceDTO{
 
-  String dayOfWeek;
-  String timeOfDay;
-  int year;
-  int month;
-  int dayOfWeekAsNumber;
+  late String dayOfWeek;
+  late String timeOfDay;
+  late int year;
+  late int month;
+  late int dayOfWeekAsNumber;
 
   ServiceDTO(String dayOfWeek, String timeOfDay, year, month, dayOfWeekAsNumber){
     this.dayOfWeek = dayOfWeek;
@@ -379,7 +379,7 @@ class ServiceDTO{
     });
 
     //Lista com dias a serem cadastrados
-    List<DateTime> lstDayServices = new List();
+    List<DateTime> lstDayServices = [];
 
     // Com base no ano e mês. Itero todos os dias do mês.
     int  daysCounter = 31;
@@ -414,7 +414,7 @@ class ServiceDTO{
 
                     service.data = new DateTime(day.year, day.month, day.day, hour, minute);
                     service.ativo = 'True';
-                    service.lstSongs = new List();
+                    service.lstSongs = [];
 
                     listService.add(service);
         }

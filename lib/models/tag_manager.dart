@@ -1,10 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:louvor_app/models/song_manager.dart';
-import 'package:louvor_app/models/user.dart';
+import 'package:louvor_app/models/user_app.dart';
 import 'package:louvor_app/models/user_manager.dart';
 
-import 'Song.dart';
 import 'Tag.dart';
 
 class TagManager extends ChangeNotifier{
@@ -13,15 +12,23 @@ class TagManager extends ChangeNotifier{
    // _loadAllSongs();
   }
 
-  final Firestore fireStore = Firestore.instance;
+  final FirebaseFirestore fireStore = FirebaseFirestore.instance;
 
-  User user;
+  UserApp? user;
 
   static List<Tag> allTags = [];
 
   static List<String> allTagsAsStrings(){
     List<String> tags = [];
-    allTags.forEach((tag) => tags.add(tag.tag));
+    allTags.forEach((tag) {
+                             if(tag.tag != null){
+                               String x = tag.tag ?? '';
+                               if(x != ''){
+                                 tags.add(x);
+                               }
+                             }
+                          }
+                   );
     return tags;
   }
 
@@ -41,7 +48,7 @@ class TagManager extends ChangeNotifier{
     } else {
       filteredTags.addAll(
           allTags.where(
-                  (t) => t.tag.toLowerCase().contains(search.toLowerCase())
+                  (t) => t.tag!.toLowerCase().contains(search.toLowerCase())
           )
       );
     }
@@ -51,9 +58,10 @@ class TagManager extends ChangeNotifier{
 
   Future<void> _loadAllTag() async {
     final QuerySnapshot snapSongs =
-    await fireStore.collection('tags').where('isActive', isEqualTo: true).getDocuments();
+    await fireStore.collection('tags').where('isActive', isEqualTo: true)
+                                      .get().then((QuerySnapshot querySnapshot) => querySnapshot);
 
-    allTags = snapSongs.documents.map((d) => Tag.fromDocument(d)).toList();
+    allTags = snapSongs.docs.map((d) => Tag.fromDocument(d)).toList();
 
     notifyListeners();
   }
@@ -66,7 +74,7 @@ class TagManager extends ChangeNotifier{
 }
 
   updateUser(UserManager userManager) {
-    user = userManager.user;
+    user = userManager.userApp;
     if(user != null){
       _loadAllTag();
     }

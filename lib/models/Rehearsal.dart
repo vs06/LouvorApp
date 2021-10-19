@@ -6,32 +6,32 @@ import 'Song.dart';
 
 class Rehearsal extends Service {
 
-  final Firestore fireStore = Firestore.instance;
+  final FirebaseFirestore fireStore = FirebaseFirestore.instance;
 
-  DocumentReference get fireStoreReference => fireStore.document('rehearsals/$id');
+  DocumentReference get fireStoreReference => fireStore.doc('rehearsals/$id');
 
-  String id;
-  bool isActive;
-  DateTime data;
-  String type;
-  List<Song> lstSongs = [];
-  Map<String, dynamic> dynamicSongs = new Map();
+  String? id;
+  bool? isActive;
+  DateTime? data;
+  String? type;
+  List<Song>? lstSongs = [];
+  Map<String, dynamic>? dynamicSongs = new Map();
 
   Rehearsal({this.id, this.type, this.data, this.isActive, this.lstSongs});
 
   Rehearsal.fromDocument(DocumentSnapshot document){
-    id = document.documentID;
+    id = document.id;
     type = document['type'] as String;
     data = (document['data'] as Timestamp).toDate();
     isActive = document['isActive'] as bool;
 
-    Map.from(document.data['lstSongs']).
+    Map.from(document.data()?['lstSongs']).
     forEach((key, value) { if (lstSongs == null)
       lstSongs = [];
 
     Song s = Song.byMap(key, value);
     s.id = key;
-    lstSongs.add(s);
+    lstSongs?.add(s);
     });
 
   }
@@ -68,18 +68,18 @@ class Rehearsal extends Service {
       }
 
       if(this.lstSongs == null){
-        this.lstSongs = new List();
+        this.lstSongs = [];
       }
 
-      this.lstSongs.forEach((element) => this.dynamicSongs.addAll(element.toMap()));
+      this.lstSongs?.forEach((element) => this.dynamicSongs?.addAll(element.toMap()));
 
       final doc = await fireStore.collection('rehearsals').add(this.toMap());
-      id = doc.documentID;
+      id = doc.id;
 
     } else {
 
-      this.lstSongs.forEach((element) => this.dynamicSongs.addAll(element.toMap()));
-      await fireStoreReference.updateData(this.toMap());
+      this.lstSongs?.forEach((element) => this.dynamicSongs?.addAll(element.toMap()));
+      await fireStoreReference.update(this.toMap());
     }
 
     notifyListeners();
@@ -94,12 +94,6 @@ class Rehearsal extends Service {
         lstSongs: lstSongs
     );
   }
-
-  // void delete(Rehearsal rehearsal) {
-  //   rehearsal.isActive = false;
-  //   rehearsal.save();
-  //   notifyListeners();
-  // }
 
   static Rehearsal serviceCastToRehearsal(Service service, String rehearsalType){
     return Rehearsal(

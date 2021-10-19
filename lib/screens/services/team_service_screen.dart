@@ -13,17 +13,17 @@ import 'package:intl/intl.dart';
 
 class TeamServiceScreen extends StatefulWidget {
 
-  List<Song> _lstSongSelecionadas = new List<Song>();
-  Service service;
-  Service serviceWithoutChanges;
+  late List<Song> _lstSongSelecionadas = [];
+  late Service service;
+  late Service serviceWithoutChanges;
 
   TeamServiceScreen.buildTeamServiceScreen(Service s) {
     service = s;
 
     if(service.lstSongs != null){
-      _lstSongSelecionadas.addAll(service.lstSongs);
+      _lstSongSelecionadas.addAll(service.lstSongs ?? []);
     } else {
-      service.lstSongs = new List();
+      service.lstSongs = [];
     }
 
     //Made a copy of original object
@@ -127,9 +127,9 @@ class TeamServiceScreenState extends State<TeamServiceScreen> {
                                                         height: 2,
                                                         color: Colors.lightBlue,
                                                       ),
-                                                      onChanged: (String newValue) {
+                                                      onChanged: (String? newValue) {
                                                         setState(() {
-                                                          valueRoleDropDownSelected = newValue;
+                                                          valueRoleDropDownSelected = newValue!;
                                                         });
                                                       },
                                                       items: AppListPool.serviceRoles.map<DropdownMenuItem<String>>((String value) {
@@ -179,9 +179,9 @@ class TeamServiceScreenState extends State<TeamServiceScreen> {
                                                         height: 2,
                                                         color: Colors.lightBlue,
                                                       ),
-                                                      onChanged: (String newValue) {
+                                                      onChanged: (String? newValue) {
                                                         setState(() {
-                                                          valueUserDropDownSelected = newValue;
+                                                          valueUserDropDownSelected = newValue!;
                                                         });
                                                       },
                                                       items: AppListPool.usersName.map<DropdownMenuItem<String>>((String value) {
@@ -275,10 +275,10 @@ class TeamServiceScreenState extends State<TeamServiceScreen> {
                          child:
                                   ListView.builder(
                                       padding: const EdgeInsets.all(8),
-                                      itemCount: widget.service.team != null ? widget.service.team.length : 0,
+                                      itemCount: widget.service.team != null ? widget.service.team!.length : 0,
                                       shrinkWrap: true,
                                       itemBuilder: (BuildContext context, int index) {
-                                        String role =  widget.service.team.keys.elementAt(index);
+                                        String role =  widget.service.team!.keys.elementAt(index);
                                         return
                                           Column(
                                               children: <Widget>[
@@ -287,7 +287,7 @@ class TeamServiceScreenState extends State<TeamServiceScreen> {
                                                         borderRadius: BorderRadius.circular(4)
                                                     ),
                                                     child: Container(
-                                                      height: MultiUtils.calculaHeightTile(widget.service.team[role].length),
+                                                      height: MultiUtils.calculaHeightTile(widget.service.team![role]!.length),
                                                       padding: const EdgeInsets.all(8),
                                                       child: Row(
                                                         children: <Widget>[
@@ -312,7 +312,7 @@ class TeamServiceScreenState extends State<TeamServiceScreen> {
                                                                             ),
                                                                           ),
 
-                                                                          Text( StringUtils.splitVolunteersToTile(widget.service.team[role]),
+                                                                          Text( StringUtils.splitVolunteersToTile(widget.service.team![role] ?? []),
                                                                             overflow: TextOverflow.ellipsis,
                                                                             style: TextStyle(
                                                                               fontSize: 16,
@@ -326,7 +326,7 @@ class TeamServiceScreenState extends State<TeamServiceScreen> {
                                                                             GestureDetector(
                                                                               onTap: () {
                                                                                 setState(() {
-                                                                                  widget.service.team.remove(widget.service.team.keys.elementAt(index));
+                                                                                  widget.service.team!.remove(widget.service.team!.keys.elementAt(index));
                                                                                 });
                                                                               },
                                                                               child:Icon(Icons.delete , color: Colors.blueGrey,),
@@ -376,8 +376,8 @@ class TeamServiceScreenState extends State<TeamServiceScreen> {
           ),
           ElevatedButton.icon(
             onPressed: () {
-              widget.service.lstSongs.clear();
-              widget.service.lstSongs.addAll(widget._lstSongSelecionadas);
+              widget.service.lstSongs!.clear();
+              widget.service.lstSongs!.addAll(widget._lstSongSelecionadas);
               Navigator.of(context).pop();
               Navigator.of(context).pop();
               Navigator.of(context).push(
@@ -393,21 +393,21 @@ class TeamServiceScreenState extends State<TeamServiceScreen> {
   }
 
   void addTeamMap(String valueRoleDropDownSelected, String valueUserDropDownSelected) {
-    if(!valueRoleDropDownSelected.isEmpty && !valueUserDropDownSelected.isEmpty){
+    if(valueRoleDropDownSelected.isNotEmpty && valueUserDropDownSelected.isNotEmpty){
 
-      if(widget.service.team.containsKey(valueRoleDropDownSelected)){
-        if(!widget.service.team[valueRoleDropDownSelected].contains(valueUserDropDownSelected)){
+      if(widget.service.team!.containsKey(valueRoleDropDownSelected)){
+        if(!widget.service.team![valueRoleDropDownSelected]!.contains(valueUserDropDownSelected)){
           setState(() {
-            widget.service.team[valueRoleDropDownSelected].add(valueUserDropDownSelected);
+            widget.service.team![valueRoleDropDownSelected]!.add(valueUserDropDownSelected);
           });
         }else{
           setState(() {
-            widget.service.team.putIfAbsent(valueRoleDropDownSelected, () => [valueUserDropDownSelected]);
+            widget.service.team!.putIfAbsent(valueRoleDropDownSelected, () => [valueUserDropDownSelected]);
           });
         }
       } else {
         setState(() {
-          widget.service.team.putIfAbsent(valueRoleDropDownSelected, () => [valueUserDropDownSelected]);
+          widget.service.team!.putIfAbsent(valueRoleDropDownSelected, () => [valueUserDropDownSelected]);
         });
       }
     }

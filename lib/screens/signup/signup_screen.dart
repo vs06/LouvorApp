@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:louvor_app/models/user.dart';
 import 'package:louvor_app/helpers/validators.dart';
+import 'package:louvor_app/models/user_app.dart';
 import 'package:louvor_app/models/user_manager.dart';
 import 'package:provider/provider.dart';
 
@@ -9,7 +9,7 @@ class SignUpScreen extends StatelessWidget {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
-  final User user = User();
+  final UserApp user = UserApp();
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class SignUpScreen extends StatelessWidget {
                       decoration: const InputDecoration(hintText: 'Nome Completo'),
                       enabled: !userManager.loading,
                       validator: (name){
-                        if(name.isEmpty)
+                        if(name!.isEmpty)
                           return 'Campo obrigatório';
                         else if(name.trim().split(' ').length <= 1)
                           return 'Preencha seu Nome completo';
@@ -48,7 +48,7 @@ class SignUpScreen extends StatelessWidget {
                       keyboardType: TextInputType.emailAddress,
                       enabled: !userManager.loading,
                       validator: (email){
-                        if(email.isEmpty)
+                        if(email!.isEmpty)
                           return 'Campo obrigatório';
                         else if(!emailValid(email))
                           return 'E-mail inválido';
@@ -62,7 +62,7 @@ class SignUpScreen extends StatelessWidget {
                       obscureText: true,
                       enabled: !userManager.loading,
                       validator: (pass){
-                        if(pass.isEmpty)
+                        if(pass!.isEmpty)
                           return 'Campo obrigatório';
                         else if(pass.length < 6)
                           return 'Senha muito curta';
@@ -76,7 +76,7 @@ class SignUpScreen extends StatelessWidget {
                       obscureText: true,
                       enabled: !userManager.loading,
                       validator: (pass){
-                        if(pass.isEmpty)
+                        if(pass!.isEmpty)
                           return 'Campo obrigatório';
                         else if(pass.length < 6)
                           return 'Senha muito curta';
@@ -93,11 +93,11 @@ class SignUpScreen extends StatelessWidget {
                             .withAlpha(100),
                         textColor: Colors.white,
                         onPressed: userManager.loading ? null : (){
-                          if(formKey.currentState.validate()){
-                            formKey.currentState.save();
+                          if(formKey.currentState!.validate()){
+                            formKey.currentState!.save();
 
                             if(user.password != user.confirmPassword){
-                              scaffoldKey.currentState.showSnackBar(
+                              scaffoldKey.currentState!.showSnackBar(
                                   SnackBar(
                                     content: const Text('Senhas não coincidem!'),
                                     backgroundColor: Colors.red,
@@ -107,12 +107,12 @@ class SignUpScreen extends StatelessWidget {
                             }
 
                             userManager.signUp(
-                                user: user,
+                                userApp: user,
                                 onSuccess: (){
                                   Navigator.of(context).pop();
                                 },
                                 onFail: (e){
-                                  scaffoldKey.currentState.showSnackBar(
+                                  scaffoldKey.currentState!.showSnackBar(
                                       SnackBar(
                                         content: Text('Falha ao cadastrar: $e'),
                                         backgroundColor: Colors.red,

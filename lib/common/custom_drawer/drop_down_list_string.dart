@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 
 class DropDownListString extends StatefulWidget {
 
-  final List<String> listOptions;
+  final List<String>? listOptions;
+  String? ref;
 
   DropDownListString(this.listOptions);
-
-  String ref;
 
   @override
   State<DropDownListString> createState() => _DropDownListStringState();
@@ -16,7 +15,7 @@ class DropDownListString extends StatefulWidget {
 
 class _DropDownListStringState extends State<DropDownListString> {
 
-  String dropdownValue;
+  String? dropdownValue;
 
   @override
   Widget build(BuildContext context) {
@@ -30,12 +29,12 @@ class _DropDownListStringState extends State<DropDownListString> {
         height: 2,
         color: Colors.lightBlue,
       ),
-      onChanged: (String newValue) {
+      onChanged: (String? newValue) {
         setState(() {
           dropdownValue = newValue;
         });
       },
-      items: widget.listOptions.map<DropdownMenuItem<String>>((String value) {
+      items: widget.listOptions!.map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
           child: Text(value),

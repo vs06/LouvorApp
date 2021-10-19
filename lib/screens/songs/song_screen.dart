@@ -7,12 +7,12 @@ import 'package:provider/provider.dart';
 import 'package:louvor_app/models/song_manager.dart';
 import 'package:louvor_app/models/user_manager.dart';
 import 'package:louvor_app/helpers/loading_screen.dart';
-import 'package:autocomplete_textfield/autocomplete_textfield.dart';
+//import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SongScreen extends StatefulWidget {
 
-  final Song song;
+  late Song song;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   SongScreen(Song s) : song = s != null ? s.clone() : Song();
@@ -23,12 +23,13 @@ class SongScreen extends StatefulWidget {
   }
 
 }
+
 class SongScreenState extends State<SongScreen> {
 
   String currentText = "";
-  GlobalKey<AutoCompleteTextFieldState<String>> key = new GlobalKey();
+  //GlobalKey<AutoCompleteTextFieldState<String>> key = new GlobalKey();
 
-  TextEditingController textEditingController;
+  //TextEditingController textEditingController;
 
   //Controle de andamento das musicas
   bool semPalmas = false;
@@ -36,7 +37,7 @@ class SongScreenState extends State<SongScreen> {
 
   List<String> suggestions = TagManager.allTagsAsStrings();
 
-  SimpleAutoCompleteTextField simpleAutoCompleteTags;
+  //SimpleAutoCompleteTextField simpleAutoCompleteTags;
   bool showWhichErrorText = false;
 
   ScrollController _scrollTagsController = ScrollController();
@@ -44,7 +45,7 @@ class SongScreenState extends State<SongScreen> {
   @override
   Widget build(BuildContext context) {
 
-    bool toggleActive = widget.song.ativo.toUpperCase() == 'TRUE';
+    bool toggleActive = widget.song.ativo!.toUpperCase() == 'TRUE';
 
     if(widget.song.palmas == null){
       widget.song.palmas = '';
@@ -54,20 +55,20 @@ class SongScreenState extends State<SongScreen> {
       widget.song.tags = '';
     }
 
-    comPalmas = widget.song.palmas.contains('comPalmas');
-    semPalmas = widget.song.palmas.contains('semPalmas');
+    comPalmas = widget.song.palmas!.contains('comPalmas');
+    semPalmas = widget.song.palmas!.contains('semPalmas');
 
     final primaryColor = Theme.of(context).primaryColor;
 
-    List<String> tagsLst = tagsToListString(widget.song.tags);
+    List<String> tagsLst = tagsToListString(widget.song.tags ?? '');
 
-    _firstPageState();
+    //_firstPageState();
 
     return ChangeNotifierProvider.value(
       value: widget.song,
       child: Scaffold(
         appBar: AppBar(
-          title: widget.song != null ? Text("Música") : Text(widget.song.nome),
+          title: widget.song != null ? Text("Música") : Text(widget.song.nome ?? ''),
           centerTitle: true,
         ),
         backgroundColor: Colors.white,
@@ -120,7 +121,8 @@ class SongScreenState extends State<SongScreen> {
                                       : Icon(Icons.check_circle, size: 25, color:  Colors.blueGrey,),
                                   color: Colors.blueGrey,
                                   onPressed: () {
-                                    if(UserManager.isUserAdmin){
+                                    //if(UserManager.isUserAdmin){
+                                    if(UserManager.isUserAdmin == true){
                                       setState(() {
                                         toggleActive = !toggleActive;
                                       });
@@ -216,12 +218,14 @@ class SongScreenState extends State<SongScreen> {
                                 ),
 
                                 Padding(padding: EdgeInsets.only(top: 5),
-                                    child:  UserManager.isUserAdmin ?
+                                    child: UserManager.isUserAdmin == true ?
                                     Container(
                                       height: 35,
                                       width: 200,
-                                      child: Center(
-                                        child: simpleAutoCompleteTags,),
+                                      //todo reinplementar com nova versao flutter
+                                      // child: Center(
+                                      //   child: simpleAutoCompleteTags,
+                                      // ),
                                     )
                                         :
                                     Visibility(
@@ -246,7 +250,7 @@ class SongScreenState extends State<SongScreen> {
                                       isAlwaysShown: true,
                                       controller: _scrollTagsController,
                                       child: GridView.builder(
-                                        itemCount: tagsToListString(widget.song.tags).length,
+                                        itemCount: tagsToListString(widget.song.tags ?? '').length,
                                         gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
                                           crossAxisCount: 2,
                                           childAspectRatio: 4,
@@ -255,7 +259,7 @@ class SongScreenState extends State<SongScreen> {
                                           return Center(
                                               child:
                                               InputChip(
-                                                isEnabled: UserManager.isUserAdmin,
+                                                isEnabled: UserManager.isUserAdmin == true,
                                                 padding: EdgeInsets.all(2.0),
                                                 label: Text(tagsLst[index],
                                                   style: TextStyle(
@@ -265,7 +269,7 @@ class SongScreenState extends State<SongScreen> {
                                                 deleteIconColor: Colors.white,
                                                 onDeleted: () {
                                                   setState(() {
-                                                    widget.song.tags = widget.song.tags.replaceAll(tagsLst[index]+';', '');
+                                                    widget.song.tags = widget.song.tags!.replaceAll(tagsLst[index]+';', '');
                                                   });
                                                 },
                                               )
@@ -276,7 +280,7 @@ class SongScreenState extends State<SongScreen> {
                                     )
                                 )
                            : Visibility(
-                              visible: UserManager.isUserAdmin,
+                              visible: UserManager.isUserAdmin == true,
                               child:
                               Padding(
                                 padding: EdgeInsets.only(left:70, bottom: 1),
@@ -325,15 +329,16 @@ class SongScreenState extends State<SongScreen> {
                                                          ),
                                         value: semPalmas,
                                         onChanged: (bool value) {
-                                          if(UserManager.isUserAdmin){
+                                          if(UserManager.isUserAdmin == true){
                                               setState(() {
                                                 semPalmas = value;
                                                 if (semPalmas) {
-                                                  if (!widget.song.palmas.contains('semPalmas')) {
-                                                    widget.song.palmas += 'semPalmas';
+                                                  if (!widget.song.palmas!.contains('semPalmas')) {
+                                                    //widget.song.palmas += 'semPalmas';
+                                                    widget.song.palmas = 'semPalmas';
                                                   }
                                                 } else {
-                                                  if (widget.song.palmas.contains('semPalmas')) {widget.song.palmas = widget.song.palmas.replaceAll('semPalmas', '');
+                                                  if (widget.song.palmas!.contains('semPalmas')) {widget.song.palmas = widget.song.palmas!.replaceAll('semPalmas', '');
                                                   }
                                                 }
                                               });
@@ -353,17 +358,19 @@ class SongScreenState extends State<SongScreen> {
                                             style: TextStyle(fontSize: 15,color: Colors.blueGrey),),
                                           value: comPalmas,
                                           onChanged: (bool value) {
-                                            if(UserManager.isUserAdmin){
+                                            if(UserManager.isUserAdmin == true){
                                                 setState(() {
                                                   comPalmas = value;
                                                   if (comPalmas) {
-                                                    if (!widget.song.palmas.contains('comPalmas')) {
-                                                      widget.song.palmas += 'comPalmas';
+                                                    if (!widget.song.palmas!.contains('comPalmas')) {
+                                                      //todo retornar null safety
+                                                      //widget.song.!palmas += 'comPalmas' ;
+                                                      widget.song.palmas = 'comPalmas' ;
                                                     }
                                                   } else {
-                                                    if (widget.song.palmas.contains(
+                                                    if (widget.song.palmas!.contains(
                                                         'comPalmas')) {
-                                                      widget.song.palmas = widget.song.palmas.replaceAll('comPalmas', '');
+                                                      widget.song.palmas = widget.song.palmas!.replaceAll('comPalmas', '');
                                                     }
                                                   }
                                                 });
@@ -431,13 +438,13 @@ class SongScreenState extends State<SongScreen> {
                     Consumer<Song>(
                       builder: (_, song, __) {
                         return Visibility(
-                            visible: UserManager.isUserAdmin,
+                            visible: UserManager.isUserAdmin == true,
                             child: RaisedButton(
                               onPressed: () async {
                                 if (isValidateDinamicaFill()) {
                                   saveNewTags(song);
-                                  if (widget.formKey.currentState.validate()) {
-                                    widget.formKey.currentState.save();
+                                  if (widget.formKey.currentState!.validate()) {
+                                    widget.formKey.currentState!.save();
                                     context.read<SongManager>().update(song);
                                     Navigator.of(context).pop();
                                     Navigator.of(context).push(MaterialPageRoute(builder: (context) =>LoadingScreen()));
@@ -485,33 +492,33 @@ class SongScreenState extends State<SongScreen> {
     return retKeyWords;
   }
 
-  _firstPageState() {
-    simpleAutoCompleteTags = SimpleAutoCompleteTextField(
-      key: key,
-      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color: Colors.blueGrey,),
-      decoration: InputDecoration(
-        border: InputBorder.none,
-        contentPadding: const EdgeInsets.symmetric(vertical: 12),
-        hintText: " Adicione uma tag",
-        hintStyle: TextStyle(color: Colors.blueGrey),
-      ),
-      suggestions: suggestions,
-      textChanged: (text) => currentText = text,
-      clearOnSubmit: true,
-      textSubmitted: (text) =>
-          setState(() {
-            if (text != "") {
-              if(!widget.song.tags.contains(text)){
-                widget.song.tags += text + ';';
-              }
-            }
-          }),
-    );
-  }
+  // _firstPageState() {
+  //   simpleAutoCompleteTags = SimpleAutoCompleteTextField(
+  //     key: key,
+  //     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color: Colors.blueGrey,),
+  //     decoration: InputDecoration(
+  //       border: InputBorder.none,
+  //       contentPadding: const EdgeInsets.symmetric(vertical: 12),
+  //       hintText: " Adicione uma tag",
+  //       hintStyle: TextStyle(color: Colors.blueGrey),
+  //     ),
+  //     suggestions: suggestions,
+  //     textChanged: (text) => currentText = text,
+  //     clearOnSubmit: true,
+  //     textSubmitted: (text) =>
+  //         setState(() {
+  //           if (text != "") {
+  //             if(!widget.song.tags!.contains(text)){
+  //               widget.song.tags += text + ';';
+  //             }
+  //           }
+  //         }),
+  //   );
+  // }
 
   void saveNewTags(Song song) {
-    if(song.tags.isNotEmpty && song.tags.length > 0){
-      tagsToListString(song.tags).forEach((tagAdded) {
+    if(song.tags!.isNotEmpty && song.tags!.length > 0){
+      tagsToListString(song.tags ?? '').forEach((tagAdded) {
         if (!TagManager.allTagsAsStrings().contains(tagAdded)) {
           context.read<TagManager>().update(Tag.newTag(tagAdded));
         }
@@ -539,8 +546,8 @@ class SongScreenState extends State<SongScreen> {
   }
 
   void _launchVideoURL() async =>
-      await canLaunch(widget.song.videoUrl) ? await launch(widget.song.videoUrl) : throw 'Could not launch $widget.song.videoUrl';
+      await canLaunch(widget.song.videoUrl ?? '') ? await launch(widget.song.videoUrl ?? '') : throw 'Could not launch $widget.song.videoUrl';
 
   void _launchChordsURL() async =>
-      await canLaunch(widget.song.cifra) ? await launch(widget.song.cifra) : throw 'Could not launch $widget.song.cifra';
+      await canLaunch(widget.song.cifra ?? '') ? await launch(widget.song.cifra ?? '') : throw 'Could not launch $widget.song.cifra';
 }

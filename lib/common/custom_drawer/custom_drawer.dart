@@ -31,7 +31,7 @@ class CustomDrawer extends StatelessWidget {
                 CustomDrawerHeader(),
                 const Divider(),
                 Visibility(
-                  visible: userManager.user != null,
+                  visible: UserManager.isUserAdmin == true,
                   child: Column(
                     children: [
                         DrawerTile(
@@ -55,7 +55,8 @@ class CustomDrawer extends StatelessWidget {
                           page: 3,
                       ),
                       Visibility(
-                        visible: UserManager.isUserAdmin != null ? UserManager.isUserAdmin : false,
+                        visible: UserManager.isUserAdmin == true,
+                        //visible: true,
                         child:
                         DrawerTile(
                           iconData: Icons.supervised_user_circle_sharp,

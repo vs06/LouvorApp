@@ -6,34 +6,34 @@ import 'package:louvor_app/models/Song.dart';
 
 class Service extends ChangeNotifier {
 
-  final Firestore firestore = Firestore.instance;
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  DocumentReference get firestoreRef => firestore.document('services/$id');
+  DocumentReference get firestoreRef => firestore.doc('services/$id');
 
-  String id;
-  String ativo;
-  DateTime data;
-  String dirigente;
-  List<Song> lstSongs = [];
-  Map<String, dynamic> dynamicSongs = new Map();
+  late String? id;
+  late String? ativo;
+  late DateTime? data;
+  late String? dirigente;
+  late List<Song>? lstSongs = [];
+  late Map<String, dynamic>? dynamicSongs = new Map();
 
-  Map<String, List<String>> team = new Map();
+  Map<String, List<String>>? team = new Map();
 
-  Service({this.id, this.dirigente, this.data, this.ativo, this.lstSongs, this.team});
+  Service({this.id,this.dirigente, this.data, this.ativo,this.lstSongs, this.team});
 
   Service.fromDocument(DocumentSnapshot document){
-    id = document.documentID;
+    id = document.id;
     dirigente = document['dirigente'] as String;
     data = (document['data'] as Timestamp).toDate();
     ativo = document['ativo'] as String;
 
-    Map.from(document.data['lstSongs']).
+    Map.from(document.data()?['lstSongs']).
         forEach((key, value) { if (lstSongs == null)
                                       lstSongs = [];
 
                                 Song s = Song.byMap(key, value);
                                 s.id = key;
-                                lstSongs.add(s);
+                                lstSongs?.add(s);
                               });
 
     if(document['team'] != null) {
@@ -46,12 +46,12 @@ class Service extends ChangeNotifier {
 
   }
 
-  Map<String, List<String>> generateTeam(String role, List<dynamic> volunteers){
+  Map<String, List<String>>? generateTeam(String role, List<dynamic> volunteers){
 
     List<String> teste = [];
     volunteers.forEach((volunteer) => teste.add(volunteer.toString()));
 
-    team.putIfAbsent(role, () => teste);
+    team?.putIfAbsent(role, () => teste);
   }
 
   Service.fromMap(Map<dynamic, dynamic> map)
@@ -93,20 +93,20 @@ class Service extends ChangeNotifier {
         }
 
         if(this.lstSongs == null){
-          this.lstSongs = new List();
+          this.lstSongs = [];
         }
 
-        this.lstSongs.forEach((element) => this.dynamicSongs.addAll(element.toMap()));
+        this.lstSongs?.forEach((element) => this.dynamicSongs?.addAll(element.toMap()));
 
         final doc = await firestore.collection('services').add(this.toMap());
-        id = doc.documentID;
+        id = doc.id;
 
         print('SALVANDO $blob $data $dirigente');
     } else {
         print('ATUALIZANDO $blob $data $dirigente');
 
-        this.lstSongs.forEach((element) => this.dynamicSongs.addAll(element.toMap()));
-        await firestoreRef.updateData(this.toMap());
+        this.lstSongs?.forEach((element) => this.dynamicSongs?.addAll(element.toMap()));
+        await firestoreRef.update(this.toMap());
     }
 
     notifyListeners();
@@ -128,19 +128,19 @@ class Service extends ChangeNotifier {
     Service serviceClone = new Service();
 
     serviceClone.lstSongs = [];
-    serviceClone.lstSongs.addAll(serviceOrigin.lstSongs);
+    serviceClone.lstSongs?.addAll(serviceOrigin.lstSongs!.toList());
 
     serviceClone.team = new Map();
     
     if(serviceOrigin.team != null){
-     serviceOrigin.team.forEach((role, volunteers) {
+     serviceOrigin.team?.forEach((role, volunteers) {
 
-       var listNewReference = new List<String>();
+       List<String> listNewReference = [];
        volunteers.forEach((volunteer) {
          listNewReference.add(volunteer)  ;
        });
 
-       serviceClone.team.putIfAbsent(role, ()=> listNewReference);
+       serviceClone.team?.putIfAbsent(role, ()=> listNewReference);
      });
     }
 

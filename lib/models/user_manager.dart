@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:louvor_app/helpers/app_list_pool.dart';
 import 'package:louvor_app/helpers/firebase_errors.dart';
-import 'package:louvor_app/models/user.dart';
+import 'package:louvor_app/models/user_app.dart';
 
 class UserManager extends ChangeNotifier {
 
@@ -14,23 +14,22 @@ class UserManager extends ChangeNotifier {
   }
 
   final FirebaseAuth auth = FirebaseAuth.instance;
-  final Firestore firestore = Firestore.instance;
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  User user;
-  static bool isUserAdmin;
+  UserApp? userApp;
+  static bool? isUserAdmin;
 
-  List<User> allUsers = [];
+  List<UserApp> allUsers = [];
 
   bool _loading = false;
   bool get loading => _loading;
 
-  bool get isLoggedIn => user != null;
+  bool get isLoggedIn => userApp != null;
 
-  Future<void> signIn({User user, Function onFail, Function onSuccess}) async {
+  Future<void> signIn({required UserApp userApp,required Function onFail,required Function onSuccess}) async {
     loading = true;
     try {
-      final AuthResult result = await auth.signInWithEmailAndPassword(
-          email: user.email, password: user.password);
+      final UserCredential result = await auth.signInWithEmailAndPassword(email: userApp.email ?? '', password: userApp.password ?? '');
 
       await _loadCurrentUser(firebaseUser: result.user);
 
@@ -43,20 +42,20 @@ class UserManager extends ChangeNotifier {
     loading = false;
   }
 
-  Future<void> signUp({User user, Function onFail, Function onSuccess}) async {
+  Future<void> signUp({required UserApp userApp,required Function onFail,required Function onSuccess}) async {
     loading = true;
     try {
-      final AuthResult result = await auth.createUserWithEmailAndPassword(
-          email: user.email, password: user.password);
+      final UserCredential result = await auth.createUserWithEmailAndPassword(
+          email: userApp.email ?? '', password: userApp.password ?? '');
 
-      user.id = result.user.uid;
-      user.isAdmin = 'FALSE';
-      user.ativo = 'TRUE';
+      userApp.id = result.user!.uid;
+      userApp.isAdmin = 'FALSE';
+      userApp.ativo = 'TRUE';
       //Retirado linha abaixo, para não logar
       // trocar o usuário ao admin, cadastrar um novo user
       //this.user = user;
 
-      await user.saveData();
+      await userApp.saveData();
 
       onSuccess();
     } on PlatformException catch (e){
@@ -67,7 +66,7 @@ class UserManager extends ChangeNotifier {
 
   void signOut(){
     auth.signOut();
-    user = null;
+    userApp = null;
     notifyListeners();
   }
 
@@ -77,18 +76,18 @@ class UserManager extends ChangeNotifier {
   }
 
   static Future<void> resetPassword(String email) async {
-    var auth = FirebaseAuth.instance;
+    FirebaseAuth? auth = FirebaseAuth.instance;
     await auth.sendPasswordResetEmail(email: email);
     auth = null;
   }
 
-  Future<void> _loadCurrentUser({FirebaseUser firebaseUser}) async {
-    final FirebaseUser currentUser = firebaseUser ?? await auth.currentUser();
+  Future<void> _loadCurrentUser({User? firebaseUser}) async {
+    final User currentUser = firebaseUser ?? await auth.currentUser!;
     if(currentUser != null){
       final DocumentSnapshot docUser = await firestore.collection('users')
-          .document(currentUser.uid).get();
-      user = User.fromDocument(docUser);
-      isUserAdmin = user.isAdmin == 'TRUE'? true : false;
+          .doc(currentUser.uid).get();
+      userApp = UserApp.fromDocument(docUser);
+      isUserAdmin = userApp!.isAdmin == 'TRUE'? true : false;
 
       notifyListeners();
     }
@@ -97,33 +96,36 @@ class UserManager extends ChangeNotifier {
 
   Future<void> _loadAllUsers() async {
     final QuerySnapshot snapServices =
-    await firestore.collection('users').where('ativo', isEqualTo: 'TRUE').getDocuments();
+    await firestore.collection('users').where('ativo', isEqualTo: 'TRUE')
+                                       .get().then((QuerySnapshot querySnapshot) => querySnapshot);
 
-    allUsers = snapServices.documents.map(
-            (d) => User.fromDocument(d)).toList();
+    allUsers = snapServices.docs.map(
+            (d) => UserApp.fromDocument(d)).toList();
 
     if(AppListPool.usersName.isEmpty){
 
-      allUsers.sort((a, b) => a.name.compareTo(b.name));
+      //todo arrumar non safety
+      //allUsers.sort((a, b) => a.name!.compareTo(b.name));
+
       AppListPool.fillUsers(allUsers);
     }
 
     notifyListeners();
   }
 
-  List<User> get filteredUsers {
+  List<UserApp> get filteredUsers {
     return allUsers;
   }
 
-  void update(User u){
-    allUsers.removeWhere((u) => u.id == user.id);
-    user.saveData();
+  void update(UserApp u){
+    allUsers.removeWhere((u) => u.id == userApp!.id);
+    userApp!.saveData();
     notifyListeners();
   }
 
-  void userInactivated(User u){
-    allUsers.removeWhere((u) => u.id == user.id);
-    user.userInactivated ();
+  void userInactivated(UserApp u){
+    allUsers.removeWhere((u) => u.id == userApp!.id);
+    userApp!.userInactivated();
     notifyListeners();
   }
 

@@ -1,12 +1,12 @@
 class StringUtils {
 
-  static bool isNotNUllNotEmpty(String string){
+  static bool isNotNUllNotEmpty(String? string){
     return string != null && string.isNotEmpty && string != '';
   }
 
-  static String splitVolunteersToTile(List<String> lstVolunteers) {
+  static String splitVolunteersToTile(List<String>? lstVolunteers) {
     String volunteers = "";
-    var lengthVolunteers = lstVolunteers.length;
+    var lengthVolunteers = lstVolunteers!.length;
 
     lstVolunteers.forEach((element) {
       lengthVolunteers--;

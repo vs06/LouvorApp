@@ -6,7 +6,7 @@ import 'package:louvor_app/helpers/notification_utils.dart';
 
 class LoadingScreen extends StatefulWidget {
 
-  String whatsUpMessage;
+  String? whatsUpMessage;
 
   LoadingScreen();
 
@@ -16,7 +16,7 @@ class LoadingScreen extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return LoadingScreenState(whatsUpMessage);
+    return LoadingScreenState(whatsUpMessage!);
   }
 }
 
@@ -38,7 +38,7 @@ class LoadingScreenState extends State<LoadingScreen> {
 
   route() {
     Navigator.of(context).pop();
-    if(whatsUpMessage != null){
+    if(whatsUpMessage != ''){
       NotificationUtils.sendNotificationWhatsUp(whatsUpMessage);
     }
   }

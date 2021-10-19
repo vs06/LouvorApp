@@ -19,7 +19,7 @@ import 'components/service_list_tile.dart';
 class ServicesScreen extends StatelessWidget {
 
   ServicesScreen();
-  DateTime filterByMonth;
+  DateTime? filterByMonth;
   ServicesScreen.buildByMonth(this.filterByMonth);
 
   @override
@@ -98,7 +98,7 @@ class ServicesScreen extends StatelessWidget {
               },
             ),
             Visibility(
-                visible: UserManager.isUserAdmin,
+                visible: UserManager.isUserAdmin == true,
                 child:
                 IconButton(
                   icon: Icon(Icons.add),
@@ -111,7 +111,7 @@ class ServicesScreen extends StatelessWidget {
         ),
         body: Consumer<ServiceManager>(
           builder: (_, serviceManager, __) {
-            _filteredServices = serviceManager.filteredServicesByMounth(filterByMonth);
+            _filteredServices = serviceManager.filteredServicesByMonth(filterByMonth);
             orderTeamRoles(_filteredServices);
             lstServicesUsedAsResume = [];
             _filteredServices.forEach((service) => lstServicesUsedAsResume.add(service));
@@ -125,7 +125,7 @@ class ServicesScreen extends StatelessWidget {
                   })
                   : Center(
                   child:
-                  Text('Sem Cultos\nCadastrados em: ${DateUtilsCustomized.mounthBr(filterByMonth)}',
+                  Text('Sem Cultos\nCadastrados em: ${DateUtilsCustomized.monthBr(filterByMonth)}',
                     style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.w800,
@@ -137,7 +137,7 @@ class ServicesScreen extends StatelessWidget {
         ),
         floatingActionButton:
         Visibility(
-          visible: UserManager.isUserAdmin,
+          visible: UserManager.isUserAdmin == true,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -198,18 +198,18 @@ class ServicesScreen extends StatelessWidget {
       if(service.dirigente != null && service.dirigente != ''){
         if(service.team == null){
           service.team = new Map();
-          service.team.putIfAbsent('Vocal', () => [service.dirigente]);
+          service.team!.putIfAbsent('Vocal', () => [service.dirigente ?? '']);
         }else{
-          if(!service.team.containsKey('Vocal')){
-            service.team.putIfAbsent('Vocal', () => [service.dirigente]);
+          if(!service.team!.containsKey('Vocal')){
+            service.team!.putIfAbsent('Vocal', () => [service.dirigente ?? '']);
           }else{
-            service.team['Vocal'].add(service.dirigente);
+            service.team!['Vocal']!.add(service.dirigente ?? '');
           }
         }
       }
 
       if(service.team != null){
-        service.team.forEach((role, listVolunteer) {
+        service.team!.forEach((role, listVolunteer) {
           addToMap(mapRoleVolunteerQuantity, role, listVolunteer);
         });
       }
@@ -235,10 +235,10 @@ class ServicesScreen extends StatelessWidget {
 
     listVolunteer.forEach((volunteer) {
       if(mapRoleVolunteerQuantity.containsKey(role)){
-        if(mapRoleVolunteerQuantity[role].containsKey(volunteer)){
-          mapRoleVolunteerQuantity[role][volunteer] = mapRoleVolunteerQuantity[role][volunteer]+1;
+        if(mapRoleVolunteerQuantity[role]!.containsKey(volunteer)){
+          mapRoleVolunteerQuantity[role]![volunteer] = (mapRoleVolunteerQuantity[role]![volunteer] ?? 0 ) +1;
         }else{
-          mapRoleVolunteerQuantity[role].putIfAbsent(volunteer, () => 1);
+          mapRoleVolunteerQuantity[role]!.putIfAbsent(volunteer, () => 1);
         }
       }else{
         mapRoleVolunteerQuantity.putIfAbsent(role, () => {volunteer: 1});
@@ -253,8 +253,8 @@ class ServicesScreen extends StatelessWidget {
         Map<String, List<String>> teamSorted = new Map();
 
         AppListPool.serviceRoles.forEach((role) {
-          if(service.team.keys.contains(role)){
-            teamSorted.putIfAbsent(role, () => service.team[role]);
+          if(service.team!.keys.contains(role)){
+            teamSorted.putIfAbsent(role, () => service.team![role] ?? []);
           }
         });
 

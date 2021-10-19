@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:louvor_app/models/user.dart';
+import 'package:louvor_app/models/user_app.dart';
 import 'package:louvor_app/models/user_manager.dart';
 import 'package:louvor_app/screens/songs/components/song_search_dto.dart';
 
@@ -8,20 +8,20 @@ import 'Song.dart';
 
 class SongManager extends ChangeNotifier{
 
-  SongManager(){
-   // _loadAllSongs();
-  }
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  final Firestore firestore = Firestore.instance;
+  UserApp? user;
 
-  User user;
-
-  List<Song> allSongs = [];
-  List<Song> allInactiveSongs = [];
+  List<Song> ?allSongs = [];
+  List<Song>? allInactiveSongs = [];
 
   SongSearchDTO _searchDTO = new SongSearchDTO();
 
   SongSearchDTO get searchDTO => _searchDTO;
+
+  SongManager(){
+    // _loadAllSongs();
+  }
 
   set searchDTO(SongSearchDTO value){
     _searchDTO = value;
@@ -36,17 +36,17 @@ class SongManager extends ChangeNotifier{
     final List<Song> filteredSongs = [];
 
     if(searchDTO.isfiltersEmpty()){
-      filteredSongs.addAll(allSongs);
+      filteredSongs.addAll(allSongs ?? []);
     } else {
       if(searchDTO.inactiveFilter){
         filteredSongs.addAll(
-            allInactiveSongs.where(
+            allInactiveSongs!.where(
                     (song) => (searchDTO.hasMatchWithSong(song))
             )
         );
       }else{
         filteredSongs.addAll(
-            allSongs.where(
+            allSongs!.where(
                     (song) => (searchDTO.hasMatchWithSong(song))
             )
         );
@@ -60,10 +60,10 @@ class SongManager extends ChangeNotifier{
     final List<Song> filteredSongs = [];
 
     if(searchDTO.isfiltersEmpty()){
-      filteredSongs.addAll(allSongs);
+      filteredSongs.addAll(allSongs ?? []);
     } else {
       filteredSongs.addAll(
-          allSongs.where(
+          allSongs!.where(
                   (song) => (searchDTO.hasMatchWithSong(song))
           )
       );
@@ -74,9 +74,9 @@ class SongManager extends ChangeNotifier{
 
   Future<void> _loadAllSongs() async {
     final QuerySnapshot snapSongs =
-    await firestore.collection('songs').getDocuments();
+    await firestore.collection('songs').get().then((QuerySnapshot querySnapshot) => querySnapshot);
 
-    allSongs = snapSongs.documents.map(
+    allSongs = snapSongs.docs.map(
             (d) => Song.fromDocument(d)).toList();
 
     notifyListeners();
@@ -248,10 +248,11 @@ class SongManager extends ChangeNotifier{
 
   Future<void> _loadAllSong(UserManager userManager) async {
     final QuerySnapshot snapSongs =
-    await firestore.collection('songs').where('ativo', isEqualTo: 'TRUE').getDocuments();
+    await firestore.collection('songs').where('ativo', isEqualTo: 'TRUE')
+                                       .get().then((QuerySnapshot querySnapshot) => querySnapshot);
     //await firestore.collection('songs').getDocuments();
 
-    allSongs = snapSongs.documents.map(
+    allSongs = snapSongs.docs.map(
             (d) => Song.fromDocument(d)).toList();
 
       // allSongs.forEach((song) {
@@ -270,30 +271,32 @@ class SongManager extends ChangeNotifier{
   }
 
   Future<void> loadAllSongInactive() async {
-    final QuerySnapshot snapSongs = await firestore.collection('songs').where('ativo', isEqualTo: 'FALSE').getDocuments();
+    final QuerySnapshot snapSongs = await firestore.collection('songs')
+                                                   .where('ativo', isEqualTo: 'FALSE')
+                                                   .get().then((QuerySnapshot querySnapshot) => querySnapshot);
 
-    allInactiveSongs = snapSongs.documents.map((d) => Song.fromDocument(d)).toList();
+    allInactiveSongs = snapSongs.docs.map((d) => Song.fromDocument(d)).toList();
 
     notifyListeners();
   }
 
   void update(Song song){
-    song.uid = user.id;
+    song.uid = user!.id;
 
-    if(song.ativo.toUpperCase() == 'FALSE'){
-      allSongs.removeWhere((s) => s.id == song.id);
+    if(song.ativo?.toUpperCase() == 'FALSE'){
+      allSongs!.removeWhere((s) => s.id == song.id);
 
-      int indexToBeUpdated = allInactiveSongs.indexWhere((s) => s.id == song.id);
+      int indexToBeUpdated = allInactiveSongs!.indexWhere((s) => s.id == song.id);
       if( indexToBeUpdated != -1){
-        allInactiveSongs.add(song);
+        allInactiveSongs!.add(song);
       }
 
     }else{
-      int indexToBeUpdated = allSongs.indexWhere((s) => s.id == song.id);
+      int indexToBeUpdated = allSongs!.indexWhere((s) => s.id == song.id);
       if( indexToBeUpdated == -1){
-        allSongs.add(song);
+        allSongs!.add(song);
       }else{
-        allSongs[indexToBeUpdated] = song;
+        allSongs![indexToBeUpdated] = song;
       }
     }
 
@@ -302,7 +305,7 @@ class SongManager extends ChangeNotifier{
   }
 
   updateUser(UserManager userManager) {
-    user = userManager.user;
+    user = userManager.userApp;
 
     if(user != null){
       _loadAllSong(userManager);

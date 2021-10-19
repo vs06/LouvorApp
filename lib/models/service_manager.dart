@@ -3,26 +3,27 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:louvor_app/models/user.dart';
+import 'package:louvor_app/models/user_app.dart';
 import 'package:louvor_app/models/user_manager.dart';
 
 import 'package:louvor_app/models/Service.dart';
 
 class ServiceManager extends ChangeNotifier{
 
-  ServiceManager(){
-   // _loadAllSongs();
-  }
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  final Firestore firestore = Firestore.instance;
+  UserApp? user;
 
-  User user;
-
-  List<Service> allServices = [];
+  List<Service>? allServices = [];
 
   String _search = '';
 
+  ServiceManager(){
+    // _loadAllSongs();
+  }
+
   String get search => _search;
+
   set search(String value){
     _search = value;
     notifyListeners();
@@ -32,10 +33,10 @@ class ServiceManager extends ChangeNotifier{
     final List<Service> filteredServices = [];
 
     if(search.isEmpty){
-      filteredServices.addAll(allServices);
+      filteredServices.addAll(allServices ?? []);
     } else {
       filteredServices.addAll(
-          allServices.where(
+          allServices!.where(
                   (p) => p.data.toString().toLowerCase().contains(search.toLowerCase())
           )
       );
@@ -45,26 +46,27 @@ class ServiceManager extends ChangeNotifier{
   }
 
   void removeFromAllServices(Service serviceRemoved){
-    allServices.removeWhere((service) => service.id == serviceRemoved.id);
+    allServices!.removeWhere((service) => service.id == serviceRemoved.id);
   }
 
-  List<Service> filteredServicesByMounth(DateTime DateTime) {
+  List<Service> filteredServicesByMonth(DateTime? dateTime) {
     List<Service> filteredServices = [];
 
-    _loadAllServicesbyDate(DateTime);
+    _loadAllServicesbyDate(dateTime!);
     //filteredServices.addAll(allServices);
-    filteredServices.addAll(allServices.where(
-                                              (service) => ((service.data.year == DateTime.year) && (service.data.month == DateTime.month) )
+    filteredServices.addAll(allServices!.where(
+                                              (service) => ((service.data?.year == dateTime.year) && (service.data?.month == dateTime.month) )
                                               )
                             );
 
-    filteredServices.sort((a, b) => a.data.compareTo(b.data));
+    //TODO ARRUMAR COM NULL SAFETY
+    //filteredServices.sort((a, b) => a.data.compareTo(b.data));
 
     if(_search != ''){
       List<Service> filteredServicesSearch = [];
 
       filteredServices.forEach((service) {
-                                service.team.forEach((key, volunteers) {
+                                service.team?.forEach((key, volunteers) {
                                                             volunteers.forEach((volunteer) {
                                                               if(volunteer.contains(_search)){
                                                                 if(!filteredServicesSearch.any((element) => element.id == service.id)){
@@ -94,8 +96,8 @@ class ServiceManager extends ChangeNotifier{
     //qual á data atual?
     DateTime dateTime = DateTime.now();
 
-    List<Service> beforeListService = lstService.where((element) => element.data.isBefore(dateTime)).toList();
-    List<Service> afterListService = lstService.where((element) => element.data.isAfter(dateTime)).toList();
+    List<Service> beforeListService = lstService.where((element) => element.data!.isBefore(dateTime)).toList();
+    List<Service> afterListService = lstService.where((element) => element.data!.isAfter(dateTime)).toList();
     afterListService.addAll(beforeListService);
 
     return afterListService;
@@ -103,9 +105,10 @@ class ServiceManager extends ChangeNotifier{
 
   Future<void> _loadAllServices() async {
     final QuerySnapshot snapServices =
-    await firestore.collection('services').where('ativo', isEqualTo: 'True').getDocuments();
+    await firestore.collection('services').where('ativo', isEqualTo: 'True')
+                                          .get().then((QuerySnapshot querySnapshot) => querySnapshot);
 
-    allServices = snapServices.documents.map(
+    allServices = snapServices.docs.map(
             (d) => Service.fromDocument(d)).toList();
 
     notifyListeners();
@@ -118,32 +121,34 @@ class ServiceManager extends ChangeNotifier{
     await firestore.collection('services')
         .where('data', isGreaterThanOrEqualTo: firstdayofmount)
         .where('data', isLessThanOrEqualTo: lastdayofmounth)
-        .where('ativo', isEqualTo: 'True').getDocuments();
+        .where('ativo', isEqualTo: 'True')
+        .get().then((QuerySnapshot querySnapshot) => querySnapshot);
 
-    allServices = snapServices.documents.map(
+    allServices = snapServices.docs.map(
             (d) => Service.fromDocument(d)).toList();
     notifyListeners();
   }
 
   Future<void> _loadAllService(UserManager userManager) async {
     final QuerySnapshot snapServices =
-    await firestore.collection('services').where('ativo', isEqualTo: 'True').getDocuments();
+    await firestore.collection('services').where('ativo', isEqualTo: 'True')
+        .get().then((QuerySnapshot querySnapshot) => querySnapshot);
 
-    allServices = snapServices.documents.map(
+    allServices = snapServices.docs.map(
             (d) => Service.fromDocument(d)).toList();
 
     notifyListeners();
   }
 
   void update(Service service){
-    allServices.removeWhere((s) => s.id == service.id);
-    allServices.add(service);
+    allServices!.removeWhere((s) => s.id == service.id);
+    allServices!.add(service);
     service.save();
     notifyListeners();
   }
 
   updateUser(UserManager userManager) {
-    user = userManager.user;
+    user = userManager.userApp;
     if(user != null){
       _loadAllService(userManager);
     }

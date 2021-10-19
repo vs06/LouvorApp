@@ -9,8 +9,8 @@ import 'package:louvor_app/screens/services/services_screen.dart';
 
 class ServicesPeriodSelect extends StatefulWidget {
 
-  DateTime initialDate;
-  String serviceType;
+  late DateTime initialDate;
+  late String serviceType;
 
   ServicesPeriodSelect(String serviceType){
     this.serviceType = serviceType;
@@ -23,7 +23,7 @@ class ServicesPeriodSelect extends StatefulWidget {
 
 class ServicesPeriodSelectState extends State<ServicesPeriodSelect>{
 
-  DateTime selectedDate;
+  late DateTime selectedDate;
 
   @override
   void initState() {
@@ -146,7 +146,7 @@ class ServicesPeriodSelectState extends State<ServicesPeriodSelect>{
                                                                                         style: Theme.of(context).textTheme.headline4,
                                                                                         textAlign: TextAlign.center,
                                                                                       ),
-                                                                                      Text( DateUtilsCustomized.mounthBr(selectedDate),
+                                                                                      Text( DateUtilsCustomized.monthBr(selectedDate),
                                                                                         style: TextStyle(fontSize: 40, color: Colors.lightBlue, fontWeight: FontWeight.bold),
                                                                                         textAlign: TextAlign.center,
                                                                                       ),

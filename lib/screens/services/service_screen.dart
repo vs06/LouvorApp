@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:autocomplete_textfield/autocomplete_textfield.dart';
+//import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:louvor_app/helpers/app_list_pool.dart';
@@ -20,8 +20,8 @@ import 'team_service_screen.dart';
 
 class ServiceScreen extends StatefulWidget {
 
-  Service service;
-  Service serviceWithoutChanges;
+  late Service service;
+  late Service serviceWithoutChanges;
 
   TextEditingController dateController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -29,7 +29,7 @@ class ServiceScreen extends StatefulWidget {
   ServiceScreen(Service s){
     service = s != null ? s.clone() : Service();
     if(service.data != null){
-      dateController.text = DateFormat('dd/MM/yyyy').format(service.data).toString();
+      dateController.text = DateFormat('dd/MM/yyyy').format(service.data ?? DateTime.now()).toString();
     }
 
     serviceWithoutChanges = service.clone();
@@ -39,10 +39,10 @@ class ServiceScreen extends StatefulWidget {
   ServiceScreen.modify(Service serviceWithChanges, Service serviceWithoutChanges){
     service = serviceWithChanges != null ? serviceWithChanges.clone() : Service();
     if(service.data != null){
-      dateController.text = DateFormat('dd/MM/yyyy').format(service.data).toString();
+      dateController.text = DateFormat('dd/MM/yyyy').format(service.data ?? DateTime.now()).toString();
     }
 
-    this.serviceWithoutChanges = serviceWithoutChanges != null ? serviceWithoutChanges : null;
+    this.serviceWithoutChanges = (serviceWithoutChanges != null ? serviceWithoutChanges : null)!;
 
   }
 
@@ -56,33 +56,33 @@ class ServiceScreen extends StatefulWidget {
 
 class ServiceScreenState extends State<ServiceScreen> {
 
-  Future _selectDate(bool toggleNight) async {
-    DateTime picked = await showDatePicker(context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(2021),
-        lastDate: DateTime(2050)
-    );
-    if (picked != null){
-      setState(() => widget.dateController.text = "${picked.toLocal().day}/${picked.toLocal().month}/${picked.toLocal().year}");
-      setState(() => widget.service.data = _getHourByToggle(picked, toggleNight));
-    }
-
-  }
+  // Future _selectDate(bool toggleNight) async {
+  //   DateTime picked = await showDatePicker(context: context,
+  //       initialDate: DateTime.now(),
+  //       firstDate: DateTime(2021),
+  //       lastDate: DateTime(2050)
+  //   );
+  //   if (picked != null){
+  //     setState(() => widget.dateController.text = "${picked.toLocal().day}/${picked.toLocal().month}/${picked.toLocal().year}");
+  //     setState(() => widget.service.data = _getHourByToggle(picked, toggleNight));
+  //   }
+  //
+  // }
 
   ScrollController _scrollVolunteersController = ScrollController();
   ScrollController _scrollSongsController = ScrollController();
 
-  GlobalKey<AutoCompleteTextFieldState<String>> key = new GlobalKey();
+  //GlobalKey<AutoCompleteTextFieldState<String>> key = new GlobalKey();
   TextEditingController _controllerdirigente = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    _controllerdirigente.text = (widget.service.dirigente != null || widget.service.dirigente != '') ? widget.service.dirigente : '';
+    _controllerdirigente.text = widget.service.dirigente ?? '';
 
     final primaryColor = Theme.of(context).primaryColor;
     bool toggleNight = true;
     if(widget.service.data != null) {
-      toggleNight = widget.service.data.hour >= 16;
+      toggleNight = widget.service.data!.hour >= 16;
     }
 
     return ChangeNotifierProvider.value(
@@ -91,7 +91,7 @@ class ServiceScreenState extends State<ServiceScreen> {
         appBar: AppBar(
           title: widget.service != null
               ? Text("Culto")
-              : Text(DateFormat('dd/MM/yyyy').format(widget.service.data)),
+              : Text(DateFormat('dd/MM/yyyy').format(widget.service.data ?? DateTime.now())),
           centerTitle: true,
         ),
         backgroundColor: Colors.white,
@@ -112,40 +112,56 @@ class ServiceScreenState extends State<ServiceScreen> {
                           child:
                           Padding(
                               padding: const EdgeInsets.only(top: 2),
-                              child: UserManager.isUserAdmin ?
-                                    SimpleAutoCompleteTextField(
-                                      key: key,
-                                      controller: _controllerdirigente,
-                                      style: TextStyle(color: primaryColor, fontSize: 16, fontWeight: FontWeight.bold,),
-                                      decoration: InputDecoration(
-                                        labelText: "Dirigente",
-                                        border: InputBorder.none,
-                                        contentPadding: const EdgeInsets.symmetric(vertical: 15),
-                                        hintText: 'Dirigente',
-                                        icon: Icon(Icons.person_pin_sharp, size: 25,),
-                                      ),
-                                      suggestions: AppListPool.usersName,
-                                      //textChanged: (text) => _controllerdirigente.text = text,
-                                      clearOnSubmit: true,
-                                      textSubmitted: (text) =>
-                                          setState(() {
-                                            if (text != "") {
-                                              widget.service.dirigente = text;
-                                            }
-                                          }),
-                                    ) :
-                                   TextFormField(
-                                         controller: _controllerdirigente,
-                                         readOnly: true,
-                                         style: TextStyle(color: primaryColor, fontSize: 16, fontWeight: FontWeight.bold,),
-                                         decoration: InputDecoration(
-                                           labelText: "Dirigente",
-                                           border: InputBorder.none,
-                                           contentPadding: const EdgeInsets.symmetric(vertical: 15),
-                                           hintText: 'Dirigente',
-                                           icon: Icon(Icons.person_pin_sharp, size: 25,),
-                                         ),
-                                   ),
+                              child:
+
+                              TextFormField(
+                                controller: _controllerdirigente,
+                                readOnly: true,
+                                style: TextStyle(color: primaryColor, fontSize: 16, fontWeight: FontWeight.bold,),
+                                decoration: InputDecoration(
+                                  labelText: "Dirigente",
+                                  border: InputBorder.none,
+                                  contentPadding: const EdgeInsets.symmetric(vertical: 15),
+                                  hintText: 'Dirigente',
+                                  icon: Icon(Icons.person_pin_sharp, size: 25,),
+                                ),
+                              ),
+
+                            //todo reimplementar non null safety
+                                  // UserManager.isUserAdmin == true ?
+                                  //   SimpleAutoCompleteTextField(
+                                  //     key: key,
+                                  //     controller: _controllerdirigente,
+                                  //     style: TextStyle(color: primaryColor, fontSize: 16, fontWeight: FontWeight.bold,),
+                                  //     decoration: InputDecoration(
+                                  //       labelText: "Dirigente",
+                                  //       border: InputBorder.none,
+                                  //       contentPadding: const EdgeInsets.symmetric(vertical: 15),
+                                  //       hintText: 'Dirigente',
+                                  //       icon: Icon(Icons.person_pin_sharp, size: 25,),
+                                  //     ),
+                                  //     suggestions: AppListPool.usersName,
+                                  //     //textChanged: (text) => _controllerdirigente.text = text,
+                                  //     clearOnSubmit: true,
+                                  //     textSubmitted: (text) =>
+                                  //         setState(() {
+                                  //           if (text != "") {
+                                  //             widget.service.dirigente = text;
+                                  //           }
+                                  //         }),
+                                  //   ) :
+                                  //  TextFormField(
+                                  //        controller: _controllerdirigente,
+                                  //        readOnly: true,
+                                  //        style: TextStyle(color: primaryColor, fontSize: 16, fontWeight: FontWeight.bold,),
+                                  //        decoration: InputDecoration(
+                                  //          labelText: "Dirigente",
+                                  //          border: InputBorder.none,
+                                  //          contentPadding: const EdgeInsets.symmetric(vertical: 15),
+                                  //          hintText: 'Dirigente',
+                                  //          icon: Icon(Icons.person_pin_sharp, size: 25,),
+                                  //        ),
+                                  //  ),
 
                           ),
                         ),
@@ -155,8 +171,8 @@ class ServiceScreenState extends State<ServiceScreen> {
                           child:
                               GestureDetector(
                                       onTap: () {
-                                          if(UserManager.isUserAdmin){
-                                            _selectDate(toggleNight);
+                                          if(UserManager.isUserAdmin == true){
+                                            //_selectDate(toggleNight);
                                           }
                                       },
                                 child: AbsorbPointer(
@@ -195,7 +211,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                                           : Icon(Icons.wb_sunny_sharp, size: 20,),
                                       color: Colors.blueGrey,
                                       onPressed: () {
-                                            if(UserManager.isUserAdmin){
+                                            if(UserManager.isUserAdmin == true){
                                                 setState(() {
                                                 toggleNight = !toggleNight;
                                                 });
@@ -221,11 +237,11 @@ class ServiceScreenState extends State<ServiceScreen> {
                                           color: primaryColor,
                                         ),
                                       ),
-                                      Visibility(visible: widget.service.data == null || (widget.service.data.isAfter(DateTime.now()) && UserManager.isUserAdmin),
+                                      Visibility(visible: widget.service.data == null || (widget.service.data!.isAfter(DateTime.now()) && UserManager.isUserAdmin == true),
                                                   child: GestureDetector(
                                                               onTap: () {
-                                                                if (widget.formKey.currentState.validate()) {
-                                                                  widget.formKey.currentState.save();
+                                                                if (widget.formKey.currentState!.validate()) {
+                                                                  widget.formKey.currentState!.save();
                                                                 }
 
                                                                 //Fix null pointer
@@ -235,7 +251,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                                                                 Navigator.of(context).push(MaterialPageRoute(builder: (context) => TeamServiceScreen.buildTeamServiceScreen(widget.service)));
                                                               },
                                                               child: Icon(
-                                                                (widget.service.team == null || widget.service.team.length == 0) ? Icons.add_circle_sharp: Icons.edit_outlined,
+                                                                (widget.service.team == null || widget.service.team!.length == 0) ? Icons.add_circle_sharp: Icons.edit_outlined,
                                                                 color: Colors.lightBlue,
                                                                 size: 30,
                                                               ),
@@ -253,10 +269,10 @@ class ServiceScreenState extends State<ServiceScreen> {
                           controller: _scrollVolunteersController,
                           child: ListView.builder(
                                       padding: const EdgeInsets.all(8),
-                                      itemCount: widget.service.team != null ? widget.service.team.length: 0,
+                                      itemCount: widget.service.team != null ? widget.service.team!.length: 0,
                                       shrinkWrap: true,
                                       itemBuilder: (BuildContext context, int index) {
-                                        String role =  widget.service.team.keys.elementAt(index);
+                                        String role =  widget.service.team!.keys.elementAt(index);
                                         return Column(
                                             children:[
                                               Card(
@@ -264,7 +280,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                                                     borderRadius: BorderRadius.circular(4)
                                                 ),
                                                 child: Container(
-                                                  height: MultiUtils.calculaHeightTile(widget.service.team[role].length),
+                                                  height: MultiUtils.calculaHeightTile(widget.service.team![role]!.length),
                                                   padding: const EdgeInsets.all(8),
                                                   child: Row(
                                                     children: <Widget>[
@@ -296,7 +312,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                                                                       Column(
                                                                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                                                           children: [
-                                                                            Text( StringUtils.splitVolunteersToTile((widget.service.team[role])),
+                                                                            Text( StringUtils.splitVolunteersToTile((widget.service.team![role])),
                                                                               overflow: TextOverflow.ellipsis,
                                                                               style: TextStyle(
                                                                                 fontSize: 16,
@@ -337,17 +353,17 @@ class ServiceScreenState extends State<ServiceScreen> {
                           ),
                         ),
                         Visibility(
-                            visible: widget.service.data == null || widget.service.data.isAfter(DateTime.now()),
+                            visible: widget.service.data == null || widget.service.data!.isAfter(DateTime.now()),
                             child:
                             GestureDetector(
                                       onTap: () {
-                                                  if(widget.formKey.currentState.validate()) {
-                                                       widget.formKey.currentState.save();
+                                                  if(widget.formKey.currentState!.validate()) {
+                                                       widget.formKey.currentState!.save();
                                                   }
                                                   Navigator.of(context).push(MaterialPageRoute(builder: (context) => SongsServiceScreen.buildSongsServiceScreen(widget.service)));
                                       },
                               child: Icon(
-                                (widget.service.lstSongs == null || widget.service.lstSongs.length == 0) ? Icons.add_circle_sharp : Icons.edit_outlined,
+                                (widget.service.lstSongs == null || widget.service.lstSongs!.length == 0) ? Icons.add_circle_sharp : Icons.edit_outlined,
                                 color: Colors.lightBlue,
                                 size: 30,
                               ),
@@ -366,7 +382,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                       child:
                                 ListView.builder(
                                     padding: const EdgeInsets.all(8),
-                                    itemCount: widget.service.lstSongs == null ? 0 : widget.service.lstSongs.length,
+                                    itemCount: widget.service.lstSongs == null ? 0 : widget.service.lstSongs!.length,
                                     shrinkWrap: true,
                                     itemBuilder: (BuildContext context, int index) {
                                       return
@@ -393,7 +409,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                                                                           children: [
                                                                             Flexible(child:
                                                                             Text(
-                                                                              widget.service.lstSongs[index].nome,
+                                                                              widget.service.lstSongs![index].nome ?? '',
                                                                               overflow: TextOverflow.ellipsis,
                                                                               style: TextStyle(
                                                                                 fontSize: 16,
@@ -417,12 +433,12 @@ class ServiceScreenState extends State<ServiceScreen> {
                                                                     Row(
                                                                       children: [
                                                                         Visibility(
-                                                                          visible: StringUtils.isNotNUllNotEmpty(widget.service.lstSongs[index].cifra),
+                                                                          visible: StringUtils.isNotNUllNotEmpty(widget.service.lstSongs![index].cifra),
                                                                           child:
                                                                           Align(
                                                                             alignment: Alignment.topRight,
                                                                             child: GestureDetector(
-                                                                              onTap: () => _launchChordsURL(widget.service.lstSongs[index]),
+                                                                              onTap: () => _launchChordsURL(widget.service.lstSongs![index]),
                                                                               child: Icon(
                                                                                 Icons.straighten_rounded,
                                                                                 color: Colors.blueGrey,
@@ -432,11 +448,11 @@ class ServiceScreenState extends State<ServiceScreen> {
                                                                           ),
                                                                         ),
                                                                         SizedBox(width: 10),
-                                                                        Text('Tom: ' + widget.service.lstSongs[index].tom,
+                                                                        Text('Tom: ' + widget.service.lstSongs![index].tom! ,
                                                                           overflow: TextOverflow.ellipsis,
                                                                           style: TextStyle(
                                                                             color: Colors.blueGrey,
-                                                                            fontSize: (widget.service.lstSongs[index].tom.length > 3 ) ? 11 : 13,
+                                                                            fontSize: (widget.service.lstSongs![index].tom!.length > 3 ) ? 11 : 13,
                                                                             fontWeight:
                                                                             FontWeight.w800,
                                                                           ),
@@ -466,12 +482,12 @@ class ServiceScreenState extends State<ServiceScreen> {
                                 child:  RaisedButton(
                                         onPressed: () async {
                                           widget.service.data = _getHourByToggle(widget.service.data, toggleNight);
-                                          if (widget.formKey.currentState.validate()) {
+                                          if (widget.formKey.currentState!.validate()) {
 
-                                            widget.formKey.currentState.save();
+                                            widget.formKey.currentState!.save();
                                             context.read<ServiceManager>().update(service);
                                             Navigator.of(context).pop();
-                                            String predifiniedWhatsAppMessage = ( widget.service.lstSongs != null && widget.service.lstSongs.length > 0 )  ? getPredifiniedWhatsAppMessage(widget.service) : null;
+                                            String predifiniedWhatsAppMessage = getPredifiniedWhatsAppMessage(widget.service);
                                             Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoadingScreen.whatsAppMessage(predifiniedWhatsAppMessage)));
 
                                           }
@@ -502,7 +518,7 @@ class ServiceScreenState extends State<ServiceScreen> {
       return false;
     }
 
-    if(widget.service.data.isBefore(DateTime.now())){
+    if(widget.service.data!.isBefore(DateTime.now())){
       return false;
     }
 
@@ -520,30 +536,30 @@ class ServiceScreenState extends State<ServiceScreen> {
     }
 
     int matches = 0;
-    serviceWithoutChanges.lstSongs.forEach((song) {
-      if(serviceWithChanges.lstSongs.contains(song)){
+    serviceWithoutChanges.lstSongs!.forEach((song) {
+      if(serviceWithChanges.lstSongs!.contains(song)){
         matches++;
       }
     });
 
-    if((serviceWithChanges.lstSongs.length != serviceWithoutChanges.lstSongs.length ) || (matches != serviceWithChanges.lstSongs.length)){
+    if((serviceWithChanges.lstSongs!.length != serviceWithoutChanges.lstSongs!.length ) || (matches != serviceWithChanges.lstSongs!.length)){
       return true;
     }
 
     //Ambas vazios
-    if(widget.serviceWithoutChanges.team.keys.length + widget.service.team.keys.length == 0){
+    if(widget.serviceWithoutChanges.team!.keys.length + widget.service.team!.keys.length == 0){
       return false;
     }
 
     //Quantidade de roles diferentes
-    if(widget.serviceWithoutChanges.team.keys.length != widget.service.team.keys.length){
+    if(widget.serviceWithoutChanges.team!.keys.length != widget.service.team!.keys.length){
       return true;
     }
 
     //valido se todas as roles são iguais
-    var qtdRoles = widget.service.team.keys.length;
-    widget.service.team.keys.forEach((roleChange) {
-      if(widget.serviceWithoutChanges.team.keys.contains(roleChange)){
+    var qtdRoles = widget.service.team!.keys.length;
+    widget.service.team!.keys.forEach((roleChange) {
+      if(widget.serviceWithoutChanges.team!.keys.contains(roleChange)){
         qtdRoles--;
       }
     });
@@ -556,11 +572,11 @@ class ServiceScreenState extends State<ServiceScreen> {
     //siginifica que os maps possuem as mesmas roles.
     //Então validarei os valores das chaves
     bool hasNewVolunteer = false;
-    widget.service.team.forEach((role, volunteersWithChange) {
+    widget.service.team!.forEach((role, volunteersWithChange) {
 
       //Adição de um volunteer
       volunteersWithChange.forEach((volunteerWithChange) {
-        if(!widget.serviceWithoutChanges.team[role].contains(volunteerWithChange)){
+        if(!widget.serviceWithoutChanges.team![role]!.contains(volunteerWithChange)){
           hasNewVolunteer = true;
           return;
         }
@@ -573,11 +589,11 @@ class ServiceScreenState extends State<ServiceScreen> {
     }
 
     bool hasRemoveVolunteer = false;
-    widget.serviceWithoutChanges.team.forEach((role, volunteersWithoutChange) {
+    widget.serviceWithoutChanges.team!.forEach((role, volunteersWithoutChange) {
 
       //remoção de um volunteer
       volunteersWithoutChange.forEach((volunteerWithoutChange) {
-        if(!widget.service.team[role].contains(volunteerWithoutChange)){
+        if(!widget.service.team![role]!.contains(volunteerWithoutChange)){
           hasRemoveVolunteer = true;
           return;
         }
@@ -592,38 +608,38 @@ class ServiceScreenState extends State<ServiceScreen> {
     return false;
   }
 
-  void _launchChordsURL(Song song) async => await canLaunch(song.cifra)
-      ? await launch(song.cifra)
+  void _launchChordsURL(Song song) async => await canLaunch(song.cifra ?? '')
+      ? await launch(song.cifra ?? '')
       : throw 'Could not launch $song.cifra';
 
-     DateTime _getHourByToggle(DateTime serviceDate, bool toggleNight){
+     DateTime _getHourByToggle(DateTime? serviceDate, bool toggleNight){
      if(toggleNight){
-       if(DateFormat('EEEE').format(serviceDate).toUpperCase() == 'SUNDAY'){
+       if(DateFormat('EEEE').format(serviceDate!).toUpperCase() == 'SUNDAY'){
          return new DateTime(serviceDate.year, serviceDate.month, serviceDate.day, 19, 00);
        }else{
          return new DateTime(serviceDate.year, serviceDate.month, serviceDate.day, 20, 00);
        }
      }else{
-       return new DateTime(serviceDate.year, serviceDate.month, serviceDate.day, 10, 00);
+       return new DateTime(serviceDate!.year, serviceDate.month, serviceDate.day, 10, 00);
      }
   }
 
   void addTeamMap(String valueRoleDropDownSelected, String valueUserDropDownSelected) {
-    if(!valueRoleDropDownSelected.isEmpty && !valueUserDropDownSelected.isEmpty){
+    if(valueRoleDropDownSelected.isNotEmpty && valueUserDropDownSelected.isNotEmpty){
 
-      if(widget.service.team.containsKey(valueRoleDropDownSelected)){
-        if(!widget.service.team[valueRoleDropDownSelected].contains(valueUserDropDownSelected)){
+      if(widget.service.team!.containsKey(valueRoleDropDownSelected)){
+        if(!widget.service.team![valueRoleDropDownSelected]!.contains(valueUserDropDownSelected)){
           setState(() {
-            widget.service.team[valueRoleDropDownSelected].add(valueUserDropDownSelected);
+            widget.service.team![valueRoleDropDownSelected]!.add(valueUserDropDownSelected);
           });
         }else{
           setState(() {
-            widget.service.team.putIfAbsent(valueRoleDropDownSelected, () => [valueUserDropDownSelected]);
+            widget.service.team!.putIfAbsent(valueRoleDropDownSelected, () => [valueUserDropDownSelected]);
           });
         }
       } else {
         setState(() {
-          widget.service.team.putIfAbsent(valueRoleDropDownSelected, () => [valueUserDropDownSelected]);
+          widget.service.team!.putIfAbsent(valueRoleDropDownSelected, () => [valueUserDropDownSelected]);
         });
       }
     }
@@ -632,19 +648,19 @@ class ServiceScreenState extends State<ServiceScreen> {
   bool isTeamMapsHasChanges(Service teamWithoutChanges, Service teamWithChanges){
 
     //Ambas vazios
-    if(teamWithoutChanges.team.keys.length + teamWithChanges.team.keys.length == 0){
+    if(teamWithoutChanges.team!.keys.length + teamWithChanges.team!.keys.length == 0){
       return false;
     }
 
     //Quantidade de roles diferentes
-    if(teamWithoutChanges.team.keys.length != teamWithChanges.team.keys.length){
+    if(teamWithoutChanges.team!.keys.length != teamWithChanges.team!.keys.length){
       return true;
     }
 
     //valido se todas as roles são iguais
-    var qtdRoles = teamWithChanges.team.keys.length;
-    teamWithChanges.team.keys.forEach((roleChange) {
-      if(teamWithoutChanges.team.keys.contains(roleChange)){
+    var qtdRoles = teamWithChanges.team!.keys.length;
+    teamWithChanges.team!.keys.forEach((roleChange) {
+      if(teamWithoutChanges.team!.keys.contains(roleChange)){
         qtdRoles--;
       }
     });
@@ -653,37 +669,51 @@ class ServiceScreenState extends State<ServiceScreen> {
       return true;
     }
 
+    bool validacaoTeam = false;
+
     //Se passou nas condições acima
     //siginifica que os maps possuem as mesmas roles.
     //Então validarei os valores das chaves
-    teamWithChanges.team.forEach((role, volunteersWithChange) {
+    teamWithChanges.team!.forEach((role, volunteersWithChange) {
 
       //Adição de um volunteer
       volunteersWithChange.forEach((volunteerWithChange) {
-        if(!teamWithoutChanges.team[role].contains(volunteerWithChange)){
-          return true;
+        if(!teamWithoutChanges.team![role]!.contains(volunteerWithChange)){
+          validacaoTeam = true;
         }
       });
 
     });
 
-    teamWithoutChanges.team.forEach((role, volunteersWithoutChange) {
+    if(validacaoTeam)
+      return true;
+
+    teamWithoutChanges.team!.forEach((role, volunteersWithoutChange) {
 
       //remoção de um volunteer
       volunteersWithoutChange.forEach((volunteerWithoutChange) {
-        if(!teamWithChanges.team[role].contains(volunteerWithoutChange)){
-          return true;
-        }
+         if(!teamWithChanges.team![role]!.contains(volunteerWithoutChange) == true){
+           validacaoTeam = true;
+         }
       });
 
     });
+
+    if(validacaoTeam)
+      return true;
 
     return false;
 
   }
 
   String getPredifiniedWhatsAppMessage(Service service) {
-    return 'Músicas culto ' + DateUtilsCustomized.convertDatePtBr(service.data) + ', dirigente: ${service.dirigente},foram cadastradas.\nConsulte o App do Louvor para mais detalhes.' ;
+    if(service.lstSongs == null || (!(service.lstSongs!.length == 0))) {
+      return '';
+    }
+
+    return 'Músicas culto ' + DateUtilsCustomized.convertDatePtBr(service.data) +
+           ', dirigente: ${service.dirigente},'+
+           'foram cadastradas.\nConsulte o App do Louvor para mais detalhes.' ;
   }
 
 }

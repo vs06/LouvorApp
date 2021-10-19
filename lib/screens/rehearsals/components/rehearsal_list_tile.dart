@@ -60,8 +60,8 @@ class RehearsalListTile extends StatelessWidget {
             height: 90,
             padding: const EdgeInsets.all(6),
             decoration: BoxDecoration(
-                border: (rehearsal.data.day == DateTime.now().day && rehearsal.data.month == DateTime.now().month ) ?  Border.all(color: Colors.blueAccent, width: 5): Border(),
-                color: rehearsal.data.isBefore(DateTime.now()) ? CupertinoColors.systemGrey3 : Colors.white,
+                border: (rehearsal.data!.day == DateTime.now().day && rehearsal.data!.month == DateTime.now().month ) ?  Border.all(color: Colors.blueAccent, width: 5): Border(),
+                color: rehearsal.data!.isBefore(DateTime.now()) ? CupertinoColors.systemGrey3 : Colors.white,
                 borderRadius: BorderRadius.circular(4)
             ),
 
@@ -77,7 +77,7 @@ class RehearsalListTile extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            DateUtilsCustomized.convertDatePtBr(rehearsal.data),
+                            DateUtilsCustomized.convertDatePtBr(rehearsal.data!) ,
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w800,
@@ -92,7 +92,7 @@ class RehearsalListTile extends StatelessWidget {
                             ),
                           ),
                           Visibility(
-                            visible: UserManager.isUserAdmin && rehearsal.data.isAfter(DateTime.now()),
+                            visible:rehearsal.data!.isAfter(DateTime.now()) && ( UserManager.isUserAdmin == true),
                             child: GestureDetector(
                                       onTap: () {
                                         _showAlertDialog(context, 'Confirma a exclusão desse ensaio?', rehearsal);
@@ -129,8 +129,8 @@ class RehearsalListTile extends StatelessWidget {
   String getSongsOfRehearsal(){
     String songs = 'Músicas: ';
 
-    rehearsal.lstSongs.forEach((musica) {
-      songs += musica.nome + ', ';
+    rehearsal.lstSongs?.forEach((musica) {
+      songs += (musica.nome! + ', ');
     });
 
     return songs.substring(0,songs.length-2);

@@ -1,4 +1,4 @@
-import 'package:autocomplete_textfield/autocomplete_textfield.dart';
+//import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:louvor_app/models/tag_manager.dart';
 import 'package:louvor_app/screens/songs/components/song_search_dto.dart';
@@ -21,10 +21,10 @@ class SearchDialog extends StatefulWidget {
 
 class SearchDialogState extends State<SearchDialog>{
 
-  GlobalKey<AutoCompleteTextFieldState<String>> key = new GlobalKey();
+  //GlobalKey<AutoCompleteTextFieldState<String>> key = new GlobalKey();
   String currentText = "";
   List<String> suggestions = TagManager.allTagsAsStrings();
-  SimpleAutoCompleteTextField simpleAutoCompleteTags;
+  //late SimpleAutoCompleteTextField simpleAutoCompleteTags;
 
   //Controle inicial filters: Dinâmica
   bool semPalmas = false;
@@ -35,7 +35,7 @@ class SearchDialogState extends State<SearchDialog>{
   @override
   Widget build(BuildContext context) {
 
-    _firstPageState();
+    //_firstPageState();
 
     return Stack(
       children: <Widget>[
@@ -130,10 +130,11 @@ class SearchDialogState extends State<SearchDialog>{
                                         color: Colors.lightBlue,),
                                     ),
                                   ),
-                                  Container(
-                                    width: 240,
-                                    child: simpleAutoCompleteTags
-                                  )
+                                  //todo reimplementar non null safety
+                                  // Container(
+                                  //   width: 240,
+                                  //   child: simpleAutoCompleteTags
+                                  // )
                                 ]
                             )
                         ),
@@ -322,28 +323,28 @@ class SearchDialogState extends State<SearchDialog>{
     );
   }
 
-  _firstPageState() {
-    simpleAutoCompleteTags = SimpleAutoCompleteTextField(
-      key: key,
-      style: TextStyle(color: Colors.blueGrey, fontSize: 16),
-      decoration: InputDecoration(
-        border: const OutlineInputBorder(),
-        contentPadding: const EdgeInsets.symmetric(vertical: 12),
-        hintText: ' busca',
-        //labelText: 'digite',
-      ),
-      suggestions: suggestions,
-      textChanged: (text) => currentText = text,
-      clearOnSubmit: true,
-      textSubmitted: (text) =>
-          setState(() {
-            if (text != "") {
-              if(!widget.songSearchDTO.tagsFilter.contains(text)){
-                 widget.songSearchDTO.tagsFilter.add(text);
-              }
-            }
-          }),
-    );
-  }
+  // _firstPageState() {
+  //   simpleAutoCompleteTags = SimpleAutoCompleteTextField(
+  //     key: key,
+  //     style: TextStyle(color: Colors.blueGrey, fontSize: 16),
+  //     decoration: InputDecoration(
+  //       border: const OutlineInputBorder(),
+  //       contentPadding: const EdgeInsets.symmetric(vertical: 12),
+  //       hintText: ' busca',
+  //       //labelText: 'digite',
+  //     ),
+  //     suggestions: suggestions,
+  //     textChanged: (text) => currentText = text,
+  //     clearOnSubmit: true,
+  //     textSubmitted: (text) =>
+  //         setState(() {
+  //           if (text != "") {
+  //             if(!widget.songSearchDTO.tagsFilter.contains(text)){
+  //                widget.songSearchDTO.tagsFilter.add(text);
+  //             }
+  //           }
+  //         }),
+  //   );
+  // }
 
 }

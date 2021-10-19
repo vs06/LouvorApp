@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:louvor_app/helpers/date_utils.dart';
 import 'package:louvor_app/models/Service.dart';
 import 'package:louvor_app/models/service_manager.dart';
-import 'package:louvor_app/models/user.dart';
+import 'package:louvor_app/models/user_app.dart';
 import 'package:louvor_app/models/user_manager.dart';
 import 'package:provider/provider.dart';
 
@@ -10,9 +10,9 @@ class UserListTile extends StatelessWidget {
 
   const UserListTile(this.user);
 
-  final User user;
+  final UserApp user;
 
-  _showAlertDialog(BuildContext context, String conteudo, User u) {
+  _showAlertDialog(BuildContext context, String conteudo, UserApp u) {
     showDialog(
       context: context,
       builder: (context) {
@@ -59,7 +59,7 @@ class UserListTile extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            user.name,
+                            user.name ?? '',
                             style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w800,
@@ -67,7 +67,8 @@ class UserListTile extends StatelessWidget {
                             ),
                           ),
                           Visibility(
-                            visible: UserManager.isUserAdmin,
+                            //visible: UserManager.isUserAdmin,
+                            visible: UserManager.isUserAdmin == true,
                             child: GestureDetector(
                                       onTap: () {
                                         _showAlertDialog(context, 'Confirma a exclusão desse Usuário?', user);
@@ -80,7 +81,7 @@ class UserListTile extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(top: 4),
                         child: Text(
-                          user.email,
+                          user.email ?? '',
                           style: TextStyle(
                             color: Colors.grey[400],
                             fontSize: 14,

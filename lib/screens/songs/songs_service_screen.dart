@@ -15,20 +15,20 @@ import 'components/search_dialog.dart';
 
 class SongsServiceScreen extends StatefulWidget {
 
-  List<Song> _lstSongSelecionadas = new List<Song>();
-  Service service;
-  Service serviceWithoutChanges;
+  List<Song> _lstSongSelecionadas = [];
+  late Service service;
+  late Service serviceWithoutChanges;
 
   //POG
-  String rehearsalType = null;
+  late String rehearsalType;
 
   SongsServiceScreen.buildSongsServiceScreen(Service s) {
      service = s;
 
      if(service.lstSongs != null){
-      _lstSongSelecionadas.addAll(service.lstSongs);
+      _lstSongSelecionadas.addAll(service.lstSongs ?? []);
      } else {
-       service.lstSongs = new List();
+       service.lstSongs = [];
      }
 
      //Made a copy of original object
@@ -39,21 +39,21 @@ class SongsServiceScreen extends StatefulWidget {
 
   }
 
-  SongsServiceScreen.buildSongsRehearsalScreen(Rehearsal r) {
-    service = r;
+  SongsServiceScreen.buildSongsRehearsalScreen(Rehearsal? r) {
+    service = r!;
 
     if(service.lstSongs != null){
-      _lstSongSelecionadas.addAll(service.lstSongs);
+      _lstSongSelecionadas.addAll(service.lstSongs ?? []);
     } else {
-      service.lstSongs = new List();
+      service.lstSongs = [];
     }
 
     serviceWithoutChanges = Service.specialClone(r);
-    rehearsalType = r.type;
+    rehearsalType = r.type!;
 
   }
 
-  SongsServiceScreen(Service s) : service = s != null ? s.clone() : Service();
+  SongsServiceScreen(Service s) : service = s != null ? s.clone() : Service(data: null);
 
   @override
   State<StatefulWidget> createState() {
@@ -186,7 +186,7 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
                                             children: [
                                               Flexible(
                                                 child: Text(
-                                                  filteredSongs[index].nome,
+                                                  filteredSongs[index].nome ?? '',
                                                   overflow: TextOverflow.ellipsis,
                                                   style: TextStyle(
                                                     fontSize: 16,
@@ -328,7 +328,7 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
                                                     Container(
                                                       width: 260,
                                                       child:  Text(
-                                                                widget._lstSongSelecionadas[index].nome,
+                                                                widget._lstSongSelecionadas[index].nome ?? '',
                                                                 overflow: TextOverflow.ellipsis,
                                                                 style: TextStyle(
                                                                   fontSize: 16,
@@ -362,8 +362,8 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
             ),
             ElevatedButton.icon(
               onPressed: () {
-                widget.service.lstSongs.clear();
-                widget.service.lstSongs.addAll(widget._lstSongSelecionadas);
+                widget.service.lstSongs!.clear();
+                widget.service.lstSongs!.addAll(widget._lstSongSelecionadas);
                 //fillSongsNameIntoService(widget.service);
                 Navigator.of(context).pop();
                 Navigator.of(context).pop();

@@ -1,4 +1,4 @@
-import 'package:louvor_app/models/user.dart';
+import 'package:louvor_app/models/user_app.dart';
 
 class AppListPool {
 
@@ -15,14 +15,14 @@ class AppListPool {
 
    static final List<String> usersName = [];
 
-   static void fillUsers(List<User> allUsers ){
+   static void fillUsers(List<UserApp> allUsers ){
       allUsers.forEach((user) {
-         int firstSpace = user.name.indexOf(' ');
-         int lastName = user.name.lastIndexOf(' ');
+         int firstSpace = user.name!.indexOf(' ');
+         int lastName = user.name!.lastIndexOf(' ');
          if(firstSpace != -1){
-            usersName.add(user.name.substring(0, firstSpace)  + user.name.substring(lastName, user.name.length ) );
+            usersName.add(user.name!.substring(0, firstSpace)  + user.name!.substring(lastName, user.name!.length ) );
          } else {
-            usersName.add(user.name);
+            usersName.add(user.name ?? '');
          }
       });
    }

@@ -68,7 +68,7 @@ class SongListTile extends StatelessWidget {
                         children: [
                           Flexible(
                             child: Text(
-                            song.nome,
+                            song.nome ?? '',
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               fontSize: 16,
@@ -155,7 +155,8 @@ class SongListTile extends StatelessWidget {
                                   onTap: () {_showAlertDialog(context, 'Confirma a exclusão dessa música do repertório?', song);},
                                   child:Icon(Icons.delete , color: Colors.blueGrey,),
                                 ),
-                                visible: UserManager.isUserAdmin,
+                                //visible: UserManager.isUserAdmin,
+                                visible: UserManager.isUserAdmin ?? false
                               ),
                             ]
                         ),
@@ -171,8 +172,8 @@ class SongListTile extends StatelessWidget {
   }
 
   void _launchVideoURL() async =>
-      await canLaunch(song.videoUrl) ? await launch(song.videoUrl) : throw 'Could not launch $song.videoUrl';
+      await canLaunch(song.videoUrl ?? '') ? await launch(song.videoUrl ?? '') : throw 'Could not launch $song.videoUrl';
 
   void _launchChordsURL() async =>
-      await canLaunch(song.cifra) ? await launch(song.cifra) : throw 'Could not launch $song.cifra';
+      await canLaunch(song.cifra ?? '') ? await launch(song.cifra ?? '') : throw 'Could not launch $song.cifra';
 }

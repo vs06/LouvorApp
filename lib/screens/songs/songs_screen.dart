@@ -89,7 +89,8 @@ class SongsScreen extends StatelessWidget {
             },
           ),
           Visibility(
-            visible: UserManager.isUserAdmin,
+            //visible: UserManager.isUserAdmin,
+            visible: UserManager.isUserAdmin == true,
             child:
               IconButton(
                 icon: Icon(Icons.add),

@@ -23,7 +23,7 @@ class SongSearchDTO{
 
       if(isFilterNomeAndLetra){
         qtdFilters++;
-        if(song.nome.toLowerCase().contains(this.search.toLowerCase()) || (song.letra != null && song.letra.toLowerCase().contains(this.search.toLowerCase()))){
+        if(song.nome!.toLowerCase().contains(this.search.toLowerCase()) || (song.letra != null && song.letra!.toLowerCase().contains(this.search.toLowerCase()))){
           qtdMathFilters++;
         }
       }
@@ -31,7 +31,7 @@ class SongSearchDTO{
       if(isFilterTags){
         qtdFilters++;
         this.tagsFilter.forEach((tagFilter) {
-          if(song.tags.toLowerCase().contains(tagFilter.toLowerCase())){
+          if(song.tags!.toLowerCase().contains(tagFilter.toLowerCase())){
             qtdMathFilters++;
           }
         });
@@ -40,12 +40,12 @@ class SongSearchDTO{
       if(isFilterClaps){
         qtdFilters++;
         if(this.palmasFilter.length == 2){
-            if(song.palmas.toLowerCase().contains(this.palmasFilter[0].toLowerCase()) && song.palmas.toLowerCase().contains(this.palmasFilter[1].toLowerCase())){
+            if(song.palmas!.toLowerCase().contains(this.palmasFilter[0].toLowerCase()) && song.palmas!.toLowerCase().contains(this.palmasFilter[1].toLowerCase())){
               qtdMathFilters++;
             }
         }else{
           this.palmasFilter.forEach((filter) {
-            if(song.palmas.toLowerCase().contains(filter.toLowerCase())){
+            if(song.palmas!.toLowerCase().contains(filter.toLowerCase())){
               qtdMathFilters++;
             }
           });

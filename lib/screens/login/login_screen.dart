@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:louvor_app/helpers/dialog_utils.dart';
 import 'package:louvor_app/helpers/validators.dart';
-import 'package:louvor_app/models/user.dart';
+import 'package:louvor_app/models/user_app.dart';
 import 'package:louvor_app/models/user_manager.dart';
 import 'package:provider/provider.dart';
 
@@ -39,7 +39,7 @@ class LoginScreen extends StatelessWidget {
                       keyboardType: TextInputType.emailAddress,
                       autocorrect: false,
                       validator: (email){
-                        if(!emailValid(email))
+                        if(!emailValid(email!))
                           return 'E-mail inválido';
                         return null;
                       },
@@ -52,25 +52,25 @@ class LoginScreen extends StatelessWidget {
                       autocorrect: false,
                       obscureText: true,
                       validator: (pass){
-                        if(pass.isEmpty || pass.length < 6)
+                        if(pass!.isEmpty || pass.length < 6)
                           return 'Senha inválida';
                         return null;
                       },
                     ),
-                    child,
+                    //child,
                     const SizedBox(height: 16,),
                     SizedBox(
                       height: 44,
                       child: RaisedButton(
                         onPressed: userManager.loading ? null : (){
-                          if(formKey.currentState.validate()){
+                          if(formKey.currentState!.validate()){
                             userManager.signIn(
-                                user: User(
+                                userApp: UserApp(
                                     email: emailController.text,
                                     password: passController.text
                                 ),
                                 onFail: (e){
-                                  scaffoldKey.currentState.showSnackBar(
+                                  scaffoldKey.currentState!.showSnackBar(
                                       SnackBar(
                                         content: Text('Falha ao entrar: $e'),
                                         backgroundColor: Colors.red,

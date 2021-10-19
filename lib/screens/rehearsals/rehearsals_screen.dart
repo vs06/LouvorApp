@@ -12,7 +12,7 @@ import 'components/search_dialog.dart';
 class RehearsalsScreen extends StatelessWidget {
 
   RehearsalsScreen();
-  DateTime filterByMonth;
+  DateTime? filterByMonth;
   RehearsalsScreen.buildByMonth(this.filterByMonth);
 
   @override
@@ -87,7 +87,7 @@ class RehearsalsScreen extends StatelessWidget {
             },
           ),
           Visibility(
-              visible: UserManager.isUserAdmin,
+              visible: UserManager.isUserAdmin == true,
               child:
                 IconButton(
                   icon: Icon(Icons.add),
@@ -100,7 +100,7 @@ class RehearsalsScreen extends StatelessWidget {
       ),
       body: Consumer<RehearsalManager>(
         builder: (_, rehearsalManager, __) {
-          final filteredRehearsals = rehearsalManager.filteredRehearsalsByMounth(filterByMonth);
+          final filteredRehearsals = rehearsalManager.filteredRehearsalsByMounth(filterByMonth!);
           return filteredRehearsals.length > 0 ?
             ListView.builder(
               padding: const EdgeInsets.all(4),
@@ -110,7 +110,7 @@ class RehearsalsScreen extends StatelessWidget {
               })
           : Center(
               child:
-                  Text('Sem ensaios\nCadastrados em: ${DateUtilsCustomized.mounthBr(filterByMonth)}',
+                  Text('Sem ensaios\nCadastrados em: ${DateUtilsCustomized.monthBr(filterByMonth!)}',
                   style: TextStyle(
                                     fontSize: 25,
                                     fontWeight: FontWeight.w800,

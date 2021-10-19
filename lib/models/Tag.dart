@@ -3,13 +3,13 @@ import 'package:flutter/cupertino.dart';
 
 class Tag extends ChangeNotifier {
 
-  final Firestore fireStore = Firestore.instance;
+  final FirebaseFirestore fireStore = FirebaseFirestore.instance;
 
-  DocumentReference get fireStoreReference => fireStore.document('tags/$id');
+  DocumentReference get fireStoreReference => fireStore.doc('tags/$id');
 
-  String id;
-  String tag;
-  bool isActive;
+  String? id;
+  String? tag;
+  bool? isActive;
 
   Tag({this.id, this.tag, this.isActive});
 
@@ -26,7 +26,7 @@ class Tag extends ChangeNotifier {
   }
 
   Tag.fromDocument(DocumentSnapshot document){
-    id = document.documentID;
+    id = document.id;
     tag = document['tag'] as String;
     isActive = document['isActive'] as bool;
   }
@@ -40,9 +40,9 @@ class Tag extends ChangeNotifier {
 
     if(id == null){
       final doc = await fireStore.collection('tags').add(blob);
-      id = doc.documentID;
+      id = doc.id;
     } else {
-      await fireStoreReference.updateData(blob);
+      await fireStoreReference.update(blob);
     }
 
     notifyListeners();
@@ -58,7 +58,7 @@ class Tag extends ChangeNotifier {
   };
 
   Map<String,dynamic> toMap() => {
-    id: {
+    id!: {
       'tag': tag,
       'ativo': isActive
     }

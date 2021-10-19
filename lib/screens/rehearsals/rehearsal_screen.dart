@@ -16,28 +16,31 @@ import 'package:url_launcher/url_launcher.dart';
 
 class RehearsalScreen extends StatefulWidget {
 
-  Rehearsal rehearsal;
-  Rehearsal rehearsalWithoutChanges;
+  late Rehearsal? rehearsal;
+  late Rehearsal? rehearsalWithoutChanges;
 
   TextEditingController dateController = TextEditingController();
   TextEditingController timeController = TextEditingController();
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  RehearsalScreen(Rehearsal r){
+
+  //RehearsalScreen();
+
+  RehearsalScreen(Rehearsal? r){
     rehearsal = r != null ? r.clone() : Rehearsal();
-    if(rehearsal.data != null){
-      dateController.text = DateUtilsCustomized.dataComplentaFormatada(r.data);
+    if(rehearsal?.data != null){
+      dateController.text = DateUtilsCustomized.dataComplentaFormatada(r!.data ?? DateTime.now());
     }
 
-    rehearsalWithoutChanges = rehearsal.clone();
+    rehearsalWithoutChanges = rehearsal?.clone();
 
   }
 
   RehearsalScreen.modify(Rehearsal rehearsalWithChanges, Rehearsal rehearsalWithoutChanges){
     rehearsal = rehearsalWithChanges != null ? rehearsalWithChanges.clone() : Rehearsal();
-    if(rehearsal.data != null){
-      dateController.text = DateUtilsCustomized.dataComplentaFormatada(rehearsalWithChanges.data);
+    if(rehearsal?.data != null){
+      dateController.text = DateUtilsCustomized.dataComplentaFormatada(rehearsalWithChanges.data!);
     }
 
     this.rehearsalWithoutChanges = rehearsalWithoutChanges != null ? rehearsalWithoutChanges : null;
@@ -56,37 +59,37 @@ class RehearsalScreenState extends State<RehearsalScreen> {
 
   String valueRehearsalTypeDropDownSelected = AppListPool.rehearsalTypes[0];
 
-  Future _selectDate() async {
-    DateTime picked = await showDatePicker(context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(2021),
-        lastDate: DateTime(2050)
-    );
-    if (picked != null){
-      setState(() => widget.dateController.text = "${picked.toLocal().day}/${picked.toLocal().month}/${picked.toLocal().year.toString().substring(2,4)}");
-      setState(() => widget.rehearsal.data = picked);
-      _selectTime(context);
-    }
-  }
-  TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
-
-  Future<Null> _selectTime(BuildContext context) async {
-    final TimeOfDay picked = await showTimePicker(
-      context: context,
-      initialTime: selectedTime,
-    );
-    if (picked != null){
-        selectedTime = picked;
-
-        String minute = picked.minute < 10 ? '0' + picked.minute.toString() : picked.minute.toString();
-        String hour = picked.hour < 10 ? '0' + picked.hour.toString() : picked.hour.toString();
-
-        setState(() => widget.dateController.text += " - ${hour}:${minute}");
-        setState(() => widget.rehearsal.data = new DateTime(widget.rehearsal.data.year, widget.rehearsal.data.month, widget.rehearsal.data.day, selectedTime.hour , selectedTime.minute));
-
-      }
-
-  }
+  // Future _selectDate() async {
+  //   DateTime picked = await showDatePicker(context: context,
+  //       initialDate: DateTime.now(),
+  //       firstDate: DateTime(2021),
+  //       lastDate: DateTime(2050)
+  //   );
+  //   if (picked != null){
+  //     setState(() => widget.dateController.text = "${picked.toLocal().day}/${picked.toLocal().month}/${picked.toLocal().year.toString().substring(2,4)}");
+  //     setState(() => widget.rehearsal.data = picked);
+  //     _selectTime(context);
+  //   }
+  // }
+  // TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
+  //
+  // Future<Null> _selectTime(BuildContext context) async {
+  //   final TimeOfDay picked = await showTimePicker(
+  //     context: context,
+  //     initialTime: selectedTime,
+  //   );
+  //   if (picked != null){
+  //       selectedTime = picked;
+  //
+  //       String minute = picked.minute < 10 ? '0' + picked.minute.toString() : picked.minute.toString();
+  //       String hour = picked.hour < 10 ? '0' + picked.hour.toString() : picked.hour.toString();
+  //
+  //       setState(() => widget.dateController.text += " - ${hour}:${minute}");
+  //       setState(() => widget.rehearsal.data = new DateTime(widget.rehearsal.data.year, widget.rehearsal.data.month, widget.rehearsal.data.day, selectedTime.hour , selectedTime.minute));
+  //
+  //     }
+  //
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +102,7 @@ class RehearsalScreenState extends State<RehearsalScreen> {
         appBar: AppBar(
           title: widget.rehearsal != null
               ? Text("Ensaio")
-              : Text(DateFormat('dd/MM/yyyy').format(widget.rehearsal.data)),
+              : Text(DateFormat('dd/MM/yyyy').format(widget.rehearsal!.data ?? DateTime.now())),
           centerTitle: true,
         ),
         backgroundColor: Colors.white,
@@ -120,7 +123,7 @@ class RehearsalScreenState extends State<RehearsalScreen> {
                               width: 130,
                               child:
                                    DropdownButton<String>(
-                                           value: widget.rehearsal.type == null ? valueRehearsalTypeDropDownSelected : widget.rehearsal.type,
+                                           value: widget.rehearsal!.type == null ? valueRehearsalTypeDropDownSelected : widget.rehearsal?.type,
                                            hint: Text('Tipo ensaio'),
                                            icon: const Icon(Icons.arrow_downward),
                                            iconSize: 24,
@@ -131,23 +134,23 @@ class RehearsalScreenState extends State<RehearsalScreen> {
                                               width: 1,
                                               color: Colors.lightBlue,
                                             ),
-                                           onChanged: (String newValue) {
+                                           onChanged: (String? newValue) {
                                              setState(() {
-                                               valueRehearsalTypeDropDownSelected = newValue;
-                                               widget.rehearsal.type = valueRehearsalTypeDropDownSelected;
+                                               valueRehearsalTypeDropDownSelected = newValue!;
+                                               widget.rehearsal!.type = valueRehearsalTypeDropDownSelected;
                                              });
                                            },
-                                           items: UserManager.isUserAdmin ? AppListPool.rehearsalTypes.map<DropdownMenuItem<String>>((String value) {
+                                           items: UserManager.isUserAdmin == true ? AppListPool.rehearsalTypes.map<DropdownMenuItem<String>>((String value) {
                                              return DropdownMenuItem<String>(
                                                value: value,
                                                child: Text(value),
                                              );
                                            }).toList() :
 
-                                           [widget.rehearsal.type].map<DropdownMenuItem<String>>((String value) {
+                                           [widget.rehearsal!.type].map<DropdownMenuItem<String>>((String? value) {
                                              return DropdownMenuItem<String>(
                                                value: value,
-                                               child: Text(value),
+                                               child: Text(value!),
                                              );
                                            }).toList(),
 
@@ -161,8 +164,8 @@ class RehearsalScreenState extends State<RehearsalScreen> {
                                       child:
                                       GestureDetector(
                                         onTap: () {
-                                          if(UserManager.isUserAdmin){
-                                            _selectDate();
+                                          if(UserManager.isUserAdmin == true){
+                                        //    _selectDate();
                                           }
                                         },
                                         child: AbsorbPointer(
@@ -181,7 +184,7 @@ class RehearsalScreenState extends State<RehearsalScreen> {
                                               color: primaryColor,
                                             ),
                                             validator: (value) {
-                                              if (widget.rehearsal.data == null)
+                                              if (widget.rehearsal!.data == null)
                                                 return "Insira uma data para o ensaio";
                                               return null;
                                             },
@@ -207,17 +210,17 @@ class RehearsalScreenState extends State<RehearsalScreen> {
                           ),
                         ),
                         Visibility(
-                            visible: widget.rehearsal.data == null || widget.rehearsal.data.isAfter(DateTime.now()),
+                            visible: widget.rehearsal?.data == null || widget.rehearsal!.data!.isAfter(DateTime.now()),
                             child:
                             GestureDetector(
                                       onTap: () {
-                                                  if(widget.formKey.currentState.validate()) {
-                                                       widget.formKey.currentState.save();
+                                                  if(widget.formKey.currentState!.validate()) {
+                                                       widget.formKey.currentState!.save();
                                                   }
                                                   Navigator.of(context).push(MaterialPageRoute(builder: (context) => SongsServiceScreen.buildSongsRehearsalScreen(widget.rehearsal)));
                                       },
                               child: Icon(
-                                (widget.rehearsal.lstSongs == null || widget.rehearsal.lstSongs.length == 0) ? Icons.add_circle_sharp : Icons.edit_outlined,
+                                (widget.rehearsal?.lstSongs == null || widget.rehearsal?.lstSongs!.length == 0) ? Icons.add_circle_sharp : Icons.edit_outlined,
                                 color: Colors.lightBlue,
                                 size: 30,
                               ),
@@ -232,7 +235,7 @@ class RehearsalScreenState extends State<RehearsalScreen> {
                     child:
                         ListView.builder(
                           padding: const EdgeInsets.all(8),
-                          itemCount: widget.rehearsal.lstSongs == null ? 0 : widget.rehearsal.lstSongs.length,
+                          itemCount: widget.rehearsal!.lstSongs == null ? 0 : widget.rehearsal!.lstSongs!.length,
                           shrinkWrap: true,
                           itemBuilder: (BuildContext context, int index) {
                             return
@@ -259,7 +262,7 @@ class RehearsalScreenState extends State<RehearsalScreen> {
                                                                             children: [
                                                                               Flexible(child:
                                                                               Text(
-                                                                                widget.rehearsal.lstSongs[index].nome,
+                                                                                widget.rehearsal!.lstSongs![index].nome ?? '',
                                                                                 overflow: TextOverflow.ellipsis,
                                                                                 style: TextStyle(
                                                                                   fontSize: 16,
@@ -281,34 +284,35 @@ class RehearsalScreenState extends State<RehearsalScreen> {
                                                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                                     //crossAxisAlignment: CrossAxisAlignment.start,
                                                                     children: [
-                                                                      Row(
-                                                                        children: [
-                                                                          Visibility(
-                                                                            visible: StringUtils.isNotNUllNotEmpty(widget.rehearsal.lstSongs[index].cifra),
-                                                                            child:
-                                                                            Align(
-                                                                              alignment: Alignment.topRight,
-                                                                              child: GestureDetector(
-                                                                                onTap: () => _launchChordsURL(widget.rehearsal.lstSongs[index]),
-                                                                                child: Icon(
-                                                                                  Icons.straighten_rounded,
-                                                                                  color: Colors.blueGrey,
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                          SizedBox(width: 15),
-                                                                          Text('Tom: ' + widget.rehearsal.lstSongs[index].tom,
-                                                                            overflow: TextOverflow.ellipsis,
-                                                                            style: TextStyle(
-                                                                              color: Colors.blueGrey,
-                                                                              fontSize: 13,
-                                                                              fontWeight:
-                                                                              FontWeight.w800,
-                                                                            ),
-                                                                          ),
-                                                                        ],
-                                                                      )
+                                                                      //todo retornar non safety
+                                                                      // Row(
+                                                                      //   children: [
+                                                                      //     Visibility(
+                                                                      //       visible: StringUtils.isNotNUllNotEmpty(widget.rehearsal!.lstSongs![index].cifra ?? ''),
+                                                                      //       child:
+                                                                      //       Align(
+                                                                      //         alignment: Alignment.topRight,
+                                                                      //         child: GestureDetector(
+                                                                      //           onTap: () => _launchChordsURL(widget.rehearsal.lstSongs[index]),
+                                                                      //           child: Icon(
+                                                                      //             Icons.straighten_rounded,
+                                                                      //             color: Colors.blueGrey,
+                                                                      //           ),
+                                                                      //         ),
+                                                                      //       ),
+                                                                      //     ),
+                                                                      //     SizedBox(width: 15),
+                                                                      //     Text('Tom: ' + widget.rehearsal!.lstSongs![index].tom ?? '',
+                                                                      //       overflow: TextOverflow.ellipsis,
+                                                                      //       style: TextStyle(
+                                                                      //         color: Colors.blueGrey,
+                                                                      //         fontSize: 13,
+                                                                      //         fontWeight:
+                                                                      //         FontWeight.w800,
+                                                                      //       ),
+                                                                      //     ),
+                                                                      //   ],
+                                                                      // )
                                                                     ],
                                                                   )
                                                               ),
@@ -327,11 +331,12 @@ class RehearsalScreenState extends State<RehearsalScreen> {
                   Consumer<Rehearsal>(
                     builder: (_, rehearsal, __) {
                       return Visibility(
-                                visible: UserManager.isUserAdmin,
+                                //visible: UserManager.isUserAdmin,
+                                visible: rehearsal.data!.isAfter(DateTime.now()),
                                 child:  RaisedButton(
                                         onPressed: () async {
-                                          if (widget.formKey.currentState.validate()) {
-                                            widget.formKey.currentState.save();
+                                          if (widget.formKey.currentState!.validate()) {
+                                            widget.formKey.currentState!.save();
                                             context.read<RehearsalManager>().update(rehearsal);
                                             Navigator.of(context).pop();
                                             String predifiniedWhatsAppMessage = getPredifiniedWhatsAppMessage(widget.rehearsal);
@@ -359,12 +364,12 @@ class RehearsalScreenState extends State<RehearsalScreen> {
     );
   }
 
-  void _launchChordsURL(Song song) async => await canLaunch(song.cifra)
-      ? await launch(song.cifra)
+  void _launchChordsURL(Song? song) async => await canLaunch(song?.cifra ?? '')
+      ? await launch(song?.cifra ?? '')
       : throw 'Could not launch $song.cifra';
 
-  String getPredifiniedWhatsAppMessage(Rehearsal rehearsal) {
-    return 'Ensaio em: ' + DateUtilsCustomized.convertDatePtBr(rehearsal.data) + ', Tipo ensaio: ${rehearsal.type }.\nConsulte o App do Louvor para mais detalhes.' ;
+  String getPredifiniedWhatsAppMessage(Rehearsal? rehearsal) {
+    return 'Ensaio em: ' + DateUtilsCustomized.convertDatePtBr(rehearsal?.data ?? DateTime.now()) + ', Tipo ensaio: ${rehearsal?.type ?? ''}.\nConsulte o App do Louvor para mais detalhes.' ;
   }
 
 }

@@ -62,7 +62,7 @@ class ServiceListTile extends StatelessWidget {
             padding: const EdgeInsets.all(6),
             decoration: BoxDecoration(
                 border: isHighlightService() ?  Border.all(color: Colors.blueAccent, width: 5): Border(),
-                color: service.data.isBefore(DateTime.now()) ? CupertinoColors.systemGrey3 : Colors.white,
+                color: service.data!.isBefore(DateTime.now()) ? CupertinoColors.systemGrey3 : Colors.white,
                 borderRadius: BorderRadius.circular(4)
             ),
 
@@ -85,7 +85,7 @@ class ServiceListTile extends StatelessWidget {
                             ),
                           ),
                           Visibility(
-                           visible: !service.data.isBefore(DateTime.now()),
+                           visible: !service.data!.isBefore(DateTime.now()),
                                  child: GestureDetector(
                                           onTap: (){
                                                       sendMessageWhatsAppNotification();
@@ -98,7 +98,7 @@ class ServiceListTile extends StatelessWidget {
                                  )
                           ),
                           Text(
-                            ' '+ dirigenteNameToTile(service.dirigente),
+                            ' '+ dirigenteNameToTile(service.dirigente ?? ''),
                             style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w800,
@@ -106,7 +106,7 @@ class ServiceListTile extends StatelessWidget {
                             ),
                           ),
                           Visibility(
-                            visible: UserManager.isUserAdmin && service.data.isAfter(DateTime.now()),
+                            visible: UserManager.isUserAdmin == true && service.data!.isAfter(DateTime.now()),
                             child: GestureDetector(
                                       onTap: () {
                                         _showAlertDialog(context, 'Confirma a exclusão desse culto?', service);
@@ -145,9 +145,9 @@ class ServiceListTile extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
                           style: TextStyle(
-                            color: (getSongsOfService() == 'Músicas: ' && service.data.difference(DateTime.now()).inDays < 7) ? Colors.red : Colors.grey[800],
+                            color: (getSongsOfService() == 'Músicas: ' && service.data!.difference(DateTime.now()).inDays < 7) ? Colors.red : Colors.grey[800],
                             fontSize: 12,
-                            fontWeight: (getSongsOfService() == 'Músicas: ' && service.data.difference(DateTime.now()).inDays < 7) ? FontWeight.bold : FontWeight.normal,
+                            fontWeight: (getSongsOfService() == 'Músicas: ' && service.data!.difference(DateTime.now()).inDays < 7) ? FontWeight.bold : FontWeight.normal,
                           ),
                         ),
                       )
@@ -166,7 +166,7 @@ class ServiceListTile extends StatelessWidget {
     String singersVolunteers = 'Vocal: ';
 
     if(service.team != null){
-        service.team.forEach((key, value) {
+        service.team!.forEach((key, value) {
           if(key == 'Vocal') {
             value.forEach((volunteer) => singersVolunteers += ', ' + volunteer);
           }
@@ -182,7 +182,7 @@ class ServiceListTile extends StatelessWidget {
     String musiciansVolunteers = 'Instrumental: ';
 
     if(service.team != null){
-        service.team.forEach((key, value) {
+        service.team!.forEach((key, value) {
           if(key != 'Vocal') {
             value.forEach((volunteer) => musiciansVolunteers +=', ' +  volunteer);
           }
@@ -197,11 +197,12 @@ class ServiceListTile extends StatelessWidget {
   String getSongsOfService(){
     String songs = 'Músicas: ';
 
-    service.lstSongs.forEach((element) {
-      songs += element.nome + ', ';
+    service.lstSongs!.forEach((element) {
+      var ref = element.nome ?? '';
+      songs += ref + ', ';
     });
 
-    if(service.lstSongs.length > 0){
+    if(service.lstSongs!.length > 0){
       songs = songs.substring(0, songs.length -2);
     }
 
@@ -215,7 +216,7 @@ class ServiceListTile extends StatelessWidget {
       return '';
     }
 
-    var firstSpace = service.dirigente.indexOf(' ');
+    var firstSpace = service.dirigente!.indexOf(' ');
 
     if(firstSpace == -1){
       if(dirigenteName.length > 10){
@@ -224,7 +225,7 @@ class ServiceListTile extends StatelessWidget {
       return dirigenteName;
     }
 
-    var firstName = service.dirigente.substring(0, firstSpace);
+    var firstName = service.dirigente!.substring(0, firstSpace);
 
     //Se precisar de sobrenome
     if(AppListPool.usersName.where((element) => element.contains(firstName)).length > 1) {
@@ -237,12 +238,12 @@ class ServiceListTile extends StatelessWidget {
 
   Color songsSelectedColorStatus(Service service){
 
-    if(service.lstSongs.length > 0){
+    if(service.lstSongs!.length > 0){
       return Colors.green;
     }
 
     DateTime currentDay = DateTime.now();
-    if(service.data.difference(currentDay).inDays < 7){
+    if(service.data!.difference(currentDay).inDays < 7){
       return Colors.red;
     }
 
@@ -251,17 +252,19 @@ class ServiceListTile extends StatelessWidget {
 
   sendMessageWhatsAppNotification() {
     if(songsSelectedColorStatus(service) == Colors.red){
-      final strWhatsMessage = service.dirigente + ', você fara a abertura do culto de: ${DateUtilsCustomized.convertDatePtBr(service.data)}.\nFaltam: ${(DateTime.now().day - service.data.day)*-1} dias para o culto.'
-                                                + '\nO culto ainda não teve as músicas cadastradas.\nPoderia verificar?';
+      String strWhatsMessage = service.dirigente ?? '';
+       strWhatsMessage += ', você fara a abertura do culto de: ${DateUtilsCustomized.convertDatePtBr(service.data)}.'
+                        + '  \nFaltam: ${(DateTime.now().day - service.data!.day)*-1} dias para o culto.'
+                        + '\nO culto ainda não teve as músicas cadastradas.\nPoderia verificar?';
       NotificationUtils.sendNotificationWhatsUp(strWhatsMessage);
     }
   }
 
   isHighlightService(){
-    return service.data.day == DateTime.now().day &&
-           service.data.month == DateTime.now().month &&
-           service.data.year == DateTime.now().year &&
-           (service.data.hour + 2) > DateTime.now().hour;//após 2 horas no inicio do culta, retorna false;
+    return service.data!.day == DateTime.now().day &&
+           service.data!.month == DateTime.now().month &&
+           service.data!.year == DateTime.now().year &&
+           (service.data!.hour + 2) > DateTime.now().hour;//após 2 horas no inicio do culta, retorna false;
 
   }
 }

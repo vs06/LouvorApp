@@ -5,10 +5,10 @@ import 'package:intl/intl.dart';
 class DateUtilsCustomized {
 
   ///Retorna day Of Week name, Day and Mounth (As number) and HourMinute 24hs
-  static String convertDatePtBr(DateTime datetime){
+  static String convertDatePtBr(DateTime? datetime){
 
     var dayOfWeekPtbr = "";
-    switch (DateFormat('EEEE').format(datetime).toUpperCase()) {
+    switch (DateFormat('EEEE').format(datetime ?? DateTime.now()).toUpperCase()) {
       case "SUNDAY":
         dayOfWeekPtbr = "Domingo";
         break;
@@ -32,8 +32,8 @@ class DateUtilsCustomized {
         break;
     }
 
-    var dayMounth =  DateFormat('dd/MM').format(datetime);
-    var hourMinute24 = DateFormat('HH:mm').format(datetime);
+    var dayMounth =  DateFormat('dd/MM').format(datetime ?? DateTime.now());
+    var hourMinute24 = DateFormat('HH:mm').format(datetime ?? DateTime.now());
     return datetime == null ? "" : dayOfWeekPtbr + " - " + dayMounth + " - "+ hourMinute24;
 
   }
@@ -69,10 +69,10 @@ class DateUtilsCustomized {
 
   }
 
-  static String mounthBr(DateTime datetime){
+  static String monthBr(DateTime? datetime){
 
     var monthShort = "";
-    switch (DateFormat('MMMM').format(datetime).toUpperCase()) {
+    switch (DateFormat('MMMM').format(datetime!).toUpperCase()) {
       case "JANUARY":
         monthShort = "Jan";
         break;

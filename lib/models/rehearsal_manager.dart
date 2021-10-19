@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:louvor_app/models/user.dart';
+import 'package:louvor_app/models/user_app.dart';
 import 'package:louvor_app/models/user_manager.dart';
 
 import 'package:louvor_app/models/Service.dart';
@@ -12,19 +12,20 @@ import 'Rehearsal.dart';
 
 class RehearsalManager extends ChangeNotifier{
 
-  RehearsalManager(){
-   // _loadAllSongs();
-  }
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  final Firestore firestore = Firestore.instance;
+  UserApp? user;
 
-  User user;
-
-  List<Rehearsal> allRehearsals = [];
+  List<Rehearsal>? allRehearsals = [];
 
   String _search = '';
 
+  RehearsalManager(){
+    // _loadAllSongs();
+  }
+
   String get search => _search;
+
   set search(String value){
     _search = value;
     notifyListeners();
@@ -34,10 +35,10 @@ class RehearsalManager extends ChangeNotifier{
     final List<Rehearsal> filteredRehearsals = [];
 
     if(search.isEmpty){
-      filteredRehearsals.addAll(allRehearsals);
+      filteredRehearsals.addAll(allRehearsals ?? []);
     } else {
       filteredRehearsals.addAll(
-          allRehearsals.where((p) => p.data.toString().toLowerCase().contains(search.toLowerCase()))
+          allRehearsals!.where((p) => p.data.toString().toLowerCase().contains(search.toLowerCase()))
       );
     }
 
@@ -45,7 +46,7 @@ class RehearsalManager extends ChangeNotifier{
   }
 
   void removeFromAllRehearsals(Rehearsal rehearsalRemoved){
-    allRehearsals.removeWhere((rehearsal) => rehearsal.id == rehearsalRemoved.id);
+    allRehearsals!.removeWhere((rehearsal) => rehearsal.id == rehearsalRemoved.id);
   }
 
 
@@ -53,12 +54,13 @@ class RehearsalManager extends ChangeNotifier{
     List<Rehearsal> filteredRehearsals = [];
 
     _loadAllRehearsalsbyDate(DateTime);
-    filteredRehearsals.addAll(allRehearsals.where(
-            (rehearsal) => ((rehearsal.data.year == DateTime.year) && (rehearsal.data.month == DateTime.month) )
+    filteredRehearsals.addAll(allRehearsals!.where(
+            (rehearsal) => ((rehearsal.data!.year == DateTime.year) && (rehearsal.data!.month == DateTime.month) )
     )
     );
 
-    filteredRehearsals.sort((a, b) => a.data.compareTo(b.data));
+    //todo arrumar null safety
+    //filteredRehearsals.sort((a, b) => a.data!.compareTo(b.data));
 
     return sortFilteredRehearsals(filteredRehearsals);
   }
@@ -71,8 +73,8 @@ class RehearsalManager extends ChangeNotifier{
     //qual á data atual?
     DateTime dateTime = DateTime.now();
 
-    List<Rehearsal> beforeListRehearsal = lstRehearsal.where((rehearsal) => rehearsal.data.isBefore(dateTime)).toList();
-    List<Rehearsal> afterListRehearsal = lstRehearsal.where((rehearsal) => rehearsal.data.isAfter(dateTime)).toList();
+    List<Rehearsal> beforeListRehearsal = lstRehearsal.where((rehearsal) => rehearsal.data!.isBefore(dateTime)).toList();
+    List<Rehearsal> afterListRehearsal = lstRehearsal.where((rehearsal) => rehearsal.data!.isAfter(dateTime)).toList();
     afterListRehearsal.addAll(beforeListRehearsal);
 
     return afterListRehearsal;
@@ -80,9 +82,10 @@ class RehearsalManager extends ChangeNotifier{
 
   Future<void> _loadAllRehearsal() async {
     final QuerySnapshot snapRehearsals =
-    await firestore.collection('rehearsals').where('isActive', isEqualTo: true).getDocuments();
+    await firestore.collection('rehearsals').where('isActive', isEqualTo: true)
+                                            .get().then((QuerySnapshot querySnapshot) => querySnapshot);
 
-    allRehearsals = snapRehearsals.documents.map(
+    allRehearsals = snapRehearsals.docs.map(
             (d) => Rehearsal.fromDocument(d)).toList();
 
     notifyListeners();
@@ -95,32 +98,34 @@ class RehearsalManager extends ChangeNotifier{
     await firestore.collection('rehearsals')
         .where('data', isGreaterThanOrEqualTo: firstdayofmount)
         .where('data', isLessThanOrEqualTo: lastdayofmounth)
-        .where('isActive', isEqualTo: true).getDocuments();
-
-    allRehearsals = snapRehearsals.documents.map(
+        .where('isActive', isEqualTo: true)
+        .get().then((QuerySnapshot querySnapshot) => querySnapshot);
+    
+    allRehearsals = snapRehearsals.docs.map(
             (d) => Rehearsal.fromDocument(d)).toList();
     notifyListeners();
   }
 
   Future<void> _loadAllRehearsals(UserManager userManager) async {
     final QuerySnapshot snapRehaersals =
-    await firestore.collection('rehearsals').where('isActive', isEqualTo: true).getDocuments();
+    await firestore.collection('rehearsals').where('isActive', isEqualTo: true)
+                                            .get().then((QuerySnapshot querySnapshot) => querySnapshot);
 
-    allRehearsals = snapRehaersals.documents.map(
+    allRehearsals = snapRehaersals.docs.map(
             (d) => Rehearsal.fromDocument(d)).toList();
 
     notifyListeners();
   }
 
   void update(Rehearsal rehearsal){
-    allRehearsals.removeWhere((r) => r.id == rehearsal.id);
-    allRehearsals.add(rehearsal);
+    allRehearsals!.removeWhere((r) => r.id == rehearsal.id);
+    allRehearsals!.add(rehearsal);
     rehearsal.save();
     notifyListeners();
   }
 
   updateUser(UserManager userManager) {
-    user = userManager.user;
+    user = userManager.userApp;
     if(user != null){
       _loadAllRehearsals(userManager);
     }

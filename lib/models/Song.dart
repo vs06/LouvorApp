@@ -3,22 +3,22 @@ import 'package:flutter/cupertino.dart';
 
 class Song extends ChangeNotifier {
 
-  final Firestore firestore = Firestore.instance;
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  DocumentReference get firestoreRef => firestore.document('songs/$id');
+  DocumentReference get firestoreRef => firestore.doc('songs/$id');
 
-  String id;
-  String nome;
-  String artista;
-  String tom;
-  String palmas;
-  String data;
-  String cifra;
-  String tags;
-  String letra;
-  String uid;
-  String ativo;
-  String videoUrl;
+ late String? id;
+ late String? nome;
+ late String? artista;
+ late String? tom;
+ late String? palmas;
+ late String? data;
+ late String? cifra;
+ late String? tags;
+ late String? letra;
+ late String? uid;
+ late String? ativo;
+ late String? videoUrl;
 
   Song({this.id, this.nome, this.artista, this.tom, this.palmas, this.cifra, this.tags, this.data, this.letra, this.uid, this.ativo, this.videoUrl});
 
@@ -39,7 +39,7 @@ class Song extends ChangeNotifier {
   }
 
   Song.fromDocument(DocumentSnapshot document){
-    id = document.documentID;
+    id = document.id;
     nome = document['titulo'] as String;
     artista = document['artista'] as String;
     tom = document['tom'] as String;
@@ -73,9 +73,9 @@ class Song extends ChangeNotifier {
     
     if(id == null){
       final doc = await firestore.collection('songs').add(blob);
-      id = doc.documentID;
+      id = doc.id;
     } else {
-      await firestoreRef.updateData(blob);
+      await firestoreRef.update(blob);
     }
 
     notifyListeners();
@@ -109,7 +109,7 @@ class Song extends ChangeNotifier {
   };
 
   Map<String,dynamic> toMap() => {
-    id: {
+    id!: {
       'titulo': nome,
       'artista': artista,
       'tom': tom,

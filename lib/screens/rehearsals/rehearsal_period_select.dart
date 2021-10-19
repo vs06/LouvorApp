@@ -12,7 +12,7 @@ class RehearsalsPeriodSelect extends StatefulWidget {
 
   final DateTime initialDate;
 
-  const RehearsalsPeriodSelect({Key key, this.initialDate}) : super(key: key);
+  const RehearsalsPeriodSelect({required Key key, required this.initialDate}) : super(key: key);
 
   @override
   RehearsalsPeriodSelectState createState() => RehearsalsPeriodSelectState();
@@ -21,7 +21,7 @@ class RehearsalsPeriodSelect extends StatefulWidget {
 
 class RehearsalsPeriodSelectState extends State<RehearsalsPeriodSelect>{
 
-  DateTime selectedDate;
+  late DateTime selectedDate;
 
   @override
   void initState() {
@@ -144,7 +144,7 @@ class RehearsalsPeriodSelectState extends State<RehearsalsPeriodSelect>{
                                                                                         style: Theme.of(context).textTheme.headline4,
                                                                                         textAlign: TextAlign.center,
                                                                                       ),
-                                                                                      Text( DateUtilsCustomized.mounthBr(selectedDate),
+                                                                                      Text( DateUtilsCustomized.monthBr(selectedDate),
                                                                                         style: TextStyle(fontSize: 40, color: Colors.lightBlue, fontWeight: FontWeight.bold),
                                                                                         textAlign: TextAlign.center,
                                                                                       ),
