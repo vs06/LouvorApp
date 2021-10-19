@@ -24,7 +24,7 @@ class BaseScreen extends StatelessWidget {
               Scaffold(
                 drawer: CustomDrawer(),
                 appBar: AppBar(
-                  title: const Text('CEU Louvor'),
+                  title: const Text('Louvor da CEU'),
                 ),
                 body: Padding(
                   padding: const EdgeInsets.all(4.0),

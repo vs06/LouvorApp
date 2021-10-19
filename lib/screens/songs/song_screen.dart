@@ -12,7 +12,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class SongScreen extends StatefulWidget {
 
-  late Song song;
+  final Song song;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   SongScreen(Song s) : song = s != null ? s.clone() : Song();
@@ -439,7 +439,8 @@ class SongScreenState extends State<SongScreen> {
                       builder: (_, song, __) {
                         return Visibility(
                             visible: UserManager.isUserAdmin == true,
-                            child: RaisedButton(
+
+                            child: ElevatedButton(
                               onPressed: () async {
                                 if (isValidateDinamicaFill()) {
                                   saveNewTags(song);
@@ -453,13 +454,10 @@ class SongScreenState extends State<SongScreen> {
                                   DialogUtils.alert(context, 'Campo obrigatório.', 'É necessário informar a dinâmica da música.', 'Ok');
                                 }
                               },
-                              textColor: Colors.white,
-                              color: primaryColor,
-                              disabledColor: primaryColor.withAlpha(100),
-                              child: const Text(
-                                'Salvar',
-                                style: TextStyle(fontSize: 18.0),
-                              ),
+                              // textColor: Colors.white,
+                              // color: primaryColor,
+                              // disabledColor: primaryColor.withAlpha(100),
+                              child: const Text('Salvar',style: TextStyle(fontSize: 18.0),),
                             ));
                       },
                     ),

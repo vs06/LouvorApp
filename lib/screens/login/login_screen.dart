@@ -104,20 +104,21 @@ class LoginScreen extends StatelessWidget {
               },
               child: Align(
                 alignment: Alignment.centerRight,
-                child: FlatButton(
-                  onPressed: (){
-                    if(!emailValid(emailController.text)){
-                      DialogUtils.alert(context, 'Email inválido.', 'O email: ${emailController.text}, não é válido', 'Ok');
-                    }else {
-                        UserManager.resetPassword(emailController.text);
-                        DialogUtils.alert(context, 'Recuperação de senha', 'Foi enviado um link, para o email: ${emailController.text}.\nLá você poderá alterar sua senha, para acessar Louvor App', 'Ok');
-                    }
-                  },
-                  padding: EdgeInsets.zero,
-                  child: const Text(
-                      'Esqueci minha senha'
-                  ),
-                ),
+                child: Padding(padding: EdgeInsets.zero,
+                               child:ElevatedButton (
+                                       onPressed: (){
+                                         if(!emailValid(emailController.text)){
+                                           DialogUtils.alert(context, 'Email inválido.', 'O email: ${emailController.text}, não é válido', 'Ok');
+                                         }else {
+                                           UserManager.resetPassword(emailController.text);
+                                           DialogUtils.alert(context, 'Recuperação de senha', 'Foi enviado um link, para o email: ${emailController.text}.\nLá você poderá alterar sua senha, para acessar Louvor App', 'Ok');
+                                         }
+                                       },
+                                       child: const Text(
+                                           'Esqueci minha senha'
+                                       ),
+                                     ),
+                )
               ),
             ),
           ),
