@@ -41,16 +41,16 @@ class Song extends ChangeNotifier {
   Song.fromDocument(DocumentSnapshot document){
     id = document.id;
     nome = document['titulo'] as String;
-    artista = document['artista'] as String;
-    tom = document['tom'] as String;
+    artista = document['artista'] ?? '';
+    tom = document['tom'] ?? '';
     palmas = document['palmas'] as String;
-    data = document['data'] as String;
-    cifra = document['cifra'] as String;
-    tags = document['tags'] as String;
-    letra = document['letra'] as String;
+    data = document['data'] ?? '';
+    cifra = document['cifra'] ?? '';
+    tags = document['tags'] ?? '';
+    letra = document['letra'] ?? '';
     uid = document['uid'] as String;
     ativo = document['ativo'] as String;
-    videoUrl = document['videoUrl'] as String;
+    videoUrl = document['videoUrl'] ?? '';
 
   }
 
