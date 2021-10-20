@@ -113,19 +113,33 @@ class ServiceScreenState extends State<ServiceScreen> {
                           Padding(
                               padding: const EdgeInsets.only(top: 2),
                               child:
-
-                              TextFormField(
-                                controller: _controllerdirigente,
-                                readOnly: true,
-                                style: TextStyle(color: primaryColor, fontSize: 16, fontWeight: FontWeight.bold,),
-                                decoration: InputDecoration(
-                                  labelText: "Dirigente",
-                                  border: InputBorder.none,
-                                  contentPadding: const EdgeInsets.symmetric(vertical: 15),
-                                  hintText: 'Dirigente',
-                                  icon: Icon(Icons.person_pin_sharp, size: 25,),
-                                ),
-                              ),
+                                  Row(
+                                    children: [
+                                                Container(
+                                                width: 35,
+                                                child:
+                                                  Icon(Icons.person_pin_sharp, size: 25,),
+                                                ),
+                                                Container(
+                                                  width: 120,
+                                                  child: Autocomplete<String>(
+                                                            optionsBuilder: (TextEditingValue textEditingValue) {
+                                                              if (textEditingValue.text == '') {
+                                                                return const Iterable<String>.empty();
+                                                              }
+                                                              return AppListPool.usersName.where((String option) {
+                                                                return option.contains(textEditingValue.text.toLowerCase());
+                                                              });
+                                                            },
+                                                            onSelected: (String selection) {
+                                                              if (selection != "") {
+                                                                widget.service!.dirigente = selection;
+                                                              }
+                                                            },
+                                                          ),
+                                                )
+                                    ],
+                                  )
 
                             //todo reimplementar non null safety
                                   // UserManager.isUserAdmin == true ?
