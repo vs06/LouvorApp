@@ -132,7 +132,7 @@ class ServicesMonthCreatorScreenState extends State<ServicesMonthCreatorScreen> 
                                               child:
                                               TextFormField(
                                                 onTap: () {
-                                                  //_selectTime(context);
+                                                  _selectTime(context);
                                                 },
                                                 readOnly: true,
                                                 controller: timeController,
@@ -327,22 +327,22 @@ class ServicesMonthCreatorScreenState extends State<ServicesMonthCreatorScreen> 
 
   }
 
-  // Future<Null> _selectTime(BuildContext context) async {
-  //   final TimeOfDay picked = await showTimePicker(
-  //     context: context,
-  //     initialTime: selectedTime,
-  //   );
-  //   if (picked != null){
-  //     selectedTime = picked;
-  //
-  //     String minute = picked.minute < 10 ? '0' + picked.minute.toString() : picked.minute.toString();
-  //     String hour = picked.hour < 10 ? '0' + picked.hour.toString() : picked.hour.toString();
-  //
-  //     setState(() => timeController.text = "${hour}:${minute}");
-  //
-  //   }
-  //
-  // }
+  Future<Null> _selectTime(BuildContext context) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: selectedTime,
+    );
+    if (picked != null){
+      selectedTime = picked;
+
+      String minute = picked.minute < 10 ? '0' + picked.minute.toString() : picked.minute.toString();
+      String hour = picked.hour < 10 ? '0' + picked.hour.toString() : picked.hour.toString();
+
+      setState(() => timeController.text = "${hour}:${minute}");
+
+    }
+
+  }
 
 }
 
