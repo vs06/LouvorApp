@@ -124,16 +124,16 @@ class Service extends ChangeNotifier {
     );
   }
 
-  static Service specialClone(Service serviceOrigin) {
+  static Service specialClone(Service? serviceOrigin) {
     Service serviceClone = new Service();
 
     serviceClone.lstSongs = [];
-    serviceClone.lstSongs?.addAll(serviceOrigin.lstSongs!.toList());
+    serviceClone.lstSongs?.addAll(serviceOrigin!.lstSongs!.toList());
 
     serviceClone.team = new Map();
     
-    if(serviceOrigin.team != null){
-     serviceOrigin.team?.forEach((role, volunteers) {
+    if(serviceOrigin!.team != null){
+     serviceOrigin!.team?.forEach((role, volunteers) {
 
        List<String> listNewReference = [];
        volunteers.forEach((volunteer) {

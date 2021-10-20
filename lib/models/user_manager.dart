@@ -37,9 +37,18 @@ class UserManager extends ChangeNotifier {
 
       onSuccess();
     } on PlatformException catch (e){
+
       onFail(getErrorString(e.code));
+
+    } on FirebaseAuthException catch (e){
+
+      onFail(getErrorString(e.message.toString()));
+
+    } on Exception catch (e){
+      onFail(getErrorString(e.toString()));
+
     }
-    loading = false;
+  loading = false;
   }
 
   Future<void> signUp({required UserApp userApp,required Function onFail,required Function onSuccess}) async {

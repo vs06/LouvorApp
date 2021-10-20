@@ -15,7 +15,7 @@ class SongScreen extends StatefulWidget {
   final Song song;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  SongScreen(Song s) : song = s != null ? s.clone() : Song();
+  SongScreen(Song? s) : song = s != null ? s.clone() : Song();
 
   @override
   State<StatefulWidget> createState() {
@@ -45,7 +45,7 @@ class SongScreenState extends State<SongScreen> {
   @override
   Widget build(BuildContext context) {
 
-    bool toggleActive = widget.song.ativo!.toUpperCase() == 'TRUE';
+    bool toggleActive = widget.song.ativo == null ? widget.song.ativo?.toUpperCase() == 'TRUE' : false;
 
     if(widget.song.palmas == null){
       widget.song.palmas = '';

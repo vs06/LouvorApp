@@ -91,7 +91,7 @@ class MyApp extends StatelessWidget {
             case '/song':
               return MaterialPageRoute(
                   builder: (_) => SongScreen(
-                      settings.arguments as Song
+                    settings.arguments == null ? null : settings.arguments as Song
                   )
               );
             case '/songs':
@@ -101,7 +101,7 @@ class MyApp extends StatelessWidget {
             case '/service':
               return MaterialPageRoute(
                   builder: (_) => ServiceScreen(
-                      settings.arguments as Service
+                      settings.arguments == null ? null : settings.arguments as Service
                   )
               );
             case '/services':

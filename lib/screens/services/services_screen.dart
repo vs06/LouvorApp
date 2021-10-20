@@ -17,14 +17,14 @@ import 'components/search_dialog.dart';
 import 'components/service_list_tile.dart';
 
 class ServicesScreen extends StatelessWidget {
-
   ServicesScreen();
+
   DateTime? filterByMonth;
+
   ServicesScreen.buildByMonth(this.filterByMonth);
 
   @override
   Widget build(BuildContext context) {
-
     List<Service> _filteredServices = [];
 
     List<Service> lstServicesUsedAsResume = [];
@@ -53,7 +53,8 @@ class ServicesScreen extends StatelessWidget {
                       onTap: () async {
                         final search = await showDialog<String>(
                             context: context,
-                            builder: (_) => SearchDialog(serviceManager.search));
+                            builder: (_) =>
+                                SearchDialog(serviceManager.search));
                         if (search != null) {
                           serviceManager.search = search;
                         }
@@ -80,8 +81,7 @@ class ServicesScreen extends StatelessWidget {
                     onPressed: () async {
                       final search = await showDialog<String>(
                           context: context,
-                          builder: (_) => SearchDialog(serviceManager.search)
-                      );
+                          builder: (_) => SearchDialog(serviceManager.search));
                       if (search != null) {
                         serviceManager.search = search;
                       }
@@ -99,44 +99,42 @@ class ServicesScreen extends StatelessWidget {
             ),
             Visibility(
                 visible: UserManager.isUserAdmin == true,
-                child:
-                IconButton(
+                child: IconButton(
                   icon: Icon(Icons.add),
                   onPressed: () {
-                    Navigator.of(context).pushNamed('/service',);
+                    Navigator.of(context).pushNamed(
+                      '/service',
+                    );
                   },
-                )
-            )
+                ))
           ],
         ),
         body: Consumer<ServiceManager>(
           builder: (_, serviceManager, __) {
-            _filteredServices = serviceManager.filteredServicesByMonth(filterByMonth);
+            _filteredServices =
+                serviceManager.filteredServicesByMonth(filterByMonth);
             orderTeamRoles(_filteredServices);
             lstServicesUsedAsResume = [];
-            _filteredServices.forEach((service) => lstServicesUsedAsResume.add(service));
-            return
-              _filteredServices.length > 0 ?
-              ListView.builder(
-                  padding: const EdgeInsets.all(4),
-                  itemCount: _filteredServices.length,
-                  itemBuilder: (_, index) {
-                    return ServiceListTile(_filteredServices[index]);
-                  })
-                  : Center(
-                  child:
-                  Text('Sem Cultos\nCadastrados em: ${DateUtilsCustomized.monthBr(filterByMonth)}',
+            _filteredServices
+                .forEach((service) => lstServicesUsedAsResume.add(service));
+            return _filteredServices.length > 0
+                ? ListView.builder(
+                    padding: const EdgeInsets.all(4),
+                    itemCount: _filteredServices.length,
+                    itemBuilder: (_, index) {
+                      return ServiceListTile(_filteredServices[index]);
+                    })
+                : Center(
+                    child: Text(
+                    'Sem Cultos\nCadastrados em: ${DateUtilsCustomized.monthBr(filterByMonth)}',
                     style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.w800,
-                        color: Theme.of(context).primaryColor
-                    ),
-                  )
-              );
+                        color: Theme.of(context).primaryColor),
+                  ));
           },
         ),
-        floatingActionButton:
-        Visibility(
+        floatingActionButton: Visibility(
           visible: UserManager.isUserAdmin == true,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -147,27 +145,30 @@ class ServicesScreen extends StatelessWidget {
                   size: 30,
                 ),
                 onPressed: () {
-                  if(_filteredServices.length > 0){
+                  if (_filteredServices.length > 0) {
                     showAlertDialog1(context, lstServicesUsedAsResume);
-                  }else{
+                  } else {
                     //rederizar para criação automatica
                     Navigator.of(context).pop();
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => ServicesMonthCreatorScreen(filterByMonth)));
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) =>
+                            ServicesMonthCreatorScreen(filterByMonth)));
                   }
                 },
               ),
             ],
           ),
-        )
-
-    );
+        ));
   }
 
-  showAlertDialog1(BuildContext context, List<Service> lstServicesUsedAsResume) {
+  showAlertDialog1(
+      BuildContext context, List<Service> lstServicesUsedAsResume) {
     // configura o button
     Widget okButton = FlatButton(
       child: Text("OK"),
-      onPressed: () {  Navigator.of(context).pop(); },
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
     );
 
     // configura o  AlertDialog
@@ -187,82 +188,75 @@ class ServicesScreen extends StatelessWidget {
     );
   }
 
-  String volunteersMonthResume(List<Service> lstServicesOfMonth){
+  String volunteersMonthResume(List<Service> lstServicesOfMonth) {
     String stringResume = '';
 
     Map<String, Map<String, int>> mapRoleVolunteerQuantity = new Map();
 
     lstServicesOfMonth.forEach((service) {
-
       //Considerar Dirigente no vocal
-      if(service.dirigente != null && service.dirigente != ''){
-        if(service.team == null){
+      if (service.dirigente != null && service.dirigente != '') {
+        if (service.team == null) {
           service.team = new Map();
           service.team!.putIfAbsent('Vocal', () => [service.dirigente ?? '']);
-        }else{
-          if(!service.team!.containsKey('Vocal')){
+        } else {
+          if (!service.team!.containsKey('Vocal')) {
             service.team!.putIfAbsent('Vocal', () => [service.dirigente ?? '']);
-          }else{
+          } else {
             service.team!['Vocal']!.add(service.dirigente ?? '');
           }
         }
       }
 
-      if(service.team != null){
+      if (service.team != null) {
         service.team!.forEach((role, listVolunteer) {
           addToMap(mapRoleVolunteerQuantity, role, listVolunteer);
         });
       }
-    }
-    );
+    });
 
     mapRoleVolunteerQuantity.forEach((role, volunteers) {
-      stringResume += role+'\n';
+      stringResume += role + '\n';
       volunteers.forEach((volunteer, quantity) {
         stringResume += '\t\t- ${volunteer} : ${quantity}\n';
       });
-
     });
 
-    if(stringResume == '')
-      return stringResume+'Sem alocações cadastradas.\n';
+    if (stringResume == '')
+      return stringResume + 'Sem alocações cadastradas.\n';
 
-    return stringResume+'\n';
-
+    return stringResume + '\n';
   }
 
-  void addToMap(Map<String, Map<String, int>> mapRoleVolunteerQuantity, String role, List<String> listVolunteer){
-
+  void addToMap(Map<String, Map<String, int>> mapRoleVolunteerQuantity,
+      String role, List<String> listVolunteer) {
     listVolunteer.forEach((volunteer) {
-      if(mapRoleVolunteerQuantity.containsKey(role)){
-        if(mapRoleVolunteerQuantity[role]!.containsKey(volunteer)){
-          mapRoleVolunteerQuantity[role]![volunteer] = (mapRoleVolunteerQuantity[role]![volunteer] ?? 0 ) +1;
-        }else{
+      if (mapRoleVolunteerQuantity.containsKey(role)) {
+        if (mapRoleVolunteerQuantity[role]!.containsKey(volunteer)) {
+          mapRoleVolunteerQuantity[role]![volunteer] =
+              (mapRoleVolunteerQuantity[role]![volunteer] ?? 0) + 1;
+        } else {
           mapRoleVolunteerQuantity[role]!.putIfAbsent(volunteer, () => 1);
         }
-      }else{
+      } else {
         mapRoleVolunteerQuantity.putIfAbsent(role, () => {volunteer: 1});
       }
     });
-
   }
 
   void orderTeamRoles(List<Service> filteredServices) {
     filteredServices.forEach((service) {
-      if(MultiUtils.isMapNotNullNotEmpty(service.team)){
+      if (MultiUtils.isMapNotNullNotEmpty(service.team)) {
         Map<String, List<String>> teamSorted = new Map();
 
         AppListPool.serviceRoles.forEach((role) {
-          if(service.team!.keys.contains(role)){
+          if (service.team!.keys.contains(role)) {
             teamSorted.putIfAbsent(role, () => service.team![role] ?? []);
           }
         });
 
         service.team = teamSorted;
-
       }
-    }
-    );
+    });
   }
-
 }

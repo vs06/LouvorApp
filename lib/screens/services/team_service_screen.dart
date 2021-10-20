@@ -17,8 +17,8 @@ class TeamServiceScreen extends StatefulWidget {
   late Service service;
   late Service serviceWithoutChanges;
 
-  TeamServiceScreen.buildTeamServiceScreen(Service s) {
-    service = s;
+  TeamServiceScreen.buildTeamServiceScreen(Service? s) {
+    service = s!;
 
     if(service.lstSongs != null){
       _lstSongSelecionadas.addAll(service.lstSongs ?? []);

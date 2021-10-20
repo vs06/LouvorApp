@@ -22,8 +22,8 @@ class SongsServiceScreen extends StatefulWidget {
   //POG
   late String rehearsalType;
 
-  SongsServiceScreen.buildSongsServiceScreen(Service s) {
-     service = s;
+  SongsServiceScreen.buildSongsServiceScreen(Service? s) {
+     service = s!;
 
      if(service.lstSongs != null){
       _lstSongSelecionadas.addAll(service.lstSongs ?? []);

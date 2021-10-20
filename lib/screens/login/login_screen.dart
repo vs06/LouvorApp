@@ -61,7 +61,7 @@ class LoginScreen extends StatelessWidget {
                     const SizedBox(height: 16,),
                     SizedBox(
                       height: 44,
-                      child: RaisedButton(
+                      child: ElevatedButton(
                         onPressed: userManager.loading ? null : (){
                           if(formKey.currentState!.validate()){
                             userManager.signIn(
@@ -70,11 +70,11 @@ class LoginScreen extends StatelessWidget {
                                     password: passController.text
                                 ),
                                 onFail: (e){
-                                  scaffoldKey.currentState!.showSnackBar(
-                                      SnackBar(
-                                        content: Text('Falha ao entrar: $e'),
-                                        backgroundColor: Colors.red,
-                                      )
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                                content: Text('Falha ao entrar: $e'),
+                                                backgroundColor: Colors.red,
+                                        )
                                   );
                                 },
                                 onSuccess: (){
@@ -83,10 +83,12 @@ class LoginScreen extends StatelessWidget {
                             );
                           }
                         },
-                        color: Theme.of(context).primaryColor,
-                        disabledColor: Theme.of(context).primaryColor
-                            .withAlpha(100),
-                        textColor: Colors.white,
+                        style: ElevatedButton.styleFrom(
+                          primary: Theme.of(context).primaryColor,
+                          textStyle: TextStyle( color: Colors.white),
+                          //todo arrumar
+                          //disabledColor: Theme.of(context).primaryColor.withAlpha(100),
+                        ),
                         child: userManager.loading ?
                         CircularProgressIndicator(
                           valueColor: AlwaysStoppedAnimation(Colors.white),
@@ -105,19 +107,32 @@ class LoginScreen extends StatelessWidget {
               child: Align(
                 alignment: Alignment.centerRight,
                 child: Padding(padding: EdgeInsets.zero,
-                               child:ElevatedButton (
-                                       onPressed: (){
-                                         if(!emailValid(emailController.text)){
-                                           DialogUtils.alert(context, 'Email inválido.', 'O email: ${emailController.text}, não é válido', 'Ok');
-                                         }else {
-                                           UserManager.resetPassword(emailController.text);
-                                           DialogUtils.alert(context, 'Recuperação de senha', 'Foi enviado um link, para o email: ${emailController.text}.\nLá você poderá alterar sua senha, para acessar Louvor App', 'Ok');
-                                         }
-                                       },
-                                       child: const Text(
-                                           'Esqueci minha senha'
-                                       ),
-                                     ),
+                               child:
+                                    GestureDetector(
+                                      onTap:(){
+                                                  if(!emailValid(emailController.text)){
+                                                    DialogUtils.alert(context, 'Email inválido.', 'O email: ${emailController.text}, não é válido', 'Ok');
+                                                  }else {
+                                                    UserManager.resetPassword(emailController.text);
+                                                    DialogUtils.alert(context, 'Recuperação de senha', 'Foi enviado um link, para o email: ${emailController.text}.\nLá você poderá alterar sua senha, para acessar Louvor App', 'Ok');
+                                                  }
+                                              },
+                                      child: const Text('Esqueci minha senha'),
+                                    )
+
+                                    // ElevatedButton (
+                                    //    onPressed: (){
+                                    //      if(!emailValid(emailController.text)){
+                                    //        DialogUtils.alert(context, 'Email inválido.', 'O email: ${emailController.text}, não é válido', 'Ok');
+                                    //      }else {
+                                    //        UserManager.resetPassword(emailController.text);
+                                    //        DialogUtils.alert(context, 'Recuperação de senha', 'Foi enviado um link, para o email: ${emailController.text}.\nLá você poderá alterar sua senha, para acessar Louvor App', 'Ok');
+                                    //      }
+                                    //    },
+                                    //    child: const Text(
+                                    //        'Esqueci minha senha'
+                                    //    ),
+                                    // ),
                 )
               ),
             ),
