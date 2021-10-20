@@ -45,7 +45,7 @@ class SongScreenState extends State<SongScreen> {
   @override
   Widget build(BuildContext context) {
 
-    bool toggleActive = widget.song.ativo == null ? widget.song.ativo?.toUpperCase() == 'TRUE' : false;
+    bool toggleActive = widget.song.ativo == null ? false :  widget.song.ativo?.toUpperCase() == 'TRUE';
 
     if(widget.song.palmas == null){
       widget.song.palmas = '';
@@ -116,19 +116,20 @@ class SongScreenState extends State<SongScreen> {
                               child:
                               IconButton(
                                   icon: toggleActive
-                                      ? Icon(Icons.check_circle, size: 25
-                                      , color: Colors.blueAccent )
+                                      ? Icon(Icons.check_circle, size: 25, color: Colors.blueAccent )
                                       : Icon(Icons.check_circle, size: 25, color:  Colors.blueGrey,),
                                   color: Colors.blueGrey,
                                   onPressed: () {
-                                    //if(UserManager.isUserAdmin){
-                                    if(UserManager.isUserAdmin == true){
-                                      setState(() {
-                                        toggleActive = !toggleActive;
-                                      });
-                                      widget.song.ativo = toggleActive ? 'TRUE' : 'FALSE';
+                                      if(UserManager.isUserAdmin ?? false){
+                                          if(UserManager.isUserAdmin == true){
+                                          setState(() {
+                                          toggleActive = !toggleActive;
+                                          });
+                                          widget.song.ativo = toggleActive ? 'TRUE' : 'FALSE';
+                                          }
+                                       }
                                     }
-                                  }),
+                                  ),
                             )
                           ],
                         )
@@ -334,8 +335,8 @@ class SongScreenState extends State<SongScreen> {
                                                 semPalmas = value;
                                                 if (semPalmas) {
                                                   if (!widget.song.palmas!.contains('semPalmas')) {
-                                                    //widget.song.palmas += 'semPalmas';
-                                                    widget.song.palmas = 'semPalmas';
+                                                    var semPalmasAux = widget.song.palmas ?? '';
+                                                    widget.song.palmas = semPalmasAux + 'semPalmas';
                                                   }
                                                 } else {
                                                   if (widget.song.palmas!.contains('semPalmas')) {widget.song.palmas = widget.song.palmas!.replaceAll('semPalmas', '');
@@ -363,13 +364,11 @@ class SongScreenState extends State<SongScreen> {
                                                   comPalmas = value;
                                                   if (comPalmas) {
                                                     if (!widget.song.palmas!.contains('comPalmas')) {
-                                                      //todo retornar null safety
-                                                      //widget.song.!palmas += 'comPalmas' ;
-                                                      widget.song.palmas = 'comPalmas' ;
+                                                      var comPalmasAux = widget.song.palmas ?? '';
+                                                      widget.song.palmas = comPalmasAux + 'comPalmas';
                                                     }
                                                   } else {
-                                                    if (widget.song.palmas!.contains(
-                                                        'comPalmas')) {
+                                                    if (widget.song.palmas!.contains('comPalmas')) {
                                                       widget.song.palmas = widget.song.palmas!.replaceAll('comPalmas', '');
                                                     }
                                                   }
