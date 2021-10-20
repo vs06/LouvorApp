@@ -16,13 +16,13 @@ class LoadingScreen extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return LoadingScreenState(whatsUpMessage!);
+    return LoadingScreenState(whatsUpMessage);
   }
 }
 
 class LoadingScreenState extends State<LoadingScreen> {
 
-  final String whatsUpMessage;
+  final String? whatsUpMessage;
   LoadingScreenState(this.whatsUpMessage);
 
   @override
@@ -38,8 +38,10 @@ class LoadingScreenState extends State<LoadingScreen> {
 
   route() {
     Navigator.of(context).pop();
-    if(whatsUpMessage != ''){
-      NotificationUtils.sendNotificationWhatsUp(whatsUpMessage);
+    var auxWhatsUpMessage = '';
+    auxWhatsUpMessage = (whatsUpMessage !=  null ? whatsUpMessage : null)!;
+    if(auxWhatsUpMessage != ''){
+      NotificationUtils.sendNotificationWhatsUp(auxWhatsUpMessage);
     }
   }
 

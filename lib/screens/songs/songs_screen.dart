@@ -108,7 +108,7 @@ class SongsScreen extends StatelessWidget {
           final filteredSongs = songManager.filteredSongs;
           ScrollController _scrollTagsController = ScrollController();
           return Scrollbar(
-                    isAlwaysShown: true,
+                    isAlwaysShown: filteredSongs.length > 0,
                     controller: _scrollTagsController,
                     child: ListView.builder(
                                 padding: const EdgeInsets.all(4),
