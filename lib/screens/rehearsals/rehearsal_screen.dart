@@ -59,37 +59,37 @@ class RehearsalScreenState extends State<RehearsalScreen> {
 
   String valueRehearsalTypeDropDownSelected = AppListPool.rehearsalTypes[0];
 
-  // Future _selectDate() async {
-  //   DateTime picked = await showDatePicker(context: context,
-  //       initialDate: DateTime.now(),
-  //       firstDate: DateTime(2021),
-  //       lastDate: DateTime(2050)
-  //   );
-  //   if (picked != null){
-  //     setState(() => widget.dateController.text = "${picked.toLocal().day}/${picked.toLocal().month}/${picked.toLocal().year.toString().substring(2,4)}");
-  //     setState(() => widget.rehearsal.data = picked);
-  //     _selectTime(context);
-  //   }
-  // }
-  // TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
-  //
-  // Future<Null> _selectTime(BuildContext context) async {
-  //   final TimeOfDay picked = await showTimePicker(
-  //     context: context,
-  //     initialTime: selectedTime,
-  //   );
-  //   if (picked != null){
-  //       selectedTime = picked;
-  //
-  //       String minute = picked.minute < 10 ? '0' + picked.minute.toString() : picked.minute.toString();
-  //       String hour = picked.hour < 10 ? '0' + picked.hour.toString() : picked.hour.toString();
-  //
-  //       setState(() => widget.dateController.text += " - ${hour}:${minute}");
-  //       setState(() => widget.rehearsal.data = new DateTime(widget.rehearsal.data.year, widget.rehearsal.data.month, widget.rehearsal.data.day, selectedTime.hour , selectedTime.minute));
-  //
-  //     }
-  //
-  // }
+  Future _selectDate() async {
+    DateTime? picked = await showDatePicker(context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2021),
+        lastDate: DateTime(2050)
+    );
+    if (picked != null){
+      setState(() => widget.dateController.text = "${picked.toLocal().day}/${picked.toLocal().month}/${picked.toLocal().year.toString().substring(2,4)}");
+      setState(() => widget.rehearsal!.data = picked);
+      _selectTime(context);
+    }
+  }
+  TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
+
+  Future<Null> _selectTime(BuildContext context) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: selectedTime,
+    );
+    if (picked != null){
+        selectedTime = picked;
+
+        String minute = picked.minute < 10 ? '0' + picked.minute.toString() : picked.minute.toString();
+        String hour = picked.hour < 10 ? '0' + picked.hour.toString() : picked.hour.toString();
+
+        setState(() => widget.dateController.text += " - ${hour}:${minute}");
+        setState(() => widget.rehearsal!.data = new DateTime(widget.rehearsal!.data!.year, widget.rehearsal!.data!.month, widget.rehearsal!.data!.day, selectedTime.hour , selectedTime.minute));
+
+      }
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -165,7 +165,7 @@ class RehearsalScreenState extends State<RehearsalScreen> {
                                       GestureDetector(
                                         onTap: () {
                                           if(UserManager.isUserAdmin == true){
-                                        //    _selectDate();
+                                            _selectDate();
                                           }
                                         },
                                         child: AbsorbPointer(

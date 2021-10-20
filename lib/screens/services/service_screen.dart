@@ -56,18 +56,18 @@ class ServiceScreen extends StatefulWidget {
 
 class ServiceScreenState extends State<ServiceScreen> {
 
-  // Future _selectDate(bool toggleNight) async {
-  //   DateTime picked = await showDatePicker(context: context,
-  //       initialDate: DateTime.now(),
-  //       firstDate: DateTime(2021),
-  //       lastDate: DateTime(2050)
-  //   );
-  //   if (picked != null){
-  //     setState(() => widget.dateController.text = "${picked.toLocal().day}/${picked.toLocal().month}/${picked.toLocal().year}");
-  //     setState(() => widget.service!.data = _getHourByToggle(picked, toggleNight));
-  //   }
-  //
-  // }
+  Future _selectDate(bool toggleNight) async {
+    DateTime? picked = await showDatePicker(context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2021),
+        lastDate: DateTime(2050)
+    );
+    if (picked != null){
+      setState(() => widget.dateController.text = "${picked.toLocal().day}/${picked.toLocal().month}/${picked.toLocal().year}");
+      setState(() => widget.service!.data = _getHourByToggle(picked, toggleNight));
+    }
+
+  }
 
   ScrollController _scrollVolunteersController = ScrollController();
   ScrollController _scrollSongsController = ScrollController();
@@ -186,7 +186,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                               GestureDetector(
                                       onTap: () {
                                           if(UserManager.isUserAdmin == true){
-                                            //_selectDate(toggleNight);
+                                            _selectDate(toggleNight);
                                           }
                                       },
                                 child: AbsorbPointer(
