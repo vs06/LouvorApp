@@ -118,7 +118,9 @@ class MyApp extends StatelessWidget {
               );
             case '/rehearsal':
               return MaterialPageRoute(
-                  builder: (_) => RehearsalScreen(null)
+                  builder: (_) => RehearsalScreen(
+                      settings.arguments == null ? null : settings.arguments as Rehearsal
+                  )
               );
             case '/users':
               return MaterialPageRoute(
