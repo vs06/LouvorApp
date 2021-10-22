@@ -52,7 +52,7 @@ class ServiceManager extends ChangeNotifier{
   List<Service> filteredServicesByMonth(DateTime? dateTime) {
     List<Service> filteredServices = [];
 
-    _loadAllServicesbyDate(dateTime!);
+    _loadAllServicesByDate(dateTime!);
     //filteredServices.addAll(allServices);
     filteredServices.addAll(allServices!.where(
                                               (service) => ((service.data?.year == dateTime.year) && (service.data?.month == dateTime.month) )
@@ -114,19 +114,19 @@ class ServiceManager extends ChangeNotifier{
     notifyListeners();
   }
 
-  Future<void> _loadAllServicesbyDate(DateTime dateTime) async {
-    final lastdayofmounth = new DateTime(dateTime.year,dateTime.month+1,1);
-    final firstdayofmount = new DateTime(dateTime.year,dateTime.month,1);
+  Future<void> _loadAllServicesByDate(DateTime dateTime) async {
+    final lastDayOfMonth = new DateTime(dateTime.year,dateTime.month+1,1);
+    final firstDayOfMount = new DateTime(dateTime.year,dateTime.month,1);
     QuerySnapshot snapServices =
     await firestore.collection('services')
-        .where('data', isGreaterThanOrEqualTo: firstdayofmount)
-        .where('data', isLessThanOrEqualTo: lastdayofmounth)
+        .where('data', isGreaterThanOrEqualTo: firstDayOfMount)
+        .where('data', isLessThanOrEqualTo: lastDayOfMonth)
         .where('ativo', isEqualTo: 'True')
         .get().then((QuerySnapshot querySnapshot) => querySnapshot);
 
     allServices = snapServices.docs.map(
             (d) => Service.fromDocument(d)).toList();
-    notifyListeners();
+    //notifyListeners();
   }
 
   Future<void> _loadAllService(UserManager userManager) async {

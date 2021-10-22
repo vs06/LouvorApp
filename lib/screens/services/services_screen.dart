@@ -111,12 +111,10 @@ class ServicesScreen extends StatelessWidget {
         ),
         body: Consumer<ServiceManager>(
           builder: (_, serviceManager, __) {
-            _filteredServices =
-                serviceManager.filteredServicesByMonth(filterByMonth);
+            _filteredServices = serviceManager.filteredServicesByMonth(filterByMonth);
             orderTeamRoles(_filteredServices);
             lstServicesUsedAsResume = [];
-            _filteredServices
-                .forEach((service) => lstServicesUsedAsResume.add(service));
+            _filteredServices.forEach((service) => lstServicesUsedAsResume.add(service));
             return _filteredServices.length > 0
                 ? ListView.builder(
                     padding: const EdgeInsets.all(4),
