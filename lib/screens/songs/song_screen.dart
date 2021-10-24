@@ -392,10 +392,10 @@ class SongScreenState extends State<SongScreen> {
                         readOnly: true,
                         decoration: InputDecoration(
                           prefixIcon: GestureDetector( onTap: _launchChordsURL,
-                                                       child:
-                                                       Icon(Icons.straighten_rounded,
-                                                         color: (widget.song.cifra != null && widget.song.cifra != '') ? primaryColor : Colors.blueGrey,
-                                                       )
+                                                       child: new Icon(
+                                                                        Icons.piano, size: 29,
+                                                                        color: (widget.song.cifra != null && widget.song.cifra != '') ? primaryColor : Colors.blueGrey,
+                                                                      ),
                                                      ) ,
                           border: const OutlineInputBorder(),
                           filled: true,

@@ -126,7 +126,7 @@ class SongListTile extends StatelessWidget {
                                   alignment: Alignment.topRight,
                                   child: GestureDetector(
                                     onTap: _launchChordsURL,
-                                    child: Icon(Icons.straighten_rounded, color: Colors.blueGrey, size: 29,),
+                                    child: new Icon(Icons.piano, color: Colors.blueGrey, size: 29,),
                                     //child: IconData(0xe457, fontFamily: 'MaterialIcons'),
                                   ),
                                 ),

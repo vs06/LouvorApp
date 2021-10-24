@@ -118,11 +118,12 @@ class ServiceScreenState extends State<ServiceScreen> {
                                                 Container(
                                                 width: 35,
                                                 child:
-                                                  Icon(Icons.person_pin_sharp, size: 25,),
+                                                  Icon(Icons.person_pin_sharp, size: 25, color: Colors.blueGrey,),
                                                 ),
                                                 Container(
                                                   width: 120,
                                                   child: Autocomplete<String>(
+                                                            initialValue: TextEditingValue(text: widget.service!.dirigente ?? '',),
                                                             optionsBuilder: (TextEditingValue textEditingValue) {
                                                               if (textEditingValue.text == '') {
                                                                 return const Iterable<String>.empty();
@@ -279,7 +280,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                      flex: 2,
                       child:
                         Scrollbar(
-                          isAlwaysShown: true,
+                          isAlwaysShown: widget.service!.team != null && widget.service!.team!.length > 0,
                           controller: _scrollVolunteersController,
                           child: ListView.builder(
                                       padding: const EdgeInsets.all(8),
@@ -391,7 +392,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                     flex: 2,
                     child:
                     Scrollbar(
-                      isAlwaysShown: true,
+                      isAlwaysShown:  widget.service!.lstSongs != null && widget.service!.lstSongs!.length > 0,
                       controller: _scrollSongsController,
                       child:
                                 ListView.builder(
@@ -453,11 +454,12 @@ class ServiceScreenState extends State<ServiceScreen> {
                                                                             alignment: Alignment.topRight,
                                                                             child: GestureDetector(
                                                                               onTap: () => _launchChordsURL(widget.service!.lstSongs![index]),
-                                                                              child: Icon(
-                                                                                Icons.straighten_rounded,
-                                                                                color: Colors.blueGrey,
-                                                                                size: 29,
-                                                                              ),
+                                                                                child: new Icon(Icons.piano, size: 29,),
+                                                                              // child: Icon(
+                                                                              //   Icons.straighten_rounded,
+                                                                              //   color: Colors.blueGrey,
+                                                                              //   size: 29,
+                                                                              // ),
                                                                             ),
                                                                           ),
                                                                         ),
@@ -558,6 +560,19 @@ class ServiceScreenState extends State<ServiceScreen> {
 
     if((serviceWithChanges.lstSongs!.length != serviceWithoutChanges.lstSongs!.length ) || (matches != serviceWithChanges.lstSongs!.length)){
       return true;
+    } else {
+        bool isOrderSongChanged = false;
+        serviceWithChanges.lstSongs!.forEach((element) {
+            if(serviceWithChanges.lstSongs!.indexOf(element) != serviceWithoutChanges.lstSongs!.indexOf(element)){
+              isOrderSongChanged = true;
+              return;
+            }
+          });
+
+        if(isOrderSongChanged){
+          return true;
+        }
+
     }
 
     //Ambas vazios
