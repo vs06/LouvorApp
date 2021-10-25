@@ -103,7 +103,7 @@ class RehearsalManager extends ChangeNotifier{
     
     allRehearsals = snapRehearsals.docs.map(
             (d) => Rehearsal.fromDocument(d)).toList();
-    notifyListeners();
+    //notifyListeners();
   }
 
   Future<void> _loadAllRehearsals(UserManager userManager) async {
