@@ -71,8 +71,8 @@ class ServiceScreenState extends State<ServiceScreen> {
   ScrollController _scrollVolunteersController = ScrollController();
   ScrollController _scrollSongsController = ScrollController();
 
-  //GlobalKey<AutoCompleteTextFieldState<String>> key = new GlobalKey();
   TextEditingController _controllerdirigente = TextEditingController();
+  //bool isDirigenteModificado = false;
 
   @override
   Widget build(BuildContext context) {
@@ -155,8 +155,11 @@ class ServiceScreenState extends State<ServiceScreen> {
 
                                                                           },
                                                                           onSelected: (String selection) {
+                                                                            //isDirigenteModificado = true;
                                                                             if (selection != "") {
-                                                                              widget.service!.dirigente = selection;
+                                                                              setState(() {
+                                                                                widget.service!.dirigente = selection;
+                                                                              });
                                                                             }
                                                                           },
                                                                         )
@@ -543,6 +546,10 @@ class ServiceScreenState extends State<ServiceScreen> {
     if(serviceWithoutChanges.dirigente != serviceWithChanges.dirigente){
       return true;
     }
+
+    // if(isDirigenteModificado){
+    //   return true;
+    // }
 
     int matches = 0;
     serviceWithoutChanges.lstSongs!.forEach((song) {

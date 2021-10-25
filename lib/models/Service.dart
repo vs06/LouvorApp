@@ -96,6 +96,10 @@ class Service extends ChangeNotifier {
           this.lstSongs = [];
         }
 
+        if(this.team == null){
+          this.team = new Map();
+        }
+
         this.lstSongs?.forEach((element) => this.dynamicSongs?.addAll(element.toMap()));
 
         final doc = await firestore.collection('services').add(this.toMap());
