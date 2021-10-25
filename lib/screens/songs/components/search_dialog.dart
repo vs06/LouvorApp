@@ -101,11 +101,9 @@ class SearchDialogState extends State<SearchDialog>{
                                                           textInputAction: TextInputAction.search,
                                                           autofocus: true,
                                                           decoration: InputDecoration(
-                                                            //border: InputBorder.none,
                                                             border: const OutlineInputBorder(),
                                                             contentPadding: const EdgeInsets.symmetric(vertical: 15),
                                                             hintText: ' busca',
-                                                            //labelText: 'digite',
                                                           ),
                                                           onFieldSubmitted: (text){
                                                             widget.songSearchDTO.search = text;
@@ -130,11 +128,10 @@ class SearchDialogState extends State<SearchDialog>{
                                         color: Colors.lightBlue,),
                                     ),
                                   ),
-                                  //todo reimplementar non null safety
-                                  // Container(
-                                  //   width: 240,
-                                  //   child: simpleAutoCompleteTags
-                                  // )
+                                  Container(
+                                    width: 240,
+                                    child: simpleAutoCompleteTags(),
+                                  )
                                 ]
                             )
                         ),
@@ -323,7 +320,44 @@ class SearchDialogState extends State<SearchDialog>{
     );
   }
 
-  // _firstPageState() {
+  Autocomplete<String> simpleAutoCompleteTags() {
+    return Autocomplete<String>(initialValue: TextEditingValue(text: currentText,),
+      displayStringForOption: (String option) => option,
+      fieldViewBuilder: ( BuildContext context,
+          TextEditingController fieldTextEditingController,
+          FocusNode fieldFocusNode,
+          VoidCallback onFieldSubmitted
+          ) {
+        return TextField(controller: fieldTextEditingController,
+          focusNode: fieldFocusNode,
+          style: const TextStyle( color: Colors.blueGrey, fontSize: 16),
+          decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 15),
+                  hintText: ' busca',
+            ),
+        );
+      },
+      optionsBuilder: (TextEditingValue textEditingValue) {
+        if (textEditingValue.text == '') {
+          return const Iterable<String>.empty();
+        }
+        return suggestions.where((String option) {
+          return option.toLowerCase().contains(textEditingValue.text.toLowerCase());
+        });
+      },
+      onSelected: (String selection) {
+        if (selection != "") {
+          setState(() {
+             if(!widget.songSearchDTO.tagsFilter.contains(selection)){
+                  widget.songSearchDTO.tagsFilter.add(selection);
+             }
+          });
+        }
+      },
+    );
+  }
+
   //   simpleAutoCompleteTags = SimpleAutoCompleteTextField(
   //     key: key,
   //     style: TextStyle(color: Colors.blueGrey, fontSize: 16),
@@ -345,6 +379,6 @@ class SearchDialogState extends State<SearchDialog>{
   //           }
   //         }),
   //   );
-  // }
+
 
 }

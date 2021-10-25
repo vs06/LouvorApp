@@ -528,28 +528,6 @@ class SongScreenState extends State<SongScreen> {
                                     }
                                   },
                     );
-     // return SimpleAutoCompleteTextField(
-     //        key: key,
-     //        style: TextStyle(
-     //          fontSize: 16, fontWeight: FontWeight.bold, color: Colors.blueGrey,),
-     //        decoration: InputDecoration(
-     //          border: InputBorder.none,
-     //          contentPadding: const EdgeInsets.symmetric(vertical: 12),
-     //          hintText: " Adicione uma tag",
-     //          hintStyle: TextStyle(color: Colors.blueGrey),
-     //        ),
-     //        suggestions: suggestions,
-     //        textChanged: (text) => currentText = text,
-     //        clearOnSubmit: true,
-     //        textSubmitted: (text) =>
-     //            setState(() {
-     //              if (text != "") {
-     //                if (!widget.song.tags!.contains(text)) {
-     //                  widget.song.tags += text + ';';
-     //                }
-     //              }
-     //            }),
-     //      );
     }
 
       void saveNewTags(Song song) {
