@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:louvor_app/helpers/string_utils.dart';
 import 'package:louvor_app/models/user_app.dart';
 import 'package:louvor_app/models/user_manager.dart';
 
@@ -68,7 +69,9 @@ class ServiceManager extends ChangeNotifier{
       filteredServices.forEach((service) {
                                 service.team?.forEach((key, volunteers) {
                                                             volunteers.forEach((volunteer) {
-                                                              if(volunteer.contains(_search)){
+                                                              var volunteerWithinAccent = StringUtils.removeAccents(volunteer.toUpperCase());
+                                                              var searchWithinAccent = StringUtils.removeAccents(_search.toUpperCase());
+                                                              if(volunteerWithinAccent.contains(searchWithinAccent)){
                                                                 if(!filteredServicesSearch.any((element) => element.id == service.id)){
                                                                   filteredServicesSearch.add(service);
                                                                 }

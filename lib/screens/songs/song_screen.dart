@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import 'package:louvor_app/models/song_manager.dart';
 import 'package:louvor_app/models/user_manager.dart';
 import 'package:louvor_app/helpers/loading_screen.dart';
-//import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SongScreen extends StatefulWidget {
@@ -27,9 +26,6 @@ class SongScreen extends StatefulWidget {
 class SongScreenState extends State<SongScreen> {
 
   String currentText = "";
-  //GlobalKey<AutoCompleteTextFieldState<String>> key = new GlobalKey();
-
-  //TextEditingController textEditingController;
 
   //Controle de andamento das musicas
   bool semPalmas = false;
@@ -37,7 +33,6 @@ class SongScreenState extends State<SongScreen> {
 
   List<String> suggestions = TagManager.allTagsAsStrings();
 
-  //SimpleAutoCompleteTextField simpleAutoCompleteTags;
   bool showWhichErrorText = false;
 
   ScrollController _scrollTagsController = ScrollController();
@@ -61,8 +56,6 @@ class SongScreenState extends State<SongScreen> {
     final primaryColor = Theme.of(context).primaryColor;
 
     List<String> tagsLst = tagsToListString(widget.song.tags ?? '');
-
-    //_firstPageState();
 
     return ChangeNotifierProvider.value(
       value: widget.song,

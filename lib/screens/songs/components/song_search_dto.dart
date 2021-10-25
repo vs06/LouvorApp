@@ -1,4 +1,5 @@
 import 'package:louvor_app/models/Song.dart';
+import 'package:louvor_app/helpers/string_utils.dart';
 
 class SongSearchDTO{
 
@@ -23,7 +24,12 @@ class SongSearchDTO{
 
       if(isFilterNomeAndLetra){
         qtdFilters++;
-        if(song.nome!.toLowerCase().contains(this.search.toLowerCase()) || (song.letra != null && song.letra!.toLowerCase().contains(this.search.toLowerCase()))){
+
+        var songNomeWithinAccent = StringUtils.removeAccents(song.nome!.toUpperCase().toUpperCase());
+        var songLetraWithinAccent = StringUtils.removeAccents(song.letra!.toUpperCase().toUpperCase());
+        var searchWithinAccent = StringUtils.removeAccents(search.toUpperCase());
+
+        if( songNomeWithinAccent!.toUpperCase().contains(searchWithinAccent) || songLetraWithinAccent.contains(searchWithinAccent)){
           qtdMathFilters++;
         }
       }

@@ -22,4 +22,14 @@ class StringUtils {
 
   }
 
+  static String removeAccents(String text){
+    var withAccent = "ÄÅÁÂÀÃäáâàãÉÊËÈéêëèÍÎÏÌíîïìÖÓÔÒÕöóôòõÜÚÛüúûùÇç";
+    var withinAccent = "AAAAAAaaaaaEEEEeeeeIIIIiiiiOOOOOoooooUUUuuuuCc";
+
+    for (int i = 0; i < withAccent.length; i++){
+      text = text.replaceAll(withAccent[i], withinAccent[i]);
+    }
+    return text.toUpperCase();
+  }
+
 }
