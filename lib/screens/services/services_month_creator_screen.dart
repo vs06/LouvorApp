@@ -301,6 +301,7 @@ class ServicesMonthCreatorScreenState extends State<ServicesMonthCreatorScreen> 
               Navigator.of(context).pop();
               ServiceDTO.convert(lst).forEach((service) {
                 service.save();
+                ServiceManager.addToAllServices(service);
               });
 
               Navigator.of(context).push(
