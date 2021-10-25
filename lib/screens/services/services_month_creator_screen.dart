@@ -302,6 +302,7 @@ class ServicesMonthCreatorScreenState extends State<ServicesMonthCreatorScreen> 
               ServiceDTO.convert(lst).forEach((service) {
                 service.save();
               });
+
               Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => ServicesScreen.buildByMonth(widget._dateTime))
               );

@@ -23,7 +23,7 @@ class Service extends ChangeNotifier {
 
   Service.fromDocument(DocumentSnapshot document){
     id = document.id;
-    dirigente = document['dirigente'] as String;
+    dirigente = document['dirigente'] ?? '';
     data = (document['data'] as Timestamp).toDate();
     ativo = document['ativo'] as String;
 
