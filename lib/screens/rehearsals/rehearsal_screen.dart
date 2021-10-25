@@ -285,34 +285,31 @@ class RehearsalScreenState extends State<RehearsalScreen> {
                                                                     //crossAxisAlignment: CrossAxisAlignment.start,
                                                                     children: [
                                                                       //todo retornar non safety
-                                                                      // Row(
-                                                                      //   children: [
-                                                                      //     Visibility(
-                                                                      //       visible: StringUtils.isNotNUllNotEmpty(widget.rehearsal!.lstSongs![index].cifra ?? ''),
-                                                                      //       child:
-                                                                      //       Align(
-                                                                      //         alignment: Alignment.topRight,
-                                                                      //         child: GestureDetector(
-                                                                      //           onTap: () => _launchChordsURL(widget.rehearsal.lstSongs[index]),
-                                                                      //           child: Icon(
-                                                                      //             Icons.straighten_rounded,
-                                                                      //             color: Colors.blueGrey,
-                                                                      //           ),
-                                                                      //         ),
-                                                                      //       ),
-                                                                      //     ),
-                                                                      //     SizedBox(width: 15),
-                                                                      //     Text('Tom: ' + widget.rehearsal!.lstSongs![index].tom ?? '',
-                                                                      //       overflow: TextOverflow.ellipsis,
-                                                                      //       style: TextStyle(
-                                                                      //         color: Colors.blueGrey,
-                                                                      //         fontSize: 13,
-                                                                      //         fontWeight:
-                                                                      //         FontWeight.w800,
-                                                                      //       ),
-                                                                      //     ),
-                                                                      //   ],
-                                                                      // )
+                                                                      Row(
+                                                                        children: [
+                                                                          Visibility(
+                                                                            visible: StringUtils.isNotNUllNotEmpty(widget.rehearsal!.lstSongs![index].cifra ?? ''),
+                                                                            child:
+                                                                            Align(
+                                                                              alignment: Alignment.topRight,
+                                                                              child: GestureDetector(
+                                                                                onTap: () => _launchChordsURL(widget.rehearsal!.lstSongs![index]),
+                                                                                child: new Icon(Icons.piano, size: 29,)
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                          SizedBox(width: 15),
+                                                                          Text('Tom: ' + widget.rehearsal!.lstSongs![index].tom!,
+                                                                            overflow: TextOverflow.ellipsis,
+                                                                            style: TextStyle(
+                                                                              color: Colors.blueGrey,
+                                                                              fontSize: 13,
+                                                                              fontWeight:
+                                                                              FontWeight.w800,
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      )
                                                                     ],
                                                                   )
                                                               ),
@@ -331,12 +328,11 @@ class RehearsalScreenState extends State<RehearsalScreen> {
                   Consumer<Rehearsal>(
                     builder: (_, rehearsal, __) {
                       return Visibility(
-                                //visible: UserManager.isUserAdmin,
-                                visible: rehearsal.data!.isAfter(DateTime.now()),
+                                visible: UserManager.isUserAdmin ?? false,
+                                //visible: rehearsal.data ?? .isAfter(DateTime.now()),
                                 child:  RaisedButton(
                                         onPressed: () async {
                                           if (widget.formKey.currentState!.validate()) {
-                                            widget.formKey.currentState!.save();
                                             context.read<RehearsalManager>().update(rehearsal);
                                             Navigator.of(context).pop();
                                             String predifiniedWhatsAppMessage = getPredifiniedWhatsAppMessage(widget.rehearsal);
