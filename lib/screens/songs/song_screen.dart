@@ -121,12 +121,10 @@ class SongScreenState extends State<SongScreen> {
                                   color: Colors.blueGrey,
                                   onPressed: () {
                                       if(UserManager.isUserAdmin ?? false){
-                                          if(UserManager.isUserAdmin == true){
                                           setState(() {
                                           toggleActive = !toggleActive;
                                           });
                                           widget.song.ativo = toggleActive ? 'TRUE' : 'FALSE';
-                                          }
                                        }
                                     }
                                   ),
@@ -209,7 +207,7 @@ class SongScreenState extends State<SongScreen> {
                     ),
 
                   Padding(
-                    padding: EdgeInsets.only(bottom: 25),
+                    padding: EdgeInsets.only(bottom: 1),
                     child: Row(
                               children: [
                                 Text('Tag\'s:',
@@ -219,14 +217,13 @@ class SongScreenState extends State<SongScreen> {
                                 ),
 
                                 Padding(padding: EdgeInsets.only(top: 5),
-                                    child: UserManager.isUserAdmin == true ?
+                                    child: (UserManager.isUserAdmin ?? false) ?
                                     Container(
                                       height: 35,
                                       width: 200,
-                                      //todo reinplementar com nova versao flutter
-                                      // child: Center(
-                                      //   child: simpleAutoCompleteTags,
-                                      // ),
+                                       child: Center(
+                                         child: simpleAutoCompleteTags(),
+                                       ),
                                     )
                                         :
                                     Visibility(
@@ -248,7 +245,7 @@ class SongScreenState extends State<SongScreen> {
                                     width: 320,
                                     child:
                                     Scrollbar(
-                                      isAlwaysShown: true,
+                                      isAlwaysShown: tagsLst.length > 0,
                                       controller: _scrollTagsController,
                                       child: GridView.builder(
                                         itemCount: tagsToListString(widget.song.tags ?? '').length,
@@ -260,7 +257,7 @@ class SongScreenState extends State<SongScreen> {
                                           return Center(
                                               child:
                                               InputChip(
-                                                isEnabled: UserManager.isUserAdmin == true,
+                                                isEnabled: UserManager.isUserAdmin ?? false,
                                                 padding: EdgeInsets.all(2.0),
                                                 label: Text(tagsLst[index],
                                                   style: TextStyle(
@@ -281,7 +278,7 @@ class SongScreenState extends State<SongScreen> {
                                     )
                                 )
                            : Visibility(
-                              visible: UserManager.isUserAdmin == true,
+                              visible: UserManager.isUserAdmin ?? false,
                               child:
                               Padding(
                                 padding: EdgeInsets.only(left:70, bottom: 1),
@@ -330,7 +327,7 @@ class SongScreenState extends State<SongScreen> {
                                                          ),
                                         value: semPalmas,
                                         onChanged: (bool value) {
-                                          if(UserManager.isUserAdmin == true){
+                                          if(UserManager.isUserAdmin ?? false){
                                               setState(() {
                                                 semPalmas = value;
                                                 if (semPalmas) {
@@ -359,7 +356,7 @@ class SongScreenState extends State<SongScreen> {
                                             style: TextStyle(fontSize: 15,color: Colors.blueGrey),),
                                           value: comPalmas,
                                           onChanged: (bool value) {
-                                            if(UserManager.isUserAdmin == true){
+                                            if(UserManager.isUserAdmin ?? false){
                                                 setState(() {
                                                   comPalmas = value;
                                                   if (comPalmas) {
@@ -389,7 +386,7 @@ class SongScreenState extends State<SongScreen> {
                       child: TextFormField(
                         initialValue: widget.song.cifra,
                         onSaved: (texto) => widget.song.cifra = texto,
-                        readOnly: true,
+                        readOnly: !(UserManager.isUserAdmin ?? false),
                         decoration: InputDecoration(
                           prefixIcon: GestureDetector( onTap: _launchChordsURL,
                                                        child: new Icon(
@@ -414,7 +411,7 @@ class SongScreenState extends State<SongScreen> {
                       child: TextFormField(
                         initialValue: widget.song.videoUrl,
                         onSaved: (texto) => widget.song.videoUrl = texto,
-                        readOnly: true,
+                        readOnly: !(UserManager.isUserAdmin ?? false),
                         decoration: InputDecoration(
                           prefixIcon: GestureDetector( onTap: _launchVideoURL,
                                                        child:
@@ -437,7 +434,7 @@ class SongScreenState extends State<SongScreen> {
                     Consumer<Song>(
                       builder: (_, song, __) {
                         return Visibility(
-                            visible: UserManager.isUserAdmin == true,
+                            visible: UserManager.isUserAdmin ?? false,
 
                             child: ElevatedButton(
                               onPressed: () async {
@@ -489,62 +486,104 @@ class SongScreenState extends State<SongScreen> {
     return retKeyWords;
   }
 
-  // _firstPageState() {
-  //   simpleAutoCompleteTags = SimpleAutoCompleteTextField(
-  //     key: key,
-  //     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color: Colors.blueGrey,),
-  //     decoration: InputDecoration(
-  //       border: InputBorder.none,
-  //       contentPadding: const EdgeInsets.symmetric(vertical: 12),
-  //       hintText: " Adicione uma tag",
-  //       hintStyle: TextStyle(color: Colors.blueGrey),
-  //     ),
-  //     suggestions: suggestions,
-  //     textChanged: (text) => currentText = text,
-  //     clearOnSubmit: true,
-  //     textSubmitted: (text) =>
-  //         setState(() {
-  //           if (text != "") {
-  //             if(!widget.song.tags!.contains(text)){
-  //               widget.song.tags += text + ';';
-  //             }
-  //           }
-  //         }),
-  //   );
-  // }
+  Autocomplete<String> simpleAutoCompleteTags() {
+      return Autocomplete<String>(initialValue: TextEditingValue(text: currentText,),
+                                  displayStringForOption: (String option) => option,
+                                  fieldViewBuilder: ( BuildContext context,
+                                                      TextEditingController fieldTextEditingController,
+                                                      FocusNode fieldFocusNode,
+                                                      VoidCallback onFieldSubmitted
+                                                    ) {
+                                                        return TextField(controller: fieldTextEditingController,
+                                                                         focusNode: fieldFocusNode,
+                                                                         style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.blueGrey, fontSize: 16),
+                                                                         decoration: new InputDecoration( contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                                                                                                          hintText: " Adicione uma tag",
+                                                                                                          hintStyle: TextStyle(color: Colors.blueGrey),
+                                                                                                          border: InputBorder.none,
+                                                                                                          focusedBorder: InputBorder.none,
+                                                                                                          enabledBorder: InputBorder.none,
+                                                                                                          errorBorder: InputBorder.none,
+                                                                                                          disabledBorder: InputBorder.none,
+                                                                                                         ),
+                                                                        );
+                                                        },
+                                  optionsBuilder: (TextEditingValue textEditingValue) {
+                                    if (textEditingValue.text == '') {
+                                      return const Iterable<String>.empty();
+                                    }
+                                    return suggestions.where((String option) {
+                                      return option.toLowerCase().contains(textEditingValue.text.toLowerCase());
+                                    });
+                                  },
+                                  onSelected: (String selection) {
+                                    if (selection != "") {
+                                      setState(() {
+                                          if (!widget.song.tags!.contains(selection)) {
+                                            String tagAux = widget.song.tags ?? '';
+                                            tagAux += selection+ ';';
+                                            widget.song.tags = tagAux;
+                                          }
+                                      });
+                                    }
+                                  },
+                    );
+     // return SimpleAutoCompleteTextField(
+     //        key: key,
+     //        style: TextStyle(
+     //          fontSize: 16, fontWeight: FontWeight.bold, color: Colors.blueGrey,),
+     //        decoration: InputDecoration(
+     //          border: InputBorder.none,
+     //          contentPadding: const EdgeInsets.symmetric(vertical: 12),
+     //          hintText: " Adicione uma tag",
+     //          hintStyle: TextStyle(color: Colors.blueGrey),
+     //        ),
+     //        suggestions: suggestions,
+     //        textChanged: (text) => currentText = text,
+     //        clearOnSubmit: true,
+     //        textSubmitted: (text) =>
+     //            setState(() {
+     //              if (text != "") {
+     //                if (!widget.song.tags!.contains(text)) {
+     //                  widget.song.tags += text + ';';
+     //                }
+     //              }
+     //            }),
+     //      );
+    }
 
-  void saveNewTags(Song song) {
-    if(song.tags!.isNotEmpty && song.tags!.length > 0){
-      tagsToListString(song.tags ?? '').forEach((tagAdded) {
-        if (!TagManager.allTagsAsStrings().contains(tagAdded)) {
-          context.read<TagManager>().update(Tag.newTag(tagAdded));
+      void saveNewTags(Song song) {
+        if(song.tags!.isNotEmpty && song.tags!.length > 0){
+          tagsToListString(song.tags ?? '').forEach((tagAdded) {
+            if (!TagManager.allTagsAsStrings().contains(tagAdded)) {
+              context.read<TagManager>().update(Tag.newTag(tagAdded));
+            }
+          });
         }
-      });
-    }
-  }
+      }
 
-  List<String> tagsToListString(String tags) {
-    List<String> tagList = [];
+      List<String> tagsToListString(String tags) {
+        List<String> tagList = [];
 
-    int posicao = 0;
+        int posicao = 0;
 
-    while (tags.indexOf(';', posicao) != -1) {
-      var index = tags.indexOf(';', posicao);
-      var tag = tags.substring(posicao, index);
-      tagList.add(tag);
-      posicao = index + 1;
-    }
+        while (tags.indexOf(';', posicao) != -1) {
+          var index = tags.indexOf(';', posicao);
+          var tag = tags.substring(posicao, index);
+          tagList.add(tag);
+          posicao = index + 1;
+        }
 
-    return tagList;
-  }
+        return tagList;
+      }
 
-  bool isValidateDinamicaFill() {
-    return !(!semPalmas && !comPalmas);
-  }
+      bool isValidateDinamicaFill() {
+        return !(!semPalmas && !comPalmas);
+      }
 
-  void _launchVideoURL() async =>
-      await canLaunch(widget.song.videoUrl ?? '') ? await launch(widget.song.videoUrl ?? '') : throw 'Could not launch $widget.song.videoUrl';
+      void _launchVideoURL() async =>
+          await canLaunch(widget.song.videoUrl ?? '') ? await launch(widget.song.videoUrl ?? '') : throw 'Could not launch $widget.song.videoUrl';
 
-  void _launchChordsURL() async =>
-      await canLaunch(widget.song.cifra ?? '') ? await launch(widget.song.cifra ?? '') : throw 'Could not launch $widget.song.cifra';
+      void _launchChordsURL() async =>
+          await canLaunch(widget.song.cifra ?? '') ? await launch(widget.song.cifra ?? '') : throw 'Could not launch $widget.song.cifra';
 }

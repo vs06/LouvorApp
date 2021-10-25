@@ -237,7 +237,7 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
                                                       child: Icon(
                                                         Icons.add_circle_sharp,
                                                         color: Colors.lightBlue,
-                                                        size: 35,
+                                                        size: 45,
                                                       ),
                                                     ),
                                                   ]
@@ -322,15 +322,26 @@ class LstSongSelecionadasState extends State<SongsServiceScreen> {
                                                     Row(
                                                       children: [
                                                         Container(
+                                                          width: 20,
+                                                          child: Text(
+                                                                  ((widget._lstSongSelecionadas.indexOf(songItem)+1).toString() + ': '),
+                                                                  style: TextStyle(
+                                                                    fontSize: 16,
+                                                                    fontWeight: FontWeight.w800,
+                                                                    color:  Colors.blue,
+                                                                  ),
+                                                                ),
+                                                        ),
+                                                        Container(
                                                           width: 260,
-                                                          child:  Text(
-                                                            songItem.nome ?? '',
-                                                            overflow: TextOverflow.ellipsis,
-                                                            style: TextStyle(
-                                                              fontSize: 16,
-                                                              fontWeight: FontWeight.w800,
-                                                            ),
-                                                          ),
+                                                          child: Text(
+                                                                  songItem.nome ?? '',
+                                                                  overflow: TextOverflow.ellipsis,
+                                                                  style: TextStyle(
+                                                                    fontSize: 16,
+                                                                    fontWeight: FontWeight.w800,
+                                                                  ),
+                                                                ),
                                                         ),
                                                         Container(
                                                           child: GestureDetector(

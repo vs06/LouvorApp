@@ -122,62 +122,49 @@ class ServiceScreenState extends State<ServiceScreen> {
                                                 ),
                                                 Container(
                                                   width: 120,
-                                                  child: Autocomplete<String>(
-                                                            initialValue: TextEditingValue(text: widget.service!.dirigente ?? '',),
-                                                            optionsBuilder: (TextEditingValue textEditingValue) {
-                                                              if (textEditingValue.text == '') {
-                                                                return const Iterable<String>.empty();
-                                                              }
-                                                              return AppListPool.usersName.where((String option) {
-                                                                return option.contains(textEditingValue.text.toLowerCase());
-                                                              });
-                                                            },
-                                                            onSelected: (String selection) {
-                                                              if (selection != "") {
-                                                                widget.service!.dirigente = selection;
-                                                              }
-                                                            },
-                                                          ),
+                                                  child:
+                                                        Padding(
+                                                                padding: const EdgeInsets.only(top: 12),
+                                                                child: Autocomplete<String>(
+                                                                                initialValue: TextEditingValue(text: widget.service!.dirigente ?? '',),
+                                                                          displayStringForOption: (String option) => option,
+                                                                          fieldViewBuilder: ( BuildContext context,
+                                                                              TextEditingController fieldTextEditingController,
+                                                                              FocusNode fieldFocusNode,
+                                                                              VoidCallback onFieldSubmitted
+                                                                              ) {
+                                                                            return TextField(
+                                                                              controller: fieldTextEditingController,
+                                                                              focusNode: fieldFocusNode,
+                                                                              style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.blue, fontSize: 17),
+                                                                              decoration: new InputDecoration(
+                                                                                border: InputBorder.none,
+                                                                                focusedBorder: InputBorder.none,
+                                                                                enabledBorder: InputBorder.none,
+                                                                                errorBorder: InputBorder.none,
+                                                                                disabledBorder: InputBorder.none,
+                                                                              ),
+                                                                            );
+                                                                          },
+                                                                          optionsBuilder: (TextEditingValue textEditingValue) {
+                                                                            if (textEditingValue.text == '') {
+                                                                              return const Iterable<String>.empty();
+                                                                            }
+                                                                            return AppListPool.usersName.where((String option) {
+                                                                              return option.toLowerCase().contains(textEditingValue.text.toLowerCase());
+                                                                            });
+
+                                                                          },
+                                                                          onSelected: (String selection) {
+                                                                            if (selection != "") {
+                                                                              widget.service!.dirigente = selection;
+                                                                            }
+                                                                          },
+                                                                        )
+                                                        )
                                                 )
                                     ],
                                   )
-
-                            //todo reimplementar non null safety
-                                  // UserManager.isUserAdmin == true ?
-                                  //   SimpleAutoCompleteTextField(
-                                  //     key: key,
-                                  //     controller: _controllerdirigente,
-                                  //     style: TextStyle(color: primaryColor, fontSize: 16, fontWeight: FontWeight.bold,),
-                                  //     decoration: InputDecoration(
-                                  //       labelText: "Dirigente",
-                                  //       border: InputBorder.none,
-                                  //       contentPadding: const EdgeInsets.symmetric(vertical: 15),
-                                  //       hintText: 'Dirigente',
-                                  //       icon: Icon(Icons.person_pin_sharp, size: 25,),
-                                  //     ),
-                                  //     suggestions: AppListPool.usersName,
-                                  //     //textChanged: (text) => _controllerdirigente.text = text,
-                                  //     clearOnSubmit: true,
-                                  //     textSubmitted: (text) =>
-                                  //         setState(() {
-                                  //           if (text != "") {
-                                  //             widget.service.dirigente = text;
-                                  //           }
-                                  //         }),
-                                  //   ) :
-                                  //  TextFormField(
-                                  //        controller: _controllerdirigente,
-                                  //        readOnly: true,
-                                  //        style: TextStyle(color: primaryColor, fontSize: 16, fontWeight: FontWeight.bold,),
-                                  //        decoration: InputDecoration(
-                                  //          labelText: "Dirigente",
-                                  //          border: InputBorder.none,
-                                  //          contentPadding: const EdgeInsets.symmetric(vertical: 15),
-                                  //          hintText: 'Dirigente',
-                                  //          icon: Icon(Icons.person_pin_sharp, size: 25,),
-                                  //        ),
-                                  //  ),
-
                           ),
                         ),
 
@@ -241,7 +228,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                   ),
 
                   Padding(
-                    padding: const EdgeInsets.only(top: 6),
+                    padding: const EdgeInsets.only(top: 0),
                     child:Row(
                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                            children: [
@@ -299,7 +286,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                                                   padding: const EdgeInsets.all(8),
                                                   child: Row(
                                                     children: <Widget>[
-                                                      const SizedBox(width: 16,),
+                                                      const SizedBox(width: 5,),
                                                       Column(
                                                           children:<Widget>[
                                                             Expanded(
@@ -420,18 +407,25 @@ class ServiceScreenState extends State<ServiceScreen> {
                                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                                     children: <Widget>[
                                                                       Row(
-                                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                                           children: [
-                                                                            Flexible(child:
                                                                             Text(
-                                                                              widget.service!.lstSongs![index].nome ?? '',
-                                                                              overflow: TextOverflow.ellipsis,
+                                                                              ((index+1).toString() + ': '),
                                                                               style: TextStyle(
                                                                                 fontSize: 16,
-                                                                                fontWeight:
-                                                                                FontWeight.w800,
+                                                                                fontWeight: FontWeight.w800,
+                                                                                color:  Colors.blue,
                                                                               ),
                                                                             ),
+                                                                            Flexible(
+                                                                              child:
+                                                                                    Text(
+                                                                                      widget.service!.lstSongs![index].nome ?? '',
+                                                                                      overflow: TextOverflow.ellipsis,
+                                                                                      style: TextStyle(
+                                                                                        fontSize: 16,
+                                                                                        fontWeight: FontWeight.w800,
+                                                                                      ),
+                                                                                    ),
                                                                             )
                                                                           ]
                                                                       )
