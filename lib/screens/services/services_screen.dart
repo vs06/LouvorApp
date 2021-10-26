@@ -13,17 +13,28 @@ import 'package:louvor_app/models/user_manager.dart';
 import 'components/search_dialog.dart';
 import 'components/service_list_tile.dart';
 
-class ServicesScreen extends StatelessWidget {
-  ServicesScreen();
+
+class ServicesScreen extends StatefulWidget{
 
   DateTime? filterByMonth;
 
   ServicesScreen.buildByMonth(this.filterByMonth);
 
+  ServicesScreen();
+
+  bool isSearchFill = false;
+
+  @override
+  State<StatefulWidget> createState() {
+    return ServicesScreenState();
+  }
+
+}
+class ServicesScreenState extends State<ServicesScreen>{
+
   @override
   Widget build(BuildContext context) {
     List<Service> _filteredServices = [];
-
     List<Service> lstServicesUsedAsResume = [];
 
     return Scaffold(
@@ -81,6 +92,9 @@ class ServicesScreen extends StatelessWidget {
                           builder: (_) => SearchDialog(serviceManager.search));
                       if (search != null) {
                         serviceManager.search = search;
+                        setState(() {
+                          widget.isSearchFill = true;
+                        });
                       }
                     },
                   );
@@ -89,6 +103,9 @@ class ServicesScreen extends StatelessWidget {
                     icon: Icon(Icons.close),
                     onPressed: () async {
                       serviceManager.search = '';
+                      setState(() {
+                        widget.isSearchFill = false;
+                      });
                     },
                   );
                 }
@@ -108,7 +125,7 @@ class ServicesScreen extends StatelessWidget {
         ),
         body: Consumer<ServiceManager>(
           builder: (_, serviceManager, __) {
-            _filteredServices = serviceManager.filteredServicesByMonth(filterByMonth);
+            _filteredServices = serviceManager.filteredServicesByMonth(widget.filterByMonth);
             orderTeamRoles(_filteredServices);
             lstServicesUsedAsResume = [];
             _filteredServices.forEach((service) => lstServicesUsedAsResume.add(service));
@@ -120,17 +137,17 @@ class ServicesScreen extends StatelessWidget {
                       return ServiceListTile(_filteredServices[index]);
                     })
                 : Center(
-                    child: Text(
-                    'Sem Cultos\nCadastrados em: ${DateUtilsCustomized.monthBr(filterByMonth)}',
-                    style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.w800,
-                        color: Theme.of(context).primaryColor),
-                  ));
+                    child: Text( serviceManager.search.isEmpty ? 'Sem Cultos\nCadastrados em: ${DateUtilsCustomized.monthBr(widget.filterByMonth)}' : 'Sem resultado\npara sua pesquisa.',
+                                  style: TextStyle(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.w800,
+                                      color: Theme.of(context).primaryColor),
+                               )
+                        );
           },
         ),
         floatingActionButton: Visibility(
-          visible: UserManager.isUserAdmin == true,
+          visible: UserManager.isUserAdmin == true && !widget.isSearchFill,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -147,7 +164,7 @@ class ServicesScreen extends StatelessWidget {
                     Navigator.of(context).pop();
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) =>
-                            ServicesMonthCreatorScreen(filterByMonth)));
+                            ServicesMonthCreatorScreen(widget.filterByMonth)));
                   }
                 },
               ),
