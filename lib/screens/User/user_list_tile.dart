@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:louvor_app/helpers/date_utils.dart';
-import 'package:louvor_app/models/Service.dart';
-import 'package:louvor_app/models/service_manager.dart';
 import 'package:louvor_app/models/user_app.dart';
 import 'package:louvor_app/models/user_manager.dart';
 import 'package:provider/provider.dart';

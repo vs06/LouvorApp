@@ -1,5 +1,4 @@
 import 'dart:core';
-import 'dart:developer';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -9,8 +8,6 @@ import 'package:louvor_app/helpers/date_utils.dart';
 import 'package:louvor_app/models/service_manager.dart';
 import 'package:louvor_app/screens/services/services_screen.dart';
 import 'package:louvor_app/models/Service.dart';
-import 'package:provider/provider.dart';
-
 
 class ServicesMonthCreatorScreen extends StatefulWidget {
 

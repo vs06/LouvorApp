@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:louvor_app/helpers/validators.dart';
-import 'package:louvor_app/models/user_app.dart';
 import 'package:louvor_app/models/user_manager.dart';
 import 'package:louvor_app/screens/User/user_list_tile.dart';
-import 'package:louvor_app/screens/services/components/service_list_tile.dart';
 import 'package:provider/provider.dart';
 
 class UsersScreen extends StatelessWidget {

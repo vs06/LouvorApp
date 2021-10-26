@@ -5,8 +5,6 @@ import 'package:louvor_app/common/custom_drawer/custom_drawer.dart';
 import 'package:louvor_app/helpers/app_list_pool.dart';
 import 'package:louvor_app/helpers/date_utils.dart';
 import 'package:louvor_app/screens/rehearsals/rehearsals_screen.dart';
-import 'package:louvor_app/screens/services/services_screen.dart';
-import 'package:intl/intl.dart';
 
 class RehearsalsPeriodSelect extends StatefulWidget {
 

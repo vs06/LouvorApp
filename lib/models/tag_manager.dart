@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:louvor_app/models/song_manager.dart';
 import 'package:louvor_app/models/user_app.dart';
 import 'package:louvor_app/models/user_manager.dart';
 

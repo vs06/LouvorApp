@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:louvor_app/common/custom_drawer/custom_drawer.dart';
 import 'package:louvor_app/helpers/date_utils.dart';
-import 'package:louvor_app/models/Rehearsal.dart';
 import 'package:louvor_app/models/rehearsal_manager.dart';
 import 'package:louvor_app/models/user_manager.dart';
 import 'package:provider/provider.dart';

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:louvor_app/models/Tag.dart';
 import 'package:louvor_app/models/tag_manager.dart';
 import 'package:louvor_app/screens/User/users_screen.dart';
-import 'package:louvor_app/screens/rehearsals/rehearsal_period_select.dart';
 import 'package:louvor_app/screens/rehearsals/rehearsal_screen.dart';
 import 'package:louvor_app/screens/services/services_period_select.dart';
 import 'package:louvor_app/screens/services/service_screen.dart';

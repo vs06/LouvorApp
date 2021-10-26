@@ -9,7 +9,6 @@ import 'package:louvor_app/helpers/string_utils.dart';
 import 'package:louvor_app/models/Song.dart';
 import 'package:louvor_app/screens/services/service_screen.dart';
 import 'package:louvor_app/models/Service.dart';
-import 'package:intl/intl.dart';
 
 class TeamServiceScreen extends StatefulWidget {
 
