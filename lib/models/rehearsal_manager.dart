@@ -6,8 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:louvor_app/models/user_app.dart';
 import 'package:louvor_app/models/user_manager.dart';
 
-import 'package:louvor_app/models/Service.dart';
-
 import 'Rehearsal.dart';
 
 class RehearsalManager extends ChangeNotifier{
@@ -50,17 +48,18 @@ class RehearsalManager extends ChangeNotifier{
   }
 
 
-  List<Rehearsal> filteredRehearsalsByMounth(DateTime DateTime) {
+  List<Rehearsal> filteredRehearsalsByMounth(DateTime dateTime) {
     List<Rehearsal> filteredRehearsals = [];
 
-    _loadAllRehearsalsbyDate(DateTime);
+    _loadAllRehearsalsbyDate(dateTime);
     filteredRehearsals.addAll(allRehearsals!.where(
-            (rehearsal) => ((rehearsal.data!.year == DateTime.year) && (rehearsal.data!.month == DateTime.month) )
+            (rehearsal) => ((rehearsal.data!.year == dateTime.year) && (rehearsal.data!.month == dateTime.month) )
     )
     );
 
-    //todo arrumar null safety
-    //filteredRehearsals.sort((a, b) => a.data!.compareTo(b.data));
+    filteredRehearsals.sort((a, b) =>
+        a.data!.compareTo(b.data ?? DateTime.now())
+    );
 
     return sortFilteredRehearsals(filteredRehearsals);
   }

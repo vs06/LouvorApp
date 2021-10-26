@@ -60,8 +60,9 @@ class ServiceManager extends ChangeNotifier{
                                               )
                             );
 
-    //TODO ARRUMAR COM NULL SAFETY
-    //filteredServices.sort((a, b) => a.data.compareTo(b.data));
+    filteredServices.sort((a, b) =>
+                              a.data!.compareTo(b.data ?? DateTime.now())
+                          );
 
     if(_search != ''){
       List<Service> filteredServicesSearch = [];
