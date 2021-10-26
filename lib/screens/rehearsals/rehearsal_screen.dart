@@ -329,14 +329,13 @@ class RehearsalScreenState extends State<RehearsalScreen> {
                     builder: (_, rehearsal, __) {
                       return Visibility(
                                 visible: UserManager.isUserAdmin ?? false,
-                                //visible: rehearsal.data ?? .isAfter(DateTime.now()),
                                 child:  RaisedButton(
                                         onPressed: () async {
                                           if (widget.formKey.currentState!.validate()) {
                                             context.read<RehearsalManager>().update(rehearsal);
                                             Navigator.of(context).pop();
-                                            String predifiniedWhatsAppMessage = getPredifiniedWhatsAppMessage(widget.rehearsal);
-                                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoadingScreen.whatsAppMessage(predifiniedWhatsAppMessage)));
+                                            String predefinedWhatsAppMessage = getPredifiniedWhatsAppMessage(widget.rehearsal);
+                                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoadingScreen.whatsAppMessage(predefinedWhatsAppMessage)));
 
                                           }
                                         },
