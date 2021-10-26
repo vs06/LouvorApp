@@ -54,13 +54,6 @@ class Rehearsal extends Service {
 
   Future<void> save() async {
 
-    final Map<String, dynamic> blob = {
-      'data': data,
-      'type': type,
-      'isActive': isActive,
-      'lstSongs': lstSongs
-    };
-
     if (id == null) {
 
       if (this.dynamicSongs == null){
