@@ -24,9 +24,6 @@ class RehearsalScreen extends StatefulWidget {
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-
-  //RehearsalScreen();
-
   RehearsalScreen(Rehearsal? r){
     rehearsal = r != null ? r.clone() : Rehearsal();
     if(rehearsal?.data != null){
@@ -96,6 +93,9 @@ class RehearsalScreenState extends State<RehearsalScreen> {
 
     final primaryColor = Theme.of(context).primaryColor;
 
+    if(widget.rehearsal!.type == null){
+      widget.rehearsal!.type = 'Geral';
+    }
     return ChangeNotifierProvider.value(
       value: widget.rehearsal,
       child: Scaffold(
@@ -245,78 +245,99 @@ class RehearsalScreenState extends State<RehearsalScreen> {
                                                     shape: RoundedRectangleBorder(
                                                         borderRadius: BorderRadius.circular(4)),
                                                     child: Container(
-                                                        height: 55,
+                                                        height: 80,
                                                         padding: const EdgeInsets.all(8),
                                                         child:
-                                                        Row(
-                                                            children: <Widget>[
-                                                              const SizedBox( width: 16,),
-                                                              Expanded(
-                                                                  flex: 5,
-                                                                  child: Column(
-                                                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                                      children: <Widget>[
-                                                                        Row(
-                                                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                            children: [
-                                                                              Flexible(child:
-                                                                              Text(
-                                                                                widget.rehearsal!.lstSongs![index].nome ?? '',
-                                                                                overflow: TextOverflow.ellipsis,
-                                                                                style: TextStyle(
-                                                                                  fontSize: 16,
-                                                                                  fontWeight:
-                                                                                  FontWeight.w800,
-                                                                                ),
-                                                                              ),
+                                                        Column(
+                                                            children: [
+                                                              Row(
+                                                                  children: <Widget>[
+                                                                    const SizedBox( width: 8,),
+                                                                    Expanded(
+                                                                        flex: 5,
+                                                                        child: Column(
+                                                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                                                            children: <Widget>[
+                                                                              Row(
+                                                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                                  children: [
+                                                                                    Flexible(child:
+                                                                                    Text(
+                                                                                      widget.rehearsal!.lstSongs![index].nome ?? '',
+                                                                                      overflow: TextOverflow.ellipsis,
+                                                                                      style: TextStyle(
+                                                                                        fontSize: 16,
+                                                                                        fontWeight:
+                                                                                        FontWeight.w800,
+                                                                                      ),
+                                                                                    ),
+                                                                                    )
+                                                                                  ]
                                                                               )
                                                                             ]
                                                                         )
-                                                                      ]
-                                                                  )
+                                                                    ),
+                                                                  ]
                                                               ),
-                                                              //  SizedBox(width: 5),
-                                                              Expanded(
-                                                                  flex: 3, // 20%
-                                                                  child:
-                                                                  Column(
-                                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                    //crossAxisAlignment: CrossAxisAlignment.start,
-                                                                    children: [
-                                                                      //todo retornar non safety
-                                                                      Row(
-                                                                        children: [
-                                                                          Visibility(
-                                                                            visible: StringUtils.isNotNUllNotEmpty(widget.rehearsal!.lstSongs![index].cifra ?? ''),
-                                                                            child:
-                                                                            Align(
-                                                                              alignment: Alignment.topRight,
-                                                                              child: GestureDetector(
-                                                                                onTap: () => _launchChordsURL(widget.rehearsal!.lstSongs![index]),
-                                                                                child: new Icon(Icons.piano, size: 29,)
+                                                              Padding(
+                                                                padding: const EdgeInsets.only(top: 6),
+                                                                child:  Row(
+                                                                            children: <Widget>[
+                                                                              const SizedBox( width: 35,),
+                                                                              Expanded(
+                                                                                  flex: 3, // 20%
+                                                                                  child:
+                                                                                  Column(
+                                                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                                    //crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                    children: [
+                                                                                      Row(
+                                                                                        children: [
+                                                                                          Visibility(
+                                                                                            visible: StringUtils.isNotNUllNotEmpty(widget.rehearsal!.lstSongs![index].videoUrl ?? ''),
+                                                                                            child:
+                                                                                            Align(
+                                                                                                alignment: Alignment.topRight,
+                                                                                                child: GestureDetector( onTap: () => _launchVideoURL(widget.rehearsal!.lstSongs![index]),
+                                                                                                  child:
+                                                                                                  Icon(Icons.ondemand_video, size: 30,
+                                                                                                  ),
+                                                                                                )
+                                                                                            ),
+                                                                                          ),
+                                                                                          SizedBox(width: 35),
+                                                                                          Visibility(
+                                                                                            visible: StringUtils.isNotNUllNotEmpty(widget.rehearsal!.lstSongs![index].cifra ?? ''),
+                                                                                            child:
+                                                                                            Align(
+                                                                                              alignment: Alignment.topRight,
+                                                                                              child: GestureDetector(
+                                                                                                  onTap: () => _launchChordsURL(widget.rehearsal!.lstSongs![index]),
+                                                                                                  child: new Icon(Icons.piano, size: 30,)
+                                                                                              ),
+                                                                                            ),
+                                                                                          ),
+                                                                                          SizedBox(width: 35),
+                                                                                          Text('Tom: ' + widget.rehearsal!.lstSongs![index].tom!,
+                                                                                            overflow: TextOverflow.ellipsis,
+                                                                                            style: TextStyle(
+                                                                                              color: Colors.blueGrey,
+                                                                                              fontSize: 13,
+                                                                                              fontWeight:
+                                                                                              FontWeight.w800,
+                                                                                            ),
+                                                                                          ),
+                                                                                        ],
+                                                                                      )
+                                                                                    ],
+                                                                                  )
                                                                               ),
-                                                                            ),
-                                                                          ),
-                                                                          SizedBox(width: 15),
-                                                                          Text('Tom: ' + widget.rehearsal!.lstSongs![index].tom!,
-                                                                            overflow: TextOverflow.ellipsis,
-                                                                            style: TextStyle(
-                                                                              color: Colors.blueGrey,
-                                                                              fontSize: 13,
-                                                                              fontWeight:
-                                                                              FontWeight.w800,
-                                                                            ),
-                                                                          ),
-                                                                        ],
-                                                                      )
-                                                                    ],
-                                                                  )
-                                                              ),
-                                                              //     ]
-                                                              //   )
-                                                            ]
-                                                        )
+                                                                            ]
+                                                                        )
+                                                              )
+                                                            ],
+                                                        ),
                                                     )
                                                 )
                                  ]
@@ -362,6 +383,11 @@ class RehearsalScreenState extends State<RehearsalScreen> {
   void _launchChordsURL(Song? song) async => await canLaunch(song?.cifra ?? '')
       ? await launch(song?.cifra ?? '')
       : throw 'Could not launch $song.cifra';
+
+  void _launchVideoURL(Song? song) async => await canLaunch(song?.videoUrl ?? '')
+      ? await launch(song?.videoUrl ?? '')
+      : throw 'Could not launch $song.videoUrl';
+
 
   String getPredifiniedWhatsAppMessage(Rehearsal? rehearsal) {
     return 'Ensaio em: ' + DateUtilsCustomized.convertDatePtBr(rehearsal?.data ?? DateTime.now()) + ', Tipo ensaio: ${rehearsal?.type ?? ''}.\nConsulte o App do Louvor para mais detalhes.' ;
