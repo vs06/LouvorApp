@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:louvor_app/models/Song.dart';
@@ -137,7 +135,7 @@ class Service extends ChangeNotifier {
     serviceClone.team = new Map();
     
     if(serviceOrigin!.team != null){
-     serviceOrigin!.team?.forEach((role, volunteers) {
+     serviceOrigin.team?.forEach((role, volunteers) {
 
        List<String> listNewReference = [];
        volunteers.forEach((volunteer) {

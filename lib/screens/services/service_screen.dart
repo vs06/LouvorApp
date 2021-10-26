@@ -499,7 +499,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                                             widget.formKey.currentState!.save();
                                             context.read<ServiceManager>().update(service);
                                             Navigator.of(context).pop();
-                                            String predifiniedWhatsAppMessage = getPredifiniedWhatsAppMessage(widget!.service);
+                                            String predifiniedWhatsAppMessage = getPredifiniedWhatsAppMessage(widget.service);
                                             Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoadingScreen.whatsAppMessage(predifiniedWhatsAppMessage)));
 
                                           }
@@ -534,7 +534,7 @@ class ServiceScreenState extends State<ServiceScreen> {
       return false;
     }
 
-    return isServicesHasChanges( widget!.serviceWithoutChanges, widget!.service);
+    return isServicesHasChanges( widget.serviceWithoutChanges, widget.service);
   }
 
   bool isServicesHasChanges(Service? serviceWithoutChanges, Service? serviceWithChanges){
@@ -736,11 +736,11 @@ class ServiceScreenState extends State<ServiceScreen> {
   }
 
   String getPredifiniedWhatsAppMessage(Service? service) {
-    if(service!.lstSongs == null || (!(service!.lstSongs!.length == 0))) {
+    if(service!.lstSongs == null || (!(service.lstSongs!.length == 0))) {
       return '';
     }
 
-    return 'Músicas culto ' + DateUtilsCustomized.convertDatePtBr(service!.data) +
+    return 'Músicas culto ' + DateUtilsCustomized.convertDatePtBr(service.data) +
            ', dirigente: ${service.dirigente},'+
            'foram cadastradas.\nConsulte o App do Louvor para mais detalhes.' ;
   }

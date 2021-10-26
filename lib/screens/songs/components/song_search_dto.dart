@@ -29,7 +29,7 @@ class SongSearchDTO{
         var songLetraWithinAccent = StringUtils.removeAccents(song.letra!.toUpperCase().toUpperCase());
         var searchWithinAccent = StringUtils.removeAccents(search.toUpperCase());
 
-        if( songNomeWithinAccent!.toUpperCase().contains(searchWithinAccent) || songLetraWithinAccent.contains(searchWithinAccent)){
+        if( songNomeWithinAccent.toUpperCase().contains(searchWithinAccent) || songLetraWithinAccent.contains(searchWithinAccent)){
           qtdMathFilters++;
         }
       }
