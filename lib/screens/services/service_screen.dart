@@ -72,7 +72,6 @@ class ServiceScreenState extends State<ServiceScreen> {
   ScrollController _scrollSongsController = ScrollController();
 
   TextEditingController _controllerdirigente = TextEditingController();
-  //bool isDirigenteModificado = false;
 
   @override
   Widget build(BuildContext context) {
@@ -546,10 +545,6 @@ class ServiceScreenState extends State<ServiceScreen> {
     if(serviceWithoutChanges.dirigente != serviceWithChanges.dirigente){
       return true;
     }
-
-    // if(isDirigenteModificado){
-    //   return true;
-    // }
 
     int matches = 0;
     serviceWithoutChanges.lstSongs!.forEach((song) {

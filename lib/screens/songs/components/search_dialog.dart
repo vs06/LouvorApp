@@ -106,6 +106,9 @@ class SearchDialogState extends State<SearchDialog>{
                                                             widget.songSearchDTO.search = text;
                                                             Navigator.of(context).pop(text);
                                                           },
+                                                          onChanged: (text) {
+                                                            widget.songSearchDTO.search = text;
+                                                          },
                                                         ),
                                               )
                                           ]
@@ -195,7 +198,7 @@ class SearchDialogState extends State<SearchDialog>{
                                               Column(
                                                 children: [
                                                   SwitchListTile(
-                                                      title: const Text('Sem Palma',
+                                                      title: const Text('Sem Palmas',
                                                         style: TextStyle(fontSize: 15,color: Colors.blueGrey),
                                                       ),
                                                       value: semPalmas,
