@@ -397,86 +397,88 @@ class ServiceScreenState extends State<ServiceScreen> {
                                                   child: Container(
                                                       height: 45,
                                                       padding: const EdgeInsets.all(8),
-                                                      child:
-                                                      Row(
-                                                          children: <Widget>[
-                                                            const SizedBox( width: 5),
-                                                            Expanded(
-                                                                flex: 5,
-                                                                child: Column(
-                                                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                                    children: <Widget>[
-                                                                      Row(
-                                                                          children: [
-                                                                            Text(
-                                                                              ((index+1).toString() + ': '),
-                                                                              style: TextStyle(
-                                                                                fontSize: 16,
-                                                                                fontWeight: FontWeight.w800,
-                                                                                color:  Colors.blue,
-                                                                              ),
+                                                      child: GestureDetector(
+                                                              onTap: () => _redirectSong(widget.service!.lstSongs![index]),
+                                                              child: Row(
+                                                                          children: <Widget>[
+                                                                            const SizedBox( width: 5),
+                                                                            Expanded(
+                                                                                flex: 5,
+                                                                                child: Column(
+                                                                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                    children: <Widget>[
+                                                                                      Row(
+                                                                                          children: [
+                                                                                            Text(
+                                                                                              ((index+1).toString() + ': '),
+                                                                                              style: TextStyle(
+                                                                                                fontSize: 16,
+                                                                                                fontWeight: FontWeight.w800,
+                                                                                                color:  Colors.blue,
+                                                                                              ),
+                                                                                            ),
+                                                                                            Flexible(
+                                                                                              child:
+                                                                                                    Text(
+                                                                                                      widget.service!.lstSongs![index].nome ?? '',
+                                                                                                      overflow: TextOverflow.ellipsis,
+                                                                                                      style: TextStyle(
+                                                                                                        fontSize: 16,
+                                                                                                        fontWeight: FontWeight.w800,
+                                                                                                      ),
+                                                                                                    ),
+                                                                                            )
+                                                                                          ]
+                                                                                      )
+                                                                                    ]
+                                                                                )
                                                                             ),
-                                                                            Flexible(
-                                                                              child:
-                                                                                    Text(
-                                                                                      widget.service!.lstSongs![index].nome ?? '',
-                                                                                      overflow: TextOverflow.ellipsis,
-                                                                                      style: TextStyle(
-                                                                                        fontSize: 16,
-                                                                                        fontWeight: FontWeight.w800,
-                                                                                      ),
-                                                                                    ),
-                                                                            )
+                                                                            //  SizedBox(width: 5),
+                                                                            Expanded(
+                                                                                flex: 3, // 20%
+                                                                                child:
+                                                                                Column(
+                                                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                                  children: [
+                                                                                    Row(
+                                                                                      children: [
+                                                                                        Visibility(
+                                                                                          visible: StringUtils.isNotNUllNotEmpty(widget.service!.lstSongs![index].cifra),
+                                                                                          child:
+                                                                                          Align(
+                                                                                            alignment: Alignment.topRight,
+                                                                                            child: GestureDetector(
+                                                                                              onTap: () => _launchChordsURL(widget.service!.lstSongs![index]),
+                                                                                                child: new Icon(Icons.piano, size: 29,),
+                                                                                              // child: Icon(
+                                                                                              //   Icons.straighten_rounded,
+                                                                                              //   color: Colors.blueGrey,
+                                                                                              //   size: 29,
+                                                                                              // ),
+                                                                                            ),
+                                                                                          ),
+                                                                                        ),
+                                                                                        SizedBox(width: 10),
+                                                                                        Text('Tom: ' + widget.service!.lstSongs![index].tom! ,
+                                                                                          overflow: TextOverflow.ellipsis,
+                                                                                          style: TextStyle(
+                                                                                            color: Colors.blueGrey,
+                                                                                            fontSize: (widget.service!.lstSongs![index].tom!.length > 3 ) ? 11 : 13,
+                                                                                            fontWeight:
+                                                                                            FontWeight.w800,
+                                                                                          ),
+                                                                                        ),
+                                                                                      ],
+                                                                                    )
+                                                                                  ],
+                                                                                )
+                                                                            ),
+                                                                            //     ]
+                                                                            //   )
                                                                           ]
                                                                       )
-                                                                    ]
-                                                                )
-                                                            ),
-                                                            //  SizedBox(width: 5),
-                                                            Expanded(
-                                                                flex: 3, // 20%
-                                                                child:
-                                                                Column(
-                                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                  children: [
-                                                                    Row(
-                                                                      children: [
-                                                                        Visibility(
-                                                                          visible: StringUtils.isNotNUllNotEmpty(widget.service!.lstSongs![index].cifra),
-                                                                          child:
-                                                                          Align(
-                                                                            alignment: Alignment.topRight,
-                                                                            child: GestureDetector(
-                                                                              onTap: () => _launchChordsURL(widget.service!.lstSongs![index]),
-                                                                                child: new Icon(Icons.piano, size: 29,),
-                                                                              // child: Icon(
-                                                                              //   Icons.straighten_rounded,
-                                                                              //   color: Colors.blueGrey,
-                                                                              //   size: 29,
-                                                                              // ),
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                        SizedBox(width: 10),
-                                                                        Text('Tom: ' + widget.service!.lstSongs![index].tom! ,
-                                                                          overflow: TextOverflow.ellipsis,
-                                                                          style: TextStyle(
-                                                                            color: Colors.blueGrey,
-                                                                            fontSize: (widget.service!.lstSongs![index].tom!.length > 3 ) ? 11 : 13,
-                                                                            fontWeight:
-                                                                            FontWeight.w800,
-                                                                          ),
-                                                                        ),
-                                                                      ],
-                                                                    )
-                                                                  ],
-                                                                )
-                                                            ),
-                                                            //     ]
-                                                            //   )
-                                                          ]
-                                                      )
+                                                      ),
                                                   )
                                               )
                                             ]
@@ -738,6 +740,10 @@ class ServiceScreenState extends State<ServiceScreen> {
     return 'Músicas culto ' + DateUtilsCustomized.convertDatePtBr(service.data) +
            ', dirigente: ${service.dirigente},'+
            'foram cadastradas.\nConsulte o App do Louvor para mais detalhes.' ;
+  }
+
+  _redirectSong(Song song) {
+    Navigator.of(context).pushNamed('/song', arguments: song);
   }
 
 }
