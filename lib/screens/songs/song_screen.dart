@@ -375,6 +375,37 @@ class SongScreenState extends State<SongScreen> {
                     ),
 
                     Padding(
+                        padding: const EdgeInsets.only(top: 1),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 60,
+                              child: Text('Bpm: ',
+                                  style: TextStyle(fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: primaryColor,)
+                              ),
+                            ),
+                            Container(
+                              width: 220,
+                              child:
+                              TextFormField(
+                                enabled: UserManager.isUserAdmin,
+                                initialValue: widget.song.bpm,
+                                onSaved: (bpm) => widget.song.bpm = bpm,
+                                decoration: const InputDecoration(
+                                  border: InputBorder.none,
+                                ),
+                                style: TextStyle(fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.blueGrey,),
+                              ),
+                            ),
+                          ],
+                        )
+                    ),
+
+                    Padding(
                       padding: const EdgeInsets.only(top: 8, bottom: 8),
                       child: TextFormField(
                         initialValue: widget.song.cifra,

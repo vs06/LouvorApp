@@ -19,8 +19,9 @@ class Song extends ChangeNotifier {
  late String? uid;
  late String? ativo;
  late String? videoUrl;
+ late String? bpm;
 
-  Song({this.id, this.nome, this.artista, this.tom, this.palmas, this.cifra, this.tags, this.data, this.letra, this.uid, this.ativo, this.videoUrl});
+  Song({this.id, this.nome, this.artista, this.tom, this.palmas, this.cifra, this.tags, this.data, this.letra, this.uid, this.ativo, this.videoUrl, this.bpm });
 
   Song.byMap(String id, Map<String, dynamic> json){
     this.id = id;
@@ -36,21 +37,23 @@ class Song extends ChangeNotifier {
     this.uid = json['uid'];
     this.ativo = json['ativo'];
     this.videoUrl = json['videoUrl'];
+    this.bpm = json['bpm'];
   }
 
   Song.fromDocument(DocumentSnapshot document){
     id = document.id;
-    nome = document['titulo'] as String;
+    nome = document['titulo'] ?? '';
     artista = document['artista'] ?? '';
     tom = document['tom'] ?? '';
-    palmas = document['palmas'] as String;
+    palmas = document['palmas'] ?? '' ;
     data = document['data'] ?? '';
     cifra = document['cifra'] ?? '';
     tags = document['tags'] ?? '';
     letra = document['letra'] ?? '';
-    uid = document['uid'] as String;
-    ativo = document['ativo'] as String;
+    uid = document['uid'] ?? '';
+    ativo = document['ativo'] ?? '';
     videoUrl = document['videoUrl'] ?? '';
+    bpm = document['bpm'] ?? '';
 
   }
 
@@ -67,6 +70,7 @@ class Song extends ChangeNotifier {
       'uid': uid,
       'ativo': ativo,
       'videoUrl': videoUrl,
+      'bpm': bpm,
     };
     if (ativo == null)
       ativo = 'TRUE';
@@ -92,7 +96,8 @@ class Song extends ChangeNotifier {
         data = json['data'],
         uid = json['uid'],
         ativo = json['ativo'],
-        videoUrl = json['videoUrl'];
+        videoUrl = json['videoUrl'],
+        bpm = json['bpm'];
 
   Map toJson() => {
     'titulo': nome,
@@ -105,7 +110,8 @@ class Song extends ChangeNotifier {
     'data': data,
     'uid': uid,
     'ativo': ativo,
-    'videoUrl' : videoUrl
+    'videoUrl' : videoUrl,
+    'bpm' : bpm
   };
 
   Map<String,dynamic> toMap() => {
@@ -120,7 +126,8 @@ class Song extends ChangeNotifier {
       'data': data,
       'uid': uid,
       'ativo': ativo,
-      'videoUrl' : videoUrl
+      'videoUrl' : videoUrl,
+      'bpm' : bpm
     }
   };
 
@@ -137,7 +144,8 @@ class Song extends ChangeNotifier {
         tags: tags,
         uid: uid,
         ativo: ativo,
-        videoUrl: videoUrl
+        videoUrl: videoUrl,
+        bpm: bpm
     );
   }
 
