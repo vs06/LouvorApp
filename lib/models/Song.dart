@@ -3,121 +3,132 @@ import 'package:flutter/cupertino.dart';
 
 class Song extends ChangeNotifier {
 
-  final Firestore firestore = Firestore.instance;
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  DocumentReference get firestoreRef => firestore.document('songs/$id');
+  DocumentReference get firestoreRef => firestore.doc('songs/$id');
 
-  String id;
-  String nome;
-  String artista;
-  String tom;
-  String livro;
-  String data;
-  String cifra;
-  String letra;
-  String uid;
-  String ativo;
-  String videoUrl;
+  late String? id;
+  late String? nome;
+  late String? artista;
+  late String? tom;
+  late String? palmas;
+  late String? data;
+  late String? cifra;
+  late String? tags;
+  late String? letra;
+  late String? uid;
+  late String? ativo;
+  late String? videoUrl;
+  late String? bpm;
 
-  Song({this.id, this.nome, this.artista, this.tom, this.cifra, this.data, this.letra, this.uid, this.ativo, this.videoUrl});
+  Song({this.id, this.nome, this.artista, this.tom, this.palmas, this.cifra, this.tags, this.data, this.letra, this.uid, this.ativo, this.videoUrl, this.bpm });
 
   Song.byMap(String id, Map<String, dynamic> json){
     this.id = id;
-    this.artista = json['artista'];
-    this.ativo = json['ativo'];
-    this.cifra = json['cifra'];
-    this.data = json['data'];
     this.id = json['id'];
-    this.letra = json['letra'];
     this.nome = json['titulo'];
+    this.artista = json['artista'];
     this.tom = json['tom'];
+    this.palmas = json['palmas'];
+    this.data = json['data'];
+    this.cifra = json['cifra'];
+    this.tags = json['tags'];
+    this.letra = json['letra'];
     this.uid = json['uid'];
+    this.ativo = json['ativo'];
     this.videoUrl = json['videoUrl'];
+    this.bpm = json['bpm'];
   }
 
   Song.fromDocument(DocumentSnapshot document){
-    id = document.documentID;
-    nome = document['titulo'] as String;
-    artista = document['artista'] as String;
-    tom = document['tom'] as String;
-    livro = document['livro'] as String;
-    data = document['data'] as String;
-    cifra = document['cifra'] as String;
-    letra = document['tags'] as String;
-    uid = document['uid'] as String;
-    ativo = document['ativo'] as String;
-    videoUrl = document['videoUrl'] as String;
+    id = document.id;
+    nome = document['titulo'] ?? '';
+    artista = document['artista'] ?? '';
+    tom = document['tom'] ?? '';
+    palmas = document['palmas'] ?? '' ;
+    data = document['data'] ?? '';
+    cifra = document['cifra'] ?? '';
+    tags = document['tags'] ?? '';
+    letra = document['letra'] ?? '';
+    uid = document['uid'] ?? '';
+    ativo = document['ativo'] ?? '';
+    videoUrl = document['videoUrl'] ?? '';
+    bpm = document.data().toString().contains('bpm') ? document.get('bpm') : '0';
+    ativo = document['ativo'] ?? '';
 
   }
 
   Future<void> save() async {
+    if (ativo == null)
+      ativo = 'TRUE';
     final Map<String, dynamic> blob = {
       'titulo': nome,
       'artista': artista,
       'tom': tom,
+      'palmas': palmas,
       'data': data,
       'cifra': cifra,
-      'tags': letra,
+      'tags': tags,
+      'letra': letra,
       'uid': uid,
       'ativo': ativo,
       'videoUrl': videoUrl,
+      'bpm': bpm,
     };
-    if (ativo == null)
-      ativo = 'TRUE';
-    
+
     if(id == null){
       final doc = await firestore.collection('songs').add(blob);
-      id = doc.documentID;
+      id = doc.id;
     } else {
-      await firestoreRef.updateData(blob);
+      await firestoreRef.update(blob);
     }
 
     notifyListeners();
-  }
-
-  Song.fromTituloDescricao(String titulo, String descricao, String livro, String tom, String data) {
-    this.nome = titulo;
-    this.artista = descricao;
-    this.tom = tom;
-    this.livro = livro;
-    this.cifra = cifra;
-    this.data = data;
   }
 
   Song.fromJson(Map<String, dynamic> json)
       : nome = json['titulo'],
         artista = json['artista'],
         tom = json['tom'],
-        letra = json['tags'],
+        palmas = json['palmas'],
+        letra = json['letra'],
+        tags = json['tags'],
         cifra = json['cifra'],
         data = json['data'],
         uid = json['uid'],
         ativo = json['ativo'],
-        videoUrl = json['videoUrl'];
+        videoUrl = json['videoUrl'],
+        bpm = json['bpm'];
 
   Map toJson() => {
     'titulo': nome,
     'artista': artista,
     'tom': tom,
-    'tags': letra,
+    'palmas': palmas,
+    'letra': letra,
+    'tags': tags,
     'cifra': cifra,
     'data': data,
     'uid': uid,
     'ativo': ativo,
-    'videoUrl' : videoUrl
+    'videoUrl' : videoUrl,
+    'bpm' : bpm
   };
 
   Map<String,dynamic> toMap() => {
-    id: {
+    id!: {
       'titulo': nome,
       'artista': artista,
       'tom': tom,
-      'tags': letra,
+      'palmas': palmas,
+      'letra': letra,
+      'tags': tags,
       'cifra': cifra,
       'data': data,
       'uid': uid,
       'ativo': ativo,
-      'videoUrl' : videoUrl
+      'videoUrl' : videoUrl,
+      'bpm' : bpm
     }
   };
 
@@ -127,12 +138,15 @@ class Song extends ChangeNotifier {
         nome: nome,
         artista: artista,
         tom: tom,
+        palmas: palmas,
         cifra: cifra,
         data: data,
         letra: letra,
+        tags: tags,
         uid: uid,
         ativo: ativo,
-        videoUrl: videoUrl
+        videoUrl: videoUrl,
+        bpm: bpm
     );
   }
 
@@ -140,18 +154,5 @@ class Song extends ChangeNotifier {
     s.ativo = 'False';
     s.save();
     notifyListeners();
-  }
-}
-class Book{
-  String nome;
-  String abreviatura;
-  String testamento;
-
-  Book();
-
-  Book.fromNameTestament(String nome, String abreviatura, String testamento){
-    this.nome = nome;
-    this.abreviatura = abreviatura;
-    this.testamento = testamento;
   }
 }
