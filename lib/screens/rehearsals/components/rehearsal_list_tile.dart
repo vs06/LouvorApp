@@ -9,7 +9,6 @@ import 'package:provider/provider.dart';
 import '../rehearsals_screen.dart';
 
 class RehearsalListTile extends StatelessWidget {
-
   const RehearsalListTile(this.rehearsal);
 
   final Rehearsal rehearsal;
@@ -22,11 +21,11 @@ class RehearsalListTile extends StatelessWidget {
           title: Text('Confirmação'),
           content: Text(conteudo),
           actions: [
-            FlatButton(
+            TextButton(
               child: Text('Não'),
               onPressed: () => Navigator.pop(context),
             ),
-            FlatButton(
+            TextButton(
               child: Text('Sim'),
               onPressed: () {
                 r.isActive = false;
@@ -37,7 +36,9 @@ class RehearsalListTile extends StatelessWidget {
 
                 Navigator.pop(context);
                 Navigator.pop(context);
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => RehearsalsScreen.buildByMonth(r.data)));
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) =>
+                        RehearsalsScreen.buildByMonth(r.data)));
               },
             )
           ],
@@ -52,88 +53,94 @@ class RehearsalListTile extends StatelessWidget {
       onTap: () {
         Navigator.of(context).pushNamed('/rehearsal', arguments: rehearsal);
       },
-       child: Card(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(4)
-          ),
-          child: Container(
-            height: 90,
-            padding: const EdgeInsets.all(6),
-            decoration: BoxDecoration(
-                border: (rehearsal.data!.day == DateTime.now().day && rehearsal.data!.month == DateTime.now().month ) ?  Border.all(color: Colors.blueAccent, width: 5): Border(),
-                color: rehearsal.data!.isBefore(DateTime.now()) ? CupertinoColors.systemGrey3 : Colors.white,
-                borderRadius: BorderRadius.circular(4)
-            ),
-
-            child: Row(
-              children: <Widget>[
-                const SizedBox(width: 16,),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            DateUtilsCustomized.convertDatePtBr(rehearsal.data!) ,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                          Text(
-                            ' ${rehearsal.type}',
-                            style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w800,
-                                color: Theme.of(context).primaryColor
-                            ),
-                          ),
-                          Visibility(
-                            visible:rehearsal.data!.isAfter(DateTime.now()) && ( UserManager.isUserAdmin == true),
-                            child: GestureDetector(
-                                      onTap: () {
-                                        _showAlertDialog(context, 'Confirma a exclusão desse ensaio?', rehearsal);
-                                      },
-                                      child: Icon(Icons.delete, color: Colors.blueGrey,),
-                                  ),
-                          )
-
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 4),
-                        child: Text(
-                          getSongsOfRehearsal(),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 2,
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+        child: Container(
+          height: 90,
+          padding: const EdgeInsets.all(6),
+          decoration: BoxDecoration(
+              border: (rehearsal.data!.day == DateTime.now().day &&
+                      rehearsal.data!.month == DateTime.now().month)
+                  ? Border.all(color: Colors.blueAccent, width: 5)
+                  : Border(),
+              color: rehearsal.data!.isBefore(DateTime.now())
+                  ? CupertinoColors.systemGrey3
+                  : Colors.white,
+              borderRadius: BorderRadius.circular(4)),
+          child: Row(
+            children: <Widget>[
+              const SizedBox(
+                width: 16,
+              ),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          DateUtilsCustomized.convertDatePtBr(rehearsal.data!),
                           style: TextStyle(
-                            color: Colors.grey[800],
-                            fontSize: 15,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w800,
                           ),
                         ),
-                      )
-
-                    ],
-                  ),
-                )
-              ],
-            ),
+                        Text(
+                          ' ${rehearsal.type}',
+                          style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w800,
+                              color: Theme.of(context).primaryColor),
+                        ),
+                        Visibility(
+                          visible: rehearsal.data!.isAfter(DateTime.now()) &&
+                              (UserManager.isUserAdmin == true),
+                          child: GestureDetector(
+                            onTap: () {
+                              _showAlertDialog(
+                                  context,
+                                  'Confirma a exclusão desse ensaio?',
+                                  rehearsal);
+                            },
+                            child: Icon(
+                              Icons.delete,
+                              color: Colors.blueGrey,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4),
+                      child: Text(
+                        getSongsOfRehearsal(),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        style: TextStyle(
+                          color: Colors.grey[800],
+                          fontSize: 15,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              )
+            ],
           ),
         ),
+      ),
     );
   }
 
-  String getSongsOfRehearsal(){
+  String getSongsOfRehearsal() {
     String songs = 'Músicas: ';
 
     rehearsal.lstSongs?.forEach((musica) {
       songs += (musica.nome! + ', ');
     });
 
-    return songs.substring(0,songs.length-2);
+    return songs.substring(0, songs.length - 2);
   }
-
 }

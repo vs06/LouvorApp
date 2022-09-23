@@ -7,10 +7,9 @@ import 'package:louvor_app/helpers/firebase_errors.dart';
 import 'package:louvor_app/models/user_app.dart';
 
 class UserManager extends ChangeNotifier {
-
-  UserManager(){
-    _loadCurrentUser();
+  UserManager() {
     _loadAllUsers();
+    _loadCurrentUser();
   }
 
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -26,32 +25,34 @@ class UserManager extends ChangeNotifier {
 
   bool get isLoggedIn => userApp != null;
 
-  Future<void> signIn({required UserApp userApp,required Function onFail,required Function onSuccess}) async {
+  Future<void> signIn(
+      {required UserApp userApp,
+      required Function onFail,
+      required Function onSuccess}) async {
     loading = true;
     try {
-      final UserCredential result = await auth.signInWithEmailAndPassword(email: userApp.email ?? '', password: userApp.password ?? '');
+      final UserCredential result = await auth.signInWithEmailAndPassword(
+          email: userApp.email ?? '', password: userApp.password ?? '');
 
       await _loadCurrentUser(firebaseUser: result.user);
 
       _loadAllUsers();
 
       onSuccess();
-    } on PlatformException catch (e){
-
+    } on PlatformException catch (e) {
       onFail(getErrorString(e.code));
-
-    } on FirebaseAuthException catch (e){
-
+    } on FirebaseAuthException catch (e) {
       onFail(getErrorString(e.message.toString()));
-
-    } on Exception catch (e){
+    } on Exception catch (e) {
       onFail(getErrorString(e.toString()));
-
     }
-  loading = false;
+    loading = false;
   }
 
-  Future<void> signUp({required UserApp userApp,required Function onFail,required Function onSuccess}) async {
+  Future<void> signUp(
+      {required UserApp userApp,
+      required Function onFail,
+      required Function onSuccess}) async {
     loading = true;
     try {
       final UserCredential result = await auth.createUserWithEmailAndPassword(
@@ -67,19 +68,19 @@ class UserManager extends ChangeNotifier {
       await userApp.saveData();
 
       onSuccess();
-    } on PlatformException catch (e){
+    } on PlatformException catch (e) {
       onFail(getErrorString(e.code));
     }
     loading = false;
   }
 
-  void signOut(){
+  void signOut() {
     auth.signOut();
     userApp = null;
     notifyListeners();
   }
 
-  set loading(bool value){
+  set loading(bool value) {
     _loading = value;
     notifyListeners();
   }
@@ -92,29 +93,30 @@ class UserManager extends ChangeNotifier {
 
   Future<void> _loadCurrentUser({User? firebaseUser}) async {
     final User currentUser = firebaseUser ?? await auth.currentUser!;
-    if(currentUser != null){
-      final DocumentSnapshot docUser = await firestore.collection('users')
-          .doc(currentUser.uid).get();
+    if (currentUser != null) {
+      final DocumentSnapshot docUser =
+          await firestore.collection('users').doc(currentUser.uid).get();
       userApp = UserApp.fromDocument(docUser);
-      isUserAdmin = userApp!.isAdmin == 'TRUE'? true : false;
+      isUserAdmin = userApp!.isAdmin == 'TRUE' ? true : false;
 
       notifyListeners();
     }
   }
 
-
   Future<void> _loadAllUsers() async {
-    final QuerySnapshot snapServices =
-    await firestore.collection('users').where('ativo', isEqualTo: 'TRUE')
-                                       .get().then((QuerySnapshot querySnapshot) => querySnapshot);
+    final QuerySnapshot snapServices = await firestore
+        .collection('users')
+        .where('ativo', isEqualTo: 'TRUE')
+        .get()
+        .then((QuerySnapshot querySnapshot) => querySnapshot);
 
-    allUsers = snapServices.docs.map(
-            (d) => UserApp.fromDocument(d)).toList();
+    allUsers = snapServices.docs.map((d) => UserApp.fromDocument(d)).toList();
 
-    if(AppListPool.usersName.isEmpty){
-
+    if (AppListPool.usersName.isEmpty) {
       //todo arrumar non safety
       //allUsers.sort((a, b) => a.name!.compareTo(b.name));
+      print(
+          'EEEEEEEEEEEEEEEMMMMMMMMMMMAAAAAAAAAAAAAAAAAAIIIIIIIIIIIIIIIIIIIIIIIIILLLLLLLLLLLL${allUsers.first.email}');
 
       AppListPool.fillUsers(allUsers);
     }
@@ -126,16 +128,15 @@ class UserManager extends ChangeNotifier {
     return allUsers;
   }
 
-  void update(UserApp u){
+  void update(UserApp u) {
     allUsers.removeWhere((u) => u.id == userApp!.id);
     userApp!.saveData();
     notifyListeners();
   }
 
-  void userInactivated(UserApp u){
+  void userInactivated(UserApp u) {
     allUsers.removeWhere((u) => u.id == userApp!.id);
     userApp!.userInactivated();
     notifyListeners();
   }
-
 }

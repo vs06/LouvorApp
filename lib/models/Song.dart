@@ -2,28 +2,40 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
 class Song extends ChangeNotifier {
-
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   DocumentReference get firestoreRef => firestore.doc('songs/$id');
 
- late String? id;
- late String? nome;
- late String? artista;
- late String? tom;
- late String? palmas;
- late String? data;
- late String? cifra;
- late String? tags;
- late String? letra;
- late String? uid;
- late String? ativo;
- late String? videoUrl;
- late String? bpm;
+  late String? id;
+  late String? nome;
+  late String? artista;
+  late String? tom;
+  late String? palmas;
+  late String? data;
+  late String? cifra;
+  late String? tags;
+  late String? letra;
+  late String? uid;
+  late String? ativo;
+  late String? videoUrl;
+  late String? bpm;
 
-  Song({this.id, this.nome, this.artista, this.tom, this.palmas, this.cifra, this.tags, this.data, this.letra, this.uid, this.ativo, this.videoUrl, this.bpm });
+  Song(
+      {this.id,
+      this.nome,
+      this.artista,
+      this.tom,
+      this.palmas,
+      this.cifra,
+      this.tags,
+      this.data,
+      this.letra,
+      this.uid,
+      this.ativo,
+      this.videoUrl,
+      this.bpm});
 
-  Song.byMap(String id, Map<String, dynamic> json){
+  Song.byMap(String id, Map<String, dynamic> json) {
     this.id = id;
     this.id = json['id'];
     this.nome = json['titulo'];
@@ -40,12 +52,12 @@ class Song extends ChangeNotifier {
     this.bpm = json['bpm'];
   }
 
-  Song.fromDocument(DocumentSnapshot document){
+  Song.fromDocument(DocumentSnapshot document) {
     id = document.id;
     nome = document['titulo'] ?? '';
     artista = document['artista'] ?? '';
     tom = document['tom'] ?? '';
-    palmas = document['palmas'] ?? '' ;
+    palmas = document['palmas'] ?? '';
     data = document['data'] ?? '';
     cifra = document['cifra'] ?? '';
     tags = document['tags'] ?? '';
@@ -53,8 +65,7 @@ class Song extends ChangeNotifier {
     uid = document['uid'] ?? '';
     ativo = document['ativo'] ?? '';
     videoUrl = document['videoUrl'] ?? '';
-    bpm = document['bpm'] ?? '';
-
+    bpm = document.data().toString().contains('bpm') ? document['bpm'] : '-1';
   }
 
   Future<void> save() async {
@@ -72,10 +83,9 @@ class Song extends ChangeNotifier {
       'videoUrl': videoUrl,
       'bpm': bpm,
     };
-    if (ativo == null)
-      ativo = 'TRUE';
-    
-    if(id == null){
+    if (ativo == null) ativo = 'TRUE';
+
+    if (id == null) {
       final doc = await firestore.collection('songs').add(blob);
       id = doc.id;
     } else {
@@ -100,38 +110,38 @@ class Song extends ChangeNotifier {
         bpm = json['bpm'];
 
   Map toJson() => {
-    'titulo': nome,
-    'artista': artista,
-    'tom': tom,
-    'palmas': palmas,
-    'letra': letra,
-    'tags': tags,
-    'cifra': cifra,
-    'data': data,
-    'uid': uid,
-    'ativo': ativo,
-    'videoUrl' : videoUrl,
-    'bpm' : bpm
-  };
+        'titulo': nome,
+        'artista': artista,
+        'tom': tom,
+        'palmas': palmas,
+        'letra': letra,
+        'tags': tags,
+        'cifra': cifra,
+        'data': data,
+        'uid': uid,
+        'ativo': ativo,
+        'videoUrl': videoUrl,
+        'bpm': bpm
+      };
 
-  Map<String,dynamic> toMap() => {
-    id!: {
-      'titulo': nome,
-      'artista': artista,
-      'tom': tom,
-      'palmas': palmas,
-      'letra': letra,
-      'tags': tags,
-      'cifra': cifra,
-      'data': data,
-      'uid': uid,
-      'ativo': ativo,
-      'videoUrl' : videoUrl,
-      'bpm' : bpm
-    }
-  };
+  Map<String, dynamic> toMap() => {
+        id!: {
+          'titulo': nome,
+          'artista': artista,
+          'tom': tom,
+          'palmas': palmas,
+          'letra': letra,
+          'tags': tags,
+          'cifra': cifra,
+          'data': data,
+          'uid': uid,
+          'ativo': ativo,
+          'videoUrl': videoUrl,
+          'bpm': bpm
+        }
+      };
 
-  Song clone(){
+  Song clone() {
     return Song(
         id: id,
         nome: nome,
@@ -145,11 +155,10 @@ class Song extends ChangeNotifier {
         uid: uid,
         ativo: ativo,
         videoUrl: videoUrl,
-        bpm: bpm
-    );
+        bpm: bpm);
   }
 
-  void delete(Song s){
+  void delete(Song s) {
     s.ativo = 'False';
     s.save();
     notifyListeners();

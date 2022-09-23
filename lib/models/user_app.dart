@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserApp {
-
   String? id;
   String? name;
   String? email;
@@ -10,25 +9,29 @@ class UserApp {
   String? ativo;
   String? confirmPassword;
 
-
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   DocumentReference get firestoreRef => firestore.doc('users/$id');
 
-  UserApp({ this.isAdmin,
-            this.email,
-            this.password,
-            this.name,
-            this.id,
-            this.ativo
-          });
+  UserApp(
+      {this.isAdmin,
+      this.email,
+      this.password,
+      this.name,
+      this.id,
+      this.ativo});
 
-  UserApp.fromDocument(DocumentSnapshot document){
+  UserApp.fromDocument(DocumentSnapshot document) {
     id = document.id;
-    name = document.data()!['name'] as String;
-    email = document.data()!['email'] as String;
-    isAdmin = document.data()!['isAdmin'] as String;
-    ativo = document.data()!['ativo'] as String;
+
+    ///name = document.data()!['name'] as String;
+    ///email = document.data()!['email'] as String;
+    ///isAdmin = document.data()!['isAdmin'] as String;
+    ///ativo = document.data()!['ativo'] as String;
+    name = document['name'] as String;
+    email = document['email'] as String;
+    isAdmin = document['isAdmin'] as String;
+    ativo = document['ativo'] as String;
   }
 
   Future<void> userInactivated() async {
@@ -41,7 +44,7 @@ class UserApp {
     await firestoreRef.set(toMap());
   }
 
-  Map<String, dynamic> toMap(){
+  Map<String, dynamic> toMap() {
     return {
       'name': name,
       'email': email,

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class DrawerTile extends StatelessWidget {
-
-  const DrawerTile({required this.iconData, required this.title, required this.page});
+  const DrawerTile(
+      {required this.iconData, required this.title, required this.page});
 
   final IconData iconData;
   final String title;
@@ -11,14 +11,15 @@ class DrawerTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final int curPage = 0;
+
     /// context.watch<PageManager>().page;
     final Color primaryColor = Theme.of(context).primaryColor;
 
     return InkWell(
-        onTap: (){
-          ///context.read<PageManager>().setPage(page);
-          //TODO Fix this POG
-        switch(this.title) {
+      onTap: () {
+        ///context.read<PageManager>().setPage(page);
+        //TODO Fix this POG
+        switch (this.title) {
           case 'Repertório':
             Navigator.of(context).pushNamed('/songs');
             return;
@@ -29,8 +30,7 @@ class DrawerTile extends StatelessWidget {
             Navigator.of(context).pushNamed('/users');
             return;
           case 'Ensaios':
-            Navigator.of(context).pushNamed('/rehearsalsperiod'
-            );
+            Navigator.of(context).pushNamed('/rehearsalsperiod');
             return;
           default:
             Navigator.of(context).pushNamed('base');
@@ -53,8 +53,7 @@ class DrawerTile extends StatelessWidget {
               title,
               style: TextStyle(
                   fontSize: 16,
-                  color: curPage == page ? primaryColor : Colors.grey[700]
-              ),
+                  color: curPage == page ? primaryColor : Colors.grey[700]),
             )
           ],
         ),

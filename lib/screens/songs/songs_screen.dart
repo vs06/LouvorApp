@@ -35,11 +35,11 @@ class SongsScreen extends StatelessWidget {
                     onTap: () async {
                       await showDialog<String>(
                           context: context,
-                          builder: (_) => SearchDialog(songManager.searchDTO, SongsScreen)
-                      );
+                          builder: (_) =>
+                              SearchDialog(songManager.searchDTO, SongsScreen));
                       if (!songManager.searchDTO.isfiltersEmpty()) {
-                        if(songManager.searchDTO.inactiveFilter){
-                           songManager.loadAllSongInactive();
+                        if (songManager.searchDTO.inactiveFilter) {
+                          songManager.loadAllSongInactive();
                         }
                         songManager.notifyListenersCurrentState();
                       }
@@ -48,13 +48,13 @@ class SongsScreen extends StatelessWidget {
                         width: constraints.biggest.width,
                         child: Text(
                           'Musícas busca: ${songManager.searchDTO.filterResume()}',
-                          style: TextStyle(fontSize: 15,
-                                            fontWeight: FontWeight.bold,
-                                          //  color: Colors.lightBlue,
-                                          ),
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            //  color: Colors.lightBlue,
+                          ),
                           //textAlign: TextAlign.center,
-                        )
-                    ),
+                        )),
                   );
                 },
               );
@@ -71,7 +71,8 @@ class SongsScreen extends StatelessWidget {
                   onPressed: () async {
                     await showDialog<String>(
                         context: context,
-                        builder: (_) => SearchDialog(songManager.searchDTO, SongsScreen));
+                        builder: (_) =>
+                            SearchDialog(songManager.searchDTO, SongsScreen));
                     if (!songManager.searchDTO.isfiltersEmpty()) {
                       songManager.loadAllSongInactive();
                     }
@@ -89,18 +90,16 @@ class SongsScreen extends StatelessWidget {
             },
           ),
           Visibility(
-            //visible: UserManager.isUserAdmin,
-            visible: UserManager.isUserAdmin == true,
-            child:
-              IconButton(
+              //visible: UserManager.isUserAdmin,
+              visible: UserManager.isUserAdmin == true,
+              child: IconButton(
                 icon: Icon(Icons.add),
                 onPressed: () {
                   Navigator.of(context).pushNamed(
                     '/song',
                   );
                 },
-              )
-          ),
+              )),
         ],
       ),
       body: Consumer<SongManager>(
@@ -108,19 +107,16 @@ class SongsScreen extends StatelessWidget {
           final filteredSongs = songManager.filteredSongs;
           ScrollController _scrollTagsController = ScrollController();
           return Scrollbar(
-                    isAlwaysShown: filteredSongs.length > 0,
-                    controller: _scrollTagsController,
-                    child: ListView.builder(
-                                padding: const EdgeInsets.all(4),
-                                itemCount: filteredSongs.length,
-                                itemBuilder: (_, index) {
-                                  return SongListTile(filteredSongs[index]);
-                                }
-                            )
-                  );
+              isAlwaysShown: filteredSongs.length > 0,
+              controller: _scrollTagsController,
+              child: ListView.builder(
+                  padding: const EdgeInsets.all(4),
+                  itemCount: filteredSongs.length,
+                  itemBuilder: (_, index) {
+                    return SongListTile(filteredSongs[index]);
+                  }));
         },
       ),
     );
   }
-
 }

@@ -4,7 +4,6 @@ import 'package:louvor_app/models/user_manager.dart';
 import 'package:provider/provider.dart';
 
 class UserListTile extends StatelessWidget {
-
   const UserListTile(this.user);
 
   final UserApp user;
@@ -17,16 +16,16 @@ class UserListTile extends StatelessWidget {
           title: Text('Confirmação'),
           content: Text(conteudo),
           actions: [
-            FlatButton(
+            TextButton(
               child: Text('Não'),
               onPressed: () => Navigator.pop(context),
             ),
-            FlatButton(
+            TextButton(
               child: Text('Sim'),
               onPressed: () {
-                 u.userInactivated();
-                 context.read<UserManager>().update(u);
-                 Navigator.pop(context);
+                u.userInactivated();
+                context.read<UserManager>().update(u);
+                Navigator.pop(context);
               },
             )
           ],
@@ -38,66 +37,71 @@ class UserListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(4)
-          ),
-          child: Container(
-            height: 85,
-            padding: const EdgeInsets.all(6),
-            child: Row(
-              children: <Widget>[
-                const SizedBox(width: 16,),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            user.name ?? '',
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w800,
-                                color: Theme.of(context).primaryColor
-                            ),
-                          ),
-                          Visibility(
-                            //visible: UserManager.isUserAdmin,
-                            visible: UserManager.isUserAdmin == true,
-                            child: GestureDetector(
-                                      onTap: () {
-                                        _showAlertDialog(context, 'Confirma a exclusão desse Usuário?', user);
-                                      },
-                                      child: Icon(Icons.delete, color: Colors.blueGrey,),
-                                  ),
-                          )
-                        ],
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+      child: Container(
+        height: 85,
+        padding: const EdgeInsets.all(6),
+        child: Row(
+          children: <Widget>[
+            const SizedBox(
+              width: 16,
+            ),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        user.name ?? '',
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w800,
+                            color: Theme.of(context).primaryColor),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 4),
-                        child: Text(
-                          user.email ?? '',
-                          style: TextStyle(
-                            color: Colors.grey[400],
-                            fontSize: 14,
+                      Visibility(
+                        //visible: UserManager.isUserAdmin,
+                        visible: UserManager.isUserAdmin == true,
+                        child: GestureDetector(
+                          onTap: () {
+                            _showAlertDialog(context,
+                                'Confirma a exclusão desse Usuário?', user);
+                          },
+                          child: Icon(
+                            Icons.delete,
+                            color: Colors.blueGrey,
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 4),
-                        child: Visibility(
-                                  visible: user.isAdmin == 'TRUE',
-                                  child: Icon(Icons.admin_panel_settings, color: Colors.lightBlue,),
-                              )
                       )
                     ],
                   ),
-                )
-              ],
-            ),
-          ),
-        );
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text(
+                      user.email ?? '',
+                      style: TextStyle(
+                        color: Colors.grey[400],
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                      padding: const EdgeInsets.only(top: 4),
+                      child: Visibility(
+                        visible: user.isAdmin == 'TRUE',
+                        child: Icon(
+                          Icons.admin_panel_settings,
+                          color: Colors.lightBlue,
+                        ),
+                      ))
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
