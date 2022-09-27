@@ -9,7 +9,8 @@
     <application
         android:name="${applicationName}"
         android:label="Louvor App"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:usesCleartextTraffic="true">
 
         <activity
             android:name=".MainActivity"
@@ -54,8 +55,18 @@
             android:value="ca-app-pub-3241906809446166~7375934745"/>
     </application>
 
-<!--    <queries>-->
+    <queries>
 <!--        &lt;!&ndash; If your app opens https URLs &ndash;&gt;-->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="https" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <!-- If you don't know the MIME type in advance, set "mimeType" to "*/*". -->
+            <data android:mimeType="application/pdf" />
+        </intent>
 <!--        <intent>-->
 <!--            <action android:name="android.intent.action.VIEW" />-->
 <!--            <data android:scheme="https" />-->
@@ -70,6 +81,6 @@
 <!--            <action android:name="android.intent.action.SEND" />-->
 <!--            <data android:mimeType="*/*" />-->
 <!--        </intent>-->
-<!--    </queries>-->
+    </queries>
 
 </manifest>

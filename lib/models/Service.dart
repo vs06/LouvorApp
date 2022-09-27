@@ -103,11 +103,7 @@ class Service extends ChangeNotifier {
 
       final doc = await firestore.collection('services').add(this.toMap());
       id = doc.id;
-
-      print('SALVANDO $blob $data $dirigente');
     } else {
-      print('ATUALIZANDO $blob $data $dirigente');
-
       this
           .lstSongs
           ?.forEach((element) => this.dynamicSongs?.addAll(element.toMap()));
@@ -118,7 +114,6 @@ class Service extends ChangeNotifier {
   }
 
   Service clone() {
-    print('CLONEI');
     return Service(
         id: id,
         dirigente: dirigente,

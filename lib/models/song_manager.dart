@@ -241,6 +241,7 @@ class SongManager extends ChangeNotifier {
     final QuerySnapshot snapSongs = await firestore
         .collection('songs')
         .where('ativo', isEqualTo: 'TRUE')
+        .orderBy('titulo')
         .get()
         .then((QuerySnapshot querySnapshot) => querySnapshot);
     //await firestore.collection('songs').getDocuments();
@@ -270,7 +271,6 @@ class SongManager extends ChangeNotifier {
         .then((QuerySnapshot querySnapshot) => querySnapshot);
 
     allInactiveSongs = snapSongs.docs.map((d) => Song.fromDocument(d)).toList();
-    print('AQUI\n\n\nAQUIIIIIIIIIIII${allInactiveSongs?.first.nome}');
     notifyListeners();
   }
 

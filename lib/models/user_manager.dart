@@ -115,9 +115,6 @@ class UserManager extends ChangeNotifier {
     if (AppListPool.usersName.isEmpty) {
       //todo arrumar non safety
       //allUsers.sort((a, b) => a.name!.compareTo(b.name));
-      print(
-          'EEEEEEEEEEEEEEEMMMMMMMMMMMAAAAAAAAAAAAAAAAAAIIIIIIIIIIIIIIIIIIIIIIIIILLLLLLLLLLLL${allUsers.first.email}');
-
       AppListPool.fillUsers(allUsers);
     }
 

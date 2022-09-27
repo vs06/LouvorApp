@@ -179,11 +179,27 @@ class SongListTile extends StatelessWidget {
     );
   }
 
-  void _launchVideoURL() async => await canLaunch(song.videoUrl ?? '')
-      ? await launch(song.videoUrl ?? '')
-      : throw 'Could not launch $song.videoUrl';
+  void _launchVideoURL() async {
+    Uri endereco = Uri.parse(song.videoUrl.toString());
+    await canLaunchUrl(endereco)
+        ? await launchUrl(endereco)
+        : throw 'Could not launch $song.videoUrl';
+  }
 
-  void _launchChordsURL() async => await canLaunch(song.cifra ?? '')
-      ? await launch(song.cifra ?? '')
-      : throw 'Could not launch $song.cifra';
+  void _launchChordsURL() async {
+    final String url = 'https://docs.google.com/viewer?embedded=true&url=' +
+        song.cifra.toString();
+    Uri endereco = Uri.parse(song.cifra.toString());
+    Uri enderecoGdrive = Uri.parse(url);
+
+    if (song.cifra.toString().startsWith('https://drive.google.com')) {
+      await canLaunchUrl(endereco)
+          ? await launchUrl(endereco, mode: LaunchMode.platformDefault)
+          : throw 'Could not launch $song.cifra';
+    } else {
+      await canLaunchUrl(enderecoGdrive)
+          ? await launchUrl(enderecoGdrive, mode: LaunchMode.platformDefault)
+          : throw 'Could not launch $song.cifra';
+    }
+  }
 }
