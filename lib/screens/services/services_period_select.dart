@@ -8,21 +8,18 @@ import 'package:louvor_app/screens/rehearsals/rehearsals_screen.dart';
 import 'package:louvor_app/screens/services/services_screen.dart';
 
 class ServicesPeriodSelect extends StatefulWidget {
-
   late DateTime initialDate;
   late String serviceType;
 
-  ServicesPeriodSelect(String serviceType){
+  ServicesPeriodSelect(String serviceType) {
     this.serviceType = serviceType;
   }
 
   @override
   ServicesPeriodSelectState createState() => ServicesPeriodSelectState();
-
 }
 
-class ServicesPeriodSelectState extends State<ServicesPeriodSelect>{
-
+class ServicesPeriodSelectState extends State<ServicesPeriodSelect> {
   late DateTime selectedDate;
 
   @override
@@ -31,29 +28,35 @@ class ServicesPeriodSelectState extends State<ServicesPeriodSelect>{
     selectedDate = DateTime.now();
   }
 
-   setMounth(int index){
-        DateTime dateMounth = new DateTime(selectedDate.year, index);
-        setState(() {
-          selectedDate = dateMounth;
-        });
-        Navigator.pop(context);
+  setMounth(int index) {
+    DateTime dateMounth = new DateTime(selectedDate.year, index);
+    setState(() {
+      selectedDate = dateMounth;
+    });
+    Navigator.pop(context);
   }
 
-  selectYear(){
+  selectYear() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Ano", textAlign: TextAlign.center,),
-          content: Container( // Need to use container to add size constraint.
+          title: Text(
+            "Ano",
+            textAlign: TextAlign.center,
+          ),
+          content: Container(
+            // Need to use container to add size constraint.
             width: 300,
             height: 300,
             child: YearPicker(
-              firstDate: DateTime(DateTime.now().year, 1),
+              firstDate: DateTime(2021, 1),
               lastDate: DateTime(DateTime.now().year + 100, 1),
               selectedDate: selectedDate,
               onChanged: (DateTime dateTime) {
-                setState(() {  selectedDate = dateTime; });
+                setState(() {
+                  selectedDate = dateTime;
+                });
                 Navigator.pop(context);
               },
             ),
@@ -72,113 +75,121 @@ class ServicesPeriodSelectState extends State<ServicesPeriodSelect>{
         itemCount: AppListPool.mounths.length,
         itemBuilder: (BuildContext context, int index) {
           return ListTile(
-            title: GestureDetector(
-                      onTap: () => setMounth(index+1),
-                      child: Text(AppListPool.mounths[index],
-                        textAlign: TextAlign.center,
-                      ),
-                  )
-          );
+              title: GestureDetector(
+            onTap: () => setMounth(index + 1),
+            child: Text(
+              AppListPool.mounths[index],
+              textAlign: TextAlign.center,
+            ),
+          ));
         },
       ),
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: CustomDrawer(),
-      appBar: AppBar(
-        title: Text('Seleção Mês'),
-        centerTitle: true,
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            );
-          },
+        drawer: CustomDrawer(),
+        appBar: AppBar(
+          title: Text('Seleção Mês'),
+          centerTitle: true,
+          leading: Builder(
+            builder: (BuildContext context) {
+              return IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              );
+            },
+          ),
         ),
-      ),
-      body: Center(
-                child:
-                    Container(
-                      width: 350,
-                        child:
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(90, 230, 50, 100),
-                                    child: Column(
-                                              children: [
-                                                          GestureDetector(
-                                                            onTap: () { selectYear(); },
-                                                            child: Row(
-                                                                      children: [
-                                                                                Text('Ano: ',
-                                                                                  style: Theme.of(context).textTheme.headline4,
-                                                                                  textAlign: TextAlign.center,
-                                                                                ),
-                                                                                Text(selectedDate.year.toString(),
-                                                                                  style: TextStyle(fontSize: 40, color: Colors.lightBlue, fontWeight: FontWeight.bold),
-                                                                                  textAlign: TextAlign.center,
-                                                                                ),
-                                                                      ],
-                                                                    )
-                                                          ),
-                                                          GestureDetector(
-                                                            onTap: () { showDialog(
-                                                                            context: context,
-                                                                            builder: (BuildContext context) {
-                                                                                    return AlertDialog(
-                                                                                      title: Text('Mês',
-                                                                                                   style: Theme.of(context).textTheme.headline4,
-                                                                                                   textAlign: TextAlign.center,
-                                                                                                  ),
-                                                                                      content: setupAlertDialoadContainer(),
-                                                                                    );
-                                                                            });
-                                                                        },
-                                                            child: Row(
-                                                                        children: [
-                                                                                      Text('Mês: ',
-                                                                                        style: Theme.of(context).textTheme.headline4,
-                                                                                        textAlign: TextAlign.center,
-                                                                                      ),
-                                                                                      Text( DateUtilsCustomized.monthBr(selectedDate),
-                                                                                        style: TextStyle(fontSize: 40, color: Colors.lightBlue, fontWeight: FontWeight.bold),
-                                                                                        textAlign: TextAlign.center,
-                                                                                      ),
-
-                                                                                    ],
-                                                                      )
-                                                          )
-                                              ],
-                                          ),
-                                  ),
-                    )
-                ),
-      floatingActionButton:
-              Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  FloatingActionButton(
-                    child: Icon(
-                        Icons.search,
-                        size: 30,
-                    ),
-                    onPressed: () {
-                      if(widget.serviceType == 'Service'){
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => ServicesScreen.buildByMonth(selectedDate)));
-                      }else{
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => RehearsalsScreen.buildByMonth(selectedDate)));
-                      }
+        body: Center(
+            child: Container(
+          width: 350,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(90, 230, 50, 100),
+            child: Column(
+              children: [
+                GestureDetector(
+                    onTap: () {
+                      selectYear();
                     },
-                  ),
-                ],
-              )
-
-    );
+                    child: Row(
+                      children: [
+                        Text(
+                          'Ano: ',
+                          style: Theme.of(context).textTheme.headline4,
+                          textAlign: TextAlign.center,
+                        ),
+                        Text(
+                          selectedDate.year.toString(),
+                          style: TextStyle(
+                              fontSize: 40,
+                              color: Colors.lightBlue,
+                              fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    )),
+                GestureDetector(
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text(
+                                'Mês',
+                                style: Theme.of(context).textTheme.headline4,
+                                textAlign: TextAlign.center,
+                              ),
+                              content: setupAlertDialoadContainer(),
+                            );
+                          });
+                    },
+                    child: Row(
+                      children: [
+                        Text(
+                          'Mês: ',
+                          style: Theme.of(context).textTheme.headline4,
+                          textAlign: TextAlign.center,
+                        ),
+                        Text(
+                          DateUtilsCustomized.monthBr(selectedDate),
+                          style: TextStyle(
+                              fontSize: 40,
+                              color: Colors.lightBlue,
+                              fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ))
+              ],
+            ),
+          ),
+        )),
+        floatingActionButton: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            FloatingActionButton(
+              child: Icon(
+                Icons.search,
+                size: 30,
+              ),
+              onPressed: () {
+                if (widget.serviceType == 'Service') {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          ServicesScreen.buildByMonth(selectedDate)));
+                } else {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          RehearsalsScreen.buildByMonth(selectedDate)));
+                }
+              },
+            ),
+          ],
+        ));
   }
 }

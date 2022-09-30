@@ -259,8 +259,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                         ),
                         Visibility(
                           visible: widget.service!.data == null ||
-                              (widget.service!.data!.isAfter(DateTime.now()) &&
-                                  UserManager.isUserAdmin == true),
+                              UserManager.isUserAdmin == true,
                           child: GestureDetector(
                             onTap: () {
                               if (widget.formKey.currentState!.validate()) {
@@ -399,8 +398,7 @@ class ServiceScreenState extends State<ServiceScreen> {
                           ),
                         ),
                         Visibility(
-                          visible: widget.service!.data == null ||
-                              widget.service!.data!.isAfter(DateTime.now()),
+                          visible: true,
                           child: GestureDetector(
                             onTap: () {
                               if (widget.formKey.currentState!.validate()) {
@@ -617,9 +615,9 @@ class ServiceScreenState extends State<ServiceScreen> {
       return false;
     }
 
-    if (widget.service!.data!.isBefore(DateTime.now())) {
-      return false;
-    }
+    // if (widget.service!.data!.isBefore(DateTime.now())) {
+    //   return false;
+    // }
 
     return isServicesHasChanges(widget.serviceWithoutChanges, widget.service);
   }
