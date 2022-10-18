@@ -39,6 +39,9 @@ class Service extends ChangeNotifier {
       lstSongs?.add(s);
     });
 
+    if (lstSongs != null)
+      lstSongs!.sort((a, b) => a.data!.compareTo(b.data ?? ''));
+
     if (document['team'] != null) {
       Map.from(document['team']).forEach((key, value) {
         //team.putIfAbsent(key, () => value);
@@ -97,16 +100,23 @@ class Service extends ChangeNotifier {
         this.team = new Map();
       }
 
-      this
-          .lstSongs
-          ?.forEach((element) => this.dynamicSongs?.addAll(element.toMap()));
+      int numSongs = 0;
+      this.lstSongs?.forEach((element) {
+        element.data = numSongs.toString();
+        numSongs++;
+        this.dynamicSongs?.addAll(element.toMap());
+      });
 
       final doc = await firestore.collection('services').add(this.toMap());
       id = doc.id;
     } else {
-      this
-          .lstSongs
-          ?.forEach((element) => this.dynamicSongs?.addAll(element.toMap()));
+      int numSongs = 0;
+      this.lstSongs?.forEach((element) {
+        element.data = numSongs.toString();
+        numSongs++;
+        this.dynamicSongs?.addAll(element.toMap());
+      });
+
       await firestoreRef.update(this.toMap());
     }
 
