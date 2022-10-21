@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:louvor_app/helpers/string_utils.dart';
 import 'package:louvor_app/models/user_app.dart';
@@ -129,7 +130,7 @@ class ServiceManager extends ChangeNotifier {
     _allServices =
         snapServices.docs.map((d) => Service.fromDocument(d)).toList();
     //TODO possibilidade de estourar a quota do Firebase
-    notifyListeners();
+    if (!kIsWeb) notifyListeners();
     //Se estourar, comentar a linha acima
   }
 

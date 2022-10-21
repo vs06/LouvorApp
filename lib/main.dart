@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:louvor_app/models/tag_manager.dart';
@@ -15,7 +16,6 @@ import 'package:louvor_app/screens/services/services_screen.dart';
 import 'package:louvor_app/screens/signup/signup_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-
 import 'models/Rehearsal.dart';
 import 'models/Song.dart';
 import 'models/rehearsal_manager.dart';
@@ -25,12 +25,21 @@ import 'models/service_manager.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  if (kIsWeb) {
+    await Firebase.initializeApp(
+        options: FirebaseOptions(
+            apiKey: "AIzaSyBSnsBpMu8zOJVA2Ay2qCFVtDAT_uD00Ss",
+            appId: "1:280051510181:web:9b306f3fdcfcc9f4aad64c",
+            messagingSenderId: "280051510181",
+            projectId: "louvor-app"));
+  } else {
+    await Firebase.initializeApp();
+  }
+
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -46,22 +55,22 @@ class MyApp extends StatelessWidget {
               songManager!..updateUser(userManager),
         ),
         ChangeNotifierProxyProvider<UserManager, ServiceManager>(
-           create: (_) => ServiceManager(),
-           lazy: false,
-           update: (_, userManager, serviceManager) =>
-           serviceManager!..updateUser(userManager),
-         ),
+          create: (_) => ServiceManager(),
+          lazy: false,
+          update: (_, userManager, serviceManager) =>
+              serviceManager!..updateUser(userManager),
+        ),
         ChangeNotifierProxyProvider<UserManager, RehearsalManager>(
           create: (_) => RehearsalManager(),
           lazy: false,
           update: (_, userManager, rehearsalManager) =>
-          rehearsalManager!..updateUser(userManager),
+              rehearsalManager!..updateUser(userManager),
         ),
         ChangeNotifierProxyProvider<UserManager, TagManager>(
           create: (_) => TagManager(),
           lazy: false,
           update: (_, userManager, tagManager) =>
-          tagManager!..updateUser(userManager),
+              tagManager!..updateUser(userManager),
         )
       ],
       child: MaterialApp(
@@ -69,66 +78,47 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         home: BaseScreen(),
         initialRoute: '/base',
-
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate
         ],
         supportedLocales: [const Locale('pt', 'BR')],
-
-        onGenerateRoute: (settings){
-          switch(settings.name){
+        onGenerateRoute: (settings) {
+          switch (settings.name) {
             case '/login':
-              return MaterialPageRoute(
-                  builder: (_) => LoginScreen()
-              );
+              return MaterialPageRoute(builder: (_) => LoginScreen());
             case '/signup':
-              return MaterialPageRoute(
-                  builder: (_) => SignUpScreen()
-              );
+              return MaterialPageRoute(builder: (_) => SignUpScreen());
             case '/song':
               return MaterialPageRoute(
-                  builder: (_) => SongScreen(
-                    settings.arguments == null ? null : settings.arguments as Song
-                  )
-              );
+                  builder: (_) => SongScreen(settings.arguments == null
+                      ? null
+                      : settings.arguments as Song));
             case '/songs':
-              return MaterialPageRoute(
-                  builder: (_) => SongsScreen()
-              );
+              return MaterialPageRoute(builder: (_) => SongsScreen());
             case '/service':
               return MaterialPageRoute(
-                  builder: (_) => ServiceScreen(
-                      settings.arguments == null ? null : settings.arguments as Service
-                  )
-              );
+                  builder: (_) => ServiceScreen(settings.arguments == null
+                      ? null
+                      : settings.arguments as Service));
             case '/services':
-              return MaterialPageRoute(
-                  builder: (_) => ServicesScreen()
-              );
+              return MaterialPageRoute(builder: (_) => ServicesScreen());
             case '/servicesperiod':
               return MaterialPageRoute(
-                  builder: (_) => ServicesPeriodSelect("Service")
-              );
+                  builder: (_) => ServicesPeriodSelect("Service"));
             case '/rehearsalsperiod':
               return MaterialPageRoute(
-                  builder: (_) => ServicesPeriodSelect("Rehearsal")
-              );
+                  builder: (_) => ServicesPeriodSelect("Rehearsal"));
             case '/rehearsal':
               return MaterialPageRoute(
-                  builder: (_) => RehearsalScreen(
-                      settings.arguments == null ? null : settings.arguments as Rehearsal
-                  )
-              );
+                  builder: (_) => RehearsalScreen(settings.arguments == null
+                      ? null
+                      : settings.arguments as Rehearsal));
             case '/users':
-              return MaterialPageRoute(
-                  builder: (_) => UsersScreen()
-              );
+              return MaterialPageRoute(builder: (_) => UsersScreen());
             case '/base':
             default:
-              return MaterialPageRoute(
-                  builder: (_) => BaseScreen()
-              );
+              return MaterialPageRoute(builder: (_) => BaseScreen());
           }
         },
       ),

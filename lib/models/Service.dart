@@ -39,8 +39,10 @@ class Service extends ChangeNotifier {
       lstSongs?.add(s);
     });
 
+    //O campo "data" está sendo usado como ordenador da sequencia de musicas do culto
     if (lstSongs != null)
-      lstSongs!.sort((a, b) => a.data!.compareTo(b.data ?? ''));
+      lstSongs!
+          .sort((a, b) => a.data != null ? a.data!.compareTo(b.data ?? '') : 1);
 
     if (document['team'] != null) {
       Map.from(document['team']).forEach((key, value) {

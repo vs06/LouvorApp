@@ -210,15 +210,14 @@ class ServiceListTile extends StatelessWidget {
   String getSongsOfService() {
     String songs = 'Músicas: ';
 
-    service.lstSongs!.forEach((element) {
-      var ref = element.nome ?? '';
-      songs += ref + ', ';
-    });
-
     if (service.lstSongs!.length > 0) {
+      service.lstSongs!.forEach((element) {
+        var ref = element.nome ?? '';
+        songs += ref + ', ';
+      });
+
       songs = songs.substring(0, songs.length - 2);
     }
-
     return songs;
   }
 
