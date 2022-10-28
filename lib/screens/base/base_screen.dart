@@ -8,7 +8,6 @@ import 'package:louvor_app/screens/songs/songs_screen.dart';
 import 'package:provider/provider.dart';
 
 class BaseScreen extends StatelessWidget {
-
   final PageController pageController = PageController();
 
   @override
@@ -16,7 +15,7 @@ class BaseScreen extends StatelessWidget {
     return Provider(
       create: (_) => PageManager(pageController),
       child: Consumer<UserManager>(
-        builder: (_, userManager, __){
+        builder: (_, userManager, __) {
           return PageView(
             controller: pageController,
             physics: const NeverScrollableScrollPhysics(),
@@ -28,7 +27,17 @@ class BaseScreen extends StatelessWidget {
                 ),
                 body: Padding(
                   padding: const EdgeInsets.all(4.0),
-                  child: Image.asset("assets/worship_tile.png", width: 600),
+                  child: Column(
+                    children: [
+                      Image.asset("assets/worship_tile.png", width: 600),
+                      Text(
+                        "v.2210",
+                        style: TextStyle(
+                          fontSize: 10,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               SongsScreen(),
